@@ -4,42 +4,7 @@ var util = require('util'),
 	BufferList = require('bufferlist').BufferList, 
 	insim = require('./insim');
 
-var Plugin = function()
-{
-	this.client = null;
-}
-
-PingPlugin = function()
-{
-	Plugin.call(this);
-
-	var self = this;
-
-	console.log('client = ' + this.client);
-
-	this.pong = function()
-	{
-		console.log('PONG');
-		var p = new insim.IS_TINY;
-		p.subt = insim.TINY_NONE;
-
-		console.log(p);
-	
-		self.client.send(p);
-	}
-
-	//this.on('ISP_TINY', this.pong);
-}
-
-util.inherits(PingPlugin, Plugin);
-
-Plugin.prototype.setClient = function(c)
-{
-	this.client = c;
-	console.log(c);
-}
-
-var Client = function(host, port, name, maxbacklog, plugins)
+var Client = function(host, port, name, maxbacklog)
 {
 	events.EventEmitter.call(this);
 
@@ -49,22 +14,8 @@ var Client = function(host, port, name, maxbacklog, plugins)
 	this.host = host;
 	this.port = port;
 	this.maxbacklog = maxbacklog || 2048;
-	this.plugins = [];
-
-	if (plugins)
-	{
-		this.plugins = plugins;
-
-		for(var i = 0; i < this.plugins.length; i++)
-		{
-			this.plugins[i]._setupEvents.call(this.plugins[i], this);
-		}
-	}
-
-	console.log(this.plugins);
 
 	this.buffer = new BufferList;
-
 	this.stream = null;
 };
 
@@ -72,7 +23,6 @@ util.inherits(Client, events.EventEmitter);
 
 Client.prototype.error = function(err)
 {
-	var self = this;
 	console.log(err);
 }
 
@@ -97,20 +47,18 @@ Client.prototype.connect = function()
 	}(self));
 
 	// Eror handling
-	self.stream.on('error', function(self)
-	{
-		return function(err) { self.error.call(self, err); }
-	}(self)); 
+	self.stream.on('error', self.error);
 }
 
 Client.prototype.send = function(packet)
 {
 	var self = this;
 
-	console.log('sending pkt ' + util.inspect(packet));
-
 	b = new Buffer(packet.pack());
 	self.stream.write(b);
+
+	delete b;
+	delete packet;
 }
 
 Client.prototype.receive = function(data)
@@ -139,8 +87,6 @@ Client.prototype.receive = function(data)
 			var pkt = new insim[pktName];
 			pkt.unpack(p);
 
-			console.log(util.inspect(pkt));
-
 			console.log('emitting pkt ' + pktName);
 			self.emit(pktName);
 		}
@@ -156,9 +102,7 @@ Client.prototype.receive = function(data)
 	}
 
 	if (self.buffer.length > self.maxbacklog)
-	{
 		throw new Error('Buffer is greater than the maximum permitted backlog. Dying.');
-	}
 }
 
 Client.prototype.peekByte = function(offset)
@@ -173,13 +117,27 @@ Client.prototype.peekByte = function(offset)
 	return self.buffer.take(1).readUInt8(offset);
 }
 
+Client.prototype.createPacket = function(name)
+{
+	var p = new insim[name];
+	return p;
+}
+
+Client.prototype.registerHook = function(pktName, func)
+{
+	var self = this;
+
+	self.on(pktName, function (func) {
+		return function (data)
+		{
+			func.call({ client: self });
+		}
+	}(func));
+}
+
 var c = new Client('127.0.0.1', 29999, 'InodeSim');
 
-var pingPlugin = new PingPlugin();
-pingPlugin.setClient(c);
-c.on('IS_TINY', function() {
-	return function(data) { pingPlugin.pong.call(pingPlugin, data) }
-}(pingPlugin));
+var pong = require('./pong');
+pong.init.call({ client: c });
 
-c.on('IS_TINY', function() { console.log('got IS_TINY'); });
 c.connect();
