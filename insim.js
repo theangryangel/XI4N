@@ -317,7 +317,7 @@ exports.IS_MSO = function()
 {
 	this._PACK = 'BBBBBBBB128s';
 
-	this.size = 20;
+	this.size = 136;
 	this.type = exports.ISP_MSO;
 	this.reqi = 0;
 	this.zero = 0;
@@ -327,7 +327,6 @@ exports.IS_MSO = function()
 	this.usertype = 0;
 	this.textstart = 0;
 	this.msg = '';
-	
 }
 
 util.inherits(exports.IS_MSO, exports.IS_Abstract);
@@ -337,7 +336,7 @@ exports.IS_III = function()
 {
 	this._PACK = 'BBBBBBBB64s';
 
-	this.size = 20;
+	this.size = 72;
 	this.type = exports.ISP_III;
 	this.reqi = 0;
 	this.zero = 0;
@@ -347,7 +346,6 @@ exports.IS_III = function()
 	this.sp2 = 0;
 	this.sp3 = 0;
 	this.msg = '';
-	
 }
 
 util.inherits(exports.IS_III, exports.IS_Abstract);
@@ -357,7 +355,7 @@ exports.IS_ACR = function()
 {
 	this._PACK = 'BBBBBBBB64s';
 
-	this.size = 20;
+	this.size = 72;
 	this.type = exports.ISP_ACR;
 	this.reqi = 0;
 	this.zero = 0;
@@ -367,7 +365,257 @@ exports.IS_ACR = function()
 	this.result = 0;
 	this.sp3 = 0;
 	this.msg = '';
-	
 }
 
 util.inherits(exports.IS_ACR, exports.IS_Abstract);
+
+// IS_MST
+exports.IS_MST = function()
+{
+	this._PACK = 'BBBB64s';
+
+	this.size = 60;
+	this.type = exports.ISP_MST;
+	this.reqi = 0;
+	this.zero = 0;
+
+	this.msg = '';
+}
+
+util.inherits(exports.IS_MST, exports.IS_Abstract);
+
+// IS_MSX
+exports.IS_MSX = function()
+{
+	this._PACK = 'BBBB96s';
+
+	this.size = 100;
+	this.type = exports.ISP_MSX;
+	this.reqi = 0;
+	this.zero = 0;
+
+	this.msg = '';
+}
+
+util.inherits(exports.IS_MSX, exports.IS_Abstract);
+
+// IS_MSL
+exports.IS_MSL = function()
+{
+	this._PACK = 'BBBB128s';
+
+	this.size = 132;
+	this.type = exports.ISP_MSL;
+	this.reqi = 0;
+	this.sound = 0;
+
+	this.msg = '';
+}
+
+util.inherits(exports.IS_MSL, exports.IS_Abstract);
+
+// IS_MTC
+exports.IS_MTC = function()
+{
+	// TODO
+}
+
+util.inherits(exports.IS_MTC, exports.IS_Abstract);
+
+// IS_SCH
+exports.IS_SCH = function()
+{
+	this._PACK = 'BBBBBBBB';
+
+	this.size = 8;
+	this.type = exports.ISP_SCH;
+	this.reqi = 0;
+	this.zero = 0;
+
+	this.charb = 0;
+	this.flags = 0;
+	this.spare2 = 0;
+	this.spare3 = 0;
+
+}
+
+util.inherits(exports.IS_SCH, exports.IS_Abstract);
+
+// IS_ISM
+exports.IS_ISM = function()
+{
+	this._PACK = 'BBBBBBBB32s';
+
+	this.size = 40;
+	this.type = exports.ISP_ISM;
+	this.reqi = 0;
+	this.zero = 0;
+
+	this.host = 0;
+	this.sp1 = 0;
+	this.sp2 = 0;
+	this.sp3 = 0;
+
+	this.hname = '';
+
+}
+
+util.inherits(exports.IS_ISM, exports.IS_Abstract);
+
+// IS_VTN
+exports.IS_VTN = function()
+{
+	this._PACK = 'BBBBBBBB';
+
+	this.size = 8;
+	this.type = exports.ISP_VTN;
+	this.reqi = 0;
+	this.zero = 0;
+
+	this.ucid = 0;
+	this.action = 0;
+	this.sp2 = 0;
+	this.sp3 = 0;
+}
+
+util.inherits(exports.IS_VTN, exports.IS_Abstract);
+
+// IS_PLC
+exports.IS_PLC = function()
+{
+	this._PACK = 'BBBBBBBBL';
+
+	this.size = 12;
+	this.type = exports.ISP_PLC;
+	this.reqi = 0;
+	this.zero = 0;
+
+	this.ucid = 0;
+	this.sp1 = 0;
+	this.sp2 = 0;
+	this.sp3 = 0;
+
+	this.cars = 0;
+}
+
+util.inherits(exports.IS_PLC, exports.IS_Abstract);
+
+// IS_RST
+exports.IS_RST = function()
+{
+	this._PACK = 'BBBBBBBB6sBBHHHHHH';
+
+	this.size = 28;
+	this.type = exports.ISP_RST;
+	this.reqi = 0;
+	this.zero = 0;
+
+	this.racelaps = 0;
+	this.qualmins = 0;
+	this.nump;
+	this.timing = 0;
+
+	this.track = '';
+	this.weather = 0;
+	this.wind = 0;
+
+	this.flags = 0;
+	this.numnodes = 0;
+	this.finish = 0;
+	this.split1 = 0;
+	this.split2 = 0;
+	this.split3 = 0;
+}
+
+util.inherits(exports.IS_RST, exports.IS_Abstract);
+
+// IS_NCN
+exports.IS_NCN = function()
+{
+	this._PACK = 'BBBB24s24sBBBB';
+
+	this.size = 56;
+	this.type = exports.ISP_NCN;
+	this.reqi = 0;
+	this.ucid = 0;
+
+	this.uname = '';
+	this.pname = '';
+
+	this.admin = 0;
+	this.total = 0;
+	this.flags = 0;
+	this.sp3 = 0;
+}
+
+util.inherits(exports.IS_NCN, exports.IS_Abstract);
+
+// IS_CNL
+exports.IS_CNL = function()
+{
+	this._PACK = 'BBBBBBBB';
+
+	this.size = 8;
+	this.type = exports.ISP_CNL;
+	this.reqi = 0;
+	this.ucid = 0;
+
+	this.reason = 0;
+	this.total = 0;
+	this.sp2 = 0;
+	this.sp3 = 0;
+}
+
+util.inherits(exports.IS_CNL, exports.IS_Abstract);
+
+// IS_CPR
+exports.IS_CPR = function()
+{
+	this._PACK = 'BBBB24s8s';
+
+	this.size = 36;
+	this.type = exports.ISP_CPR;
+	this.reqi = 0;
+	this.ucid = 0;
+
+	this.pname = '';
+	this.plate = '';
+}
+
+util.inherits(exports.IS_CPR, exports.IS_Abstract);
+
+// IS_NPL
+exports.IS_NPL = function()
+{
+	this._PACK = 'BBBBBBH24s8s4s16s4ABBBBlBBBB';
+
+	this.size = 76;
+	this.type = exports.ISP_NPL;
+	this.reqi = 0;
+	this.plid = 0;
+
+	this.ucid = 0;
+	this.ptype = 0;
+	this.flags = 0;
+
+	this.pname = '';
+	this.plate = '';
+
+	this.cname = '';
+	this.sname = '';
+	this.tyres = 0;
+	
+	this.h_mass = 0;
+	this.h_tres = 0;
+	this.model = 0;
+	this.pass = 0;
+
+	this.spare = 0;
+
+	this.setf = 0;
+	this.nump = 0;
+	this.sp2 = 0;
+	this.sp3 = 0;
+}
+
+util.inherits(exports.IS_NPL, exports.IS_Abstract);
