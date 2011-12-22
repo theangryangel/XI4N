@@ -1,5 +1,15 @@
 var util = require('util'), jspack = require('jspack').jspack;
 
+// Translating LFS insim.h to jspack as follows -
+// char	= c
+// byte	= B
+// word	= H
+// short = h
+// unsigned	= L
+// int = l
+// float = f
+// char[16] = 16s
+
 // Version
 exports.INSIM_VERSION = 5;
 
@@ -218,6 +228,23 @@ exports.IS_SMALL = function()
 
 util.inherits(exports.IS_SMALL, exports.IS_Abstract);
 
+// IS_VER
+exports.IS_VER = function()
+{
+	this._PACK = 'BBBB8s6sH';
+
+	this.size = 20;
+	this.type = exports.ISP_VER;
+	this.reqi = 0;
+	this.zero = 0;
+	
+	this.version = '';
+	this.product = '';
+	this.insimver = 0;
+}
+
+util.inherits(exports.IS_VER, exports.IS_Abstract);
+
 // IS_STA
 exports.IS_STA = function()
 {
@@ -249,3 +276,98 @@ exports.IS_STA = function()
 }
 
 util.inherits(exports.IS_STA, exports.IS_Abstract);
+
+// IS_SFP
+exports.IS_SFP = function()
+{
+	this._PACK = 'BBBBHBB';
+
+	this.size = 8;
+	this.type = exports.ISP_SFP;
+	this.reqi = 0;
+	this.zero = 0;
+	
+	this.flag = 0;
+	this.offon = 0;
+	this.sp3 = 0;
+}
+
+util.inherits(exports.IS_SFP, exports.IS_Abstract);
+
+// IS_MOD
+exports.IS_MOD = function()
+{
+	this._PACK = 'BBBBllll';
+
+	this.size = 20;
+	this.type = exports.ISP_MOD;
+	this.reqi = 0;
+	this.zero = 0;
+	
+	this.bits16 = 0;
+	this.rr = 0;
+	this.width = 0;
+	this.height = 0;
+}
+
+util.inherits(exports.IS_MOD, exports.IS_Abstract);
+
+// IS_MSO
+exports.IS_MSO = function()
+{
+	this._PACK = 'BBBBBBBB128s';
+
+	this.size = 20;
+	this.type = exports.ISP_MSO;
+	this.reqi = 0;
+	this.zero = 0;
+
+	this.ucid = 0;
+	this.plid = 0;
+	this.usertype = 0;
+	this.textstart = 0;
+	this.msg = '';
+	
+}
+
+util.inherits(exports.IS_MSO, exports.IS_Abstract);
+
+// IS_III
+exports.IS_III = function()
+{
+	this._PACK = 'BBBBBBBB64s';
+
+	this.size = 20;
+	this.type = exports.ISP_III;
+	this.reqi = 0;
+	this.zero = 0;
+
+	this.ucid = 0;
+	this.plid = 0;
+	this.sp2 = 0;
+	this.sp3 = 0;
+	this.msg = '';
+	
+}
+
+util.inherits(exports.IS_III, exports.IS_Abstract);
+
+// IS_ACR
+exports.IS_ACR = function()
+{
+	this._PACK = 'BBBBBBBB64s';
+
+	this.size = 20;
+	this.type = exports.ISP_ACR;
+	this.reqi = 0;
+	this.zero = 0;
+
+	this.ucid = 0;
+	this.admin = 0;
+	this.result = 0;
+	this.sp3 = 0;
+	this.msg = '';
+	
+}
+
+util.inherits(exports.IS_ACR, exports.IS_Abstract);
