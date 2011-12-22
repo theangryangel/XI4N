@@ -1,0 +1,6 @@
+[submodule "node_modules/bufferlist"]
+	path = node_modules/bufferlist
+	url = git://github.com/substack/node-bufferlist.git
+[submodule "node_modules/jspack"]
+	path = node_modules/jspack
+	url = git://github.com/pgriess/node-jspack.git
