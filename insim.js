@@ -161,8 +161,6 @@ exports.IS_Abstract.prototype.pack = function(values)
 	for (var i = 0; i < properties.length; i++)
 		values.push(this[properties[i]]);
 
-	console.log(values);
-
 	return jspack.Pack(this._PACK, values);
 }
 
@@ -619,3 +617,570 @@ exports.IS_NPL = function()
 }
 
 util.inherits(exports.IS_NPL, exports.IS_Abstract);
+
+// IS_PLP
+exports.IS_PLP = function()
+{
+	this._PACK = 'BBBB';
+
+	this.size = 4;
+	this.type = exports.ISP_PLP;
+	this.reqi = 0;
+	this.plid = 0;
+}
+
+util.inherits(exports.IS_PLP, exports.IS_Abstract);
+
+// IS_PLL
+exports.IS_PLL = function()
+{
+	this._PACK = 'BBBB';
+
+	this.size = 4;
+	this.type = exports.ISP_PLL;
+	this.reqi = 0;
+	this.plid = 0;
+}
+
+util.inherits(exports.IS_PLL, exports.IS_Abstract);
+
+// IS_CRS
+exports.IS_CRS = function()
+{
+	this._PACK = 'BBBB';
+
+	this.size = 4;
+	this.type = exports.ISP_CRS;
+	this.reqi = 0;
+	this.plid = 0;
+}
+
+util.inherits(exports.IS_CRS, exports.IS_Abstract);
+
+// IS_LAP
+exports.IS_LAP = function()
+{
+	this._PACK = 'BBBBLLHHBBBB';
+
+	this.size = 20;
+	this.type = exports.ISP_LAP;
+	this.reqi = 0;
+	this.plid = 0;
+
+	this.ltime = 0;
+	this.etime = 0;
+
+	this.lapsdone = 0;
+	this.flags = 0;
+
+	this.sp0 = 0;
+	this.penalty = 0;
+	this.numstops = 0;
+	this.sp3 = 0;
+}
+
+util.inherits(exports.IS_LAP, exports.IS_Abstract);
+
+// IS_SPX
+exports.IS_SPX = function()
+{
+	this._PACK = 'BBBBLLBBBB';
+
+	this.size = 16;
+	this.type = exports.ISP_SPX;
+	this.reqi = 0;
+	this.plid = 0;
+
+	this.stime = 0;
+	this.etime = 0;
+
+	this.split = 0;
+	this.penalty = 0;
+	this.numstops = 0;
+	this.sp3 = 0;
+}
+
+util.inherits(exports.IS_SPX, exports.IS_Abstract);
+
+// IS_PIT
+exports.IS_PIT = function()
+{
+	this._PACK = 'BBBBHHBBBB4ALL';
+
+	this.size = 24;
+	this.type = exports.ISP_PIT;
+	this.reqi = 0;
+	this.plid = 0;
+
+	this.lapsdone = 0;
+	this.flags = 0;
+	
+	this.sp0 = 0;
+	this.penalty = 0;
+	this.numstops = 0;
+	this.sp3 = 0;
+
+	this.tyres = 0;
+
+	this.work = 0;
+	this.spare = 0;
+}
+
+util.inherits(exports.IS_PIT, exports.IS_Abstract);
+
+// IS_PSF
+exports.IS_PSF = function()
+{
+	this._PACK = 'BBBBLL';
+
+	this.size = 12;
+	this.type = exports.ISP_PSF;
+	this.reqi = 0;
+	this.plid = 0;
+
+	this.stime = 0;
+	this.spare = 0;
+}
+
+util.inherits(exports.IS_PSF, exports.IS_Abstract);
+
+// IS_PLA
+exports.IS_PLA = function()
+{
+	this._PACK = 'BBBBBBBB';
+
+	this.size = 8;
+	this.type = exports.ISP_PLA;
+	this.reqi = 0;
+	this.plid = 0;
+
+	this.face = '';
+	this.sp1 = 0;
+	this.sp2 = 0;
+	this.sp3 = 0;
+}
+
+util.inherits(exports.IS_PLA, exports.IS_Abstract);
+
+// IS_CCH
+exports.IS_CCH = function()
+{
+	this._PACK = 'BBBBBBBB';
+
+	this.size = 8;
+	this.type = exports.ISP_CCH;
+	this.reqi = 0;
+	this.plid = 0;
+
+	this.camera = '';
+	this.sp1 = 0;
+	this.sp2 = 0;
+	this.sp3 = 0;
+}
+
+util.inherits(exports.IS_CCH, exports.IS_Abstract);
+
+// IS_PEN
+exports.IS_PEN = function()
+{
+	this._PACK = 'BBBBBBBB';
+
+	this.size = 8;
+	this.type = exports.ISP_PEN;
+	this.reqi = 0;
+	this.plid = 0;
+
+	this.oldpen = '';
+	this.newpen = 0;
+	this.reason = 0;
+	this.sp3 = 0;
+}
+
+util.inherits(exports.IS_PEN, exports.IS_Abstract);
+
+// IS_TOC
+exports.IS_TOC = function()
+{
+	this._PACK = 'BBBBBBBB';
+
+	this.size = 8;
+	this.type = exports.ISP_TOC;
+	this.reqi = 0;
+	this.plid = 0;
+
+	this.olducid = 0;
+	this.newucid = 0;
+	this.sp2 = 0;
+	this.sp3 = 0;
+}
+
+util.inherits(exports.IS_TOC, exports.IS_Abstract);
+
+// IS_FLG
+exports.IS_FLG = function()
+{
+	this._PACK = 'BBBBBBBB';
+
+	this.size = 8;
+	this.type = exports.ISP_FLG;
+	this.reqi = 0;
+	this.plid = 0;
+
+	this.offon = 0;
+	this.flag = 0;
+	this.carbehind = 0;
+	this.sp3 = 0;
+}
+
+util.inherits(exports.IS_FLG, exports.IS_Abstract);
+
+// IS_PFL
+exports.IS_PFL = function()
+{
+	this._PACK = 'BBBBHH';
+
+	this.size = 8;
+	this.type = exports.ISP_PFL;
+	this.reqi = 0;
+	this.plid = 0;
+
+	this.flags = 0;
+	this.spare = 0;
+}
+
+util.inherits(exports.IS_PFL, exports.IS_Abstract);
+
+// IS_FIN
+exports.IS_FIN = function()
+{
+	this._PACK = 'BBBBLLBBBBHH';
+
+	this.size = 20;
+	this.type = exports.ISP_FIN;
+	this.reqi = 0;
+	this.plid = 0;
+
+	this.ttime = 0;
+	this.btime = 0;
+
+	this.spa = 0;
+	this.numstops = 0;
+	this.confirm = 0;
+	this.spb = 0;
+
+	this.lapsdone = 0;
+	this.flags = 0;
+}
+
+util.inherits(exports.IS_FIN, exports.IS_Abstract);
+
+// IS_RES
+exports.IS_RES = function()
+{
+	this._PACK = 'BBBB24s24s8s4sLLBBBBHHBBH';
+
+	this.size = 84;
+	this.type = exports.ISP_RES;
+	this.reqi = 0;
+	this.plid = 0;
+
+	this.uname = '';
+	this.pname = '';
+	this.plate = '';
+	this.cname = '';
+
+	this.ttime = 0;
+	this.btime = 0;
+
+	this.spa = 0;
+	this.numstops = 0;
+	this.confirm = 0;
+	this.spb = 0;
+
+	this.lapsdone = 0;
+	this.flags = 0;
+
+	this.resultnum = 0;
+	this.numres = 0;
+	this.pseconds = 0;
+}
+
+util.inherits(exports.IS_RES, exports.IS_Abstract);
+
+// IS_REO
+exports.IS_REO = function()
+{
+	this._PACK = 'BBBB32A';
+
+	this.size = 36;
+	this.type = exports.ISP_REO;
+	this.reqi = 0;
+	this.nump = 0;
+
+	this.plid = '';
+}
+
+util.inherits(exports.IS_REO, exports.IS_Abstract);
+
+// IS_AXI
+exports.IS_AXI = function()
+{
+	this._PACK = 'BBBBBBH32s';
+
+	this.size = 40;
+	this.type = exports.ISP_AXI;
+	this.reqi = 0;
+	this.zero = 0;
+
+	this.axstart = 0;
+	this.numcp = 0;
+	this.numo = 0;
+
+	this.lname = '';
+}
+
+util.inherits(exports.IS_AXI, exports.IS_Abstract);
+
+// IS_AXO
+exports.IS_AXO = function()
+{
+	this._PACK = 'BBBB';
+
+	this.size = 4;
+	this.type = exports.ISP_AXO;
+	this.reqi = 0;
+	this.plid = 0;
+}
+
+util.inherits(exports.IS_AXO, exports.IS_Abstract);
+
+// IS_AXO
+exports.IS_AXO = function()
+{
+	this._PACK = 'BBBB';
+
+	this.size = 4;
+	this.type = exports.ISP_AXO;
+	this.reqi = 0;
+	this.plid = 0;
+}
+
+util.inherits(exports.IS_AXO, exports.IS_Abstract);
+
+// IS_NLP
+exports.IS_NLP = function()
+{
+	// TODO
+}
+
+util.inherits(exports.IS_NLP, exports.IS_Abstract);
+
+// IS_MCI
+exports.IS_MCI = function()
+{
+	// TODO
+}
+
+util.inherits(exports.IS_MCI, exports.IS_Abstract);
+
+// IS_CON
+exports.IS_CON = function()
+{
+	// TODO
+}
+
+util.inherits(exports.IS_CON, exports.IS_Abstract);
+
+// IS_OBH
+exports.IS_OBH = function()
+{
+	// TODO
+}
+
+util.inherits(exports.IS_OBH, exports.IS_Abstract);
+
+// IS_HLV
+exports.IS_HLV = function()
+{
+	// TODO
+}
+
+util.inherits(exports.IS_HLV, exports.IS_Abstract);
+
+// IS_AXM
+exports.IS_AXM = function()
+{
+	// TODO
+}
+
+util.inherits(exports.IS_AXM, exports.IS_Abstract);
+
+// IS_SCC
+exports.IS_SCC = function()
+{
+	this._PACK = 'BBBBBBBB';
+
+	this.size = 8;
+	this.type = exports.ISP_SCC;
+	this.reqi = 0;
+	this.zero = 0;
+
+	this.viewplid = 0;
+	this.ingamecam = 0;
+	this.sp2 = 0;
+	this.sp3 = 0;
+}
+
+util.inherits(exports.IS_SCC, exports.IS_Abstract);
+
+// IS_CPP
+exports.IS_SCC = function()
+{
+	this._PACK = 'BBBB3lHHHBBfHH';
+
+	this.size = 32;
+	this.type = exports.ISP_SCC;
+	this.reqi = 0;
+	this.zero = 0;
+
+	this.h = 0;
+	this.p = 0;
+	this.r = 0;
+
+	this.viewplid = 0;
+	this.ingamecam = 0;
+
+	this.fov = 0;
+
+	this.time = 0;
+	this.flags = 0;
+}
+
+util.inherits(exports.IS_SCC, exports.IS_Abstract);
+
+// IS_RIP
+exports.IS_RIP = function()
+{
+	this._PACK = 'BBBBBBBBLL64s';
+
+	this.size = 80;
+	this.type = exports.ISP_RIP;
+	this.reqi = 0;
+	this.error = 0;
+
+	this.mpr = 0;
+	this.paused = 0;
+	this.options = 0;
+	this.sp3 = 0;
+
+	this.ctime = 0;
+	this.ttime = 0;
+
+	this.rname = '';
+}
+
+util.inherits(exports.IS_RIP, exports.IS_Abstract);
+
+// IS_SSH
+exports.IS_SSH = function()
+{
+	this._PACK = 'BBBBBBBB32s';
+
+	this.size = 40;
+	this.type = exports.ISP_SSH;
+	this.reqi = 0;
+	this.error = 0;
+
+	this.sp0 = 0;
+	this.sp1 = 0;
+	this.sp2 = 0;
+	this.sp3 = 0;
+
+	this.rname = '';
+}
+
+util.inherits(exports.IS_SSH, exports.IS_Abstract);
+
+// IS_BFN
+exports.IS_BFN = function()
+{
+	this._PACK = 'BBBBBBBB';
+
+	this.size = 8;
+	this.type = exports.ISP_BFN;
+	this.reqi = 0;
+	this.subt = 0;
+
+	this.ucid = 0;
+	this.clickid = 0;
+	this.inst = 0;
+	this.sp3 = 0;
+}
+
+util.inherits(exports.IS_BFN, exports.IS_Abstract);
+
+// IS_BTN
+exports.IS_BTN = function()
+{
+	// TODO - FINISH - text is not fixed
+	this._PACK = 'BBBBBBBBBBBB32s';
+
+	this.size = 12;
+	this.type = exports.ISP_BTN;
+	this.reqi = 0;
+	this.ucid = 0;
+
+	this.clickid = 0;
+	this.inst = 0;
+	this.bstyle = 0;
+	this.typein = 0;
+
+	this.l = 0;
+	this.t = 0;
+	this.w = 0;
+	this.h = 0;
+
+	this.text = '';
+}
+
+util.inherits(exports.IS_BTN, exports.IS_Abstract);
+
+// IS_BTC
+exports.IS_BTC = function()
+{
+	this._PACK = 'BBBBBBBB';
+
+	this.size = 8;
+	this.type = exports.ISP_BTC;
+	this.reqi = 0;
+	this.ucid = 0;
+
+	this.clickid = 0;
+	this.inst = 0;
+	this.cflags = 0;
+	this.sp3 = 0;
+
+	this.rname = '';
+}
+
+util.inherits(exports.IS_BTC, exports.IS_Abstract);
+
+// IS_BTT
+exports.IS_BTT = function()
+{
+	this._PACK = 'BBBBBBBB96s';
+
+	this.size = 104;
+	this.type = exports.ISP_BTT;
+	this.reqi = 0;
+	this.ucid = 0;
+
+	this.clickid = 0;
+	this.inst = 0;
+	this.typein = 0;
+	this.sp3 = 0;
+
+	this.text = '';
+}
+
+util.inherits(exports.IS_BTT, exports.IS_Abstract);
