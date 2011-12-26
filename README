@@ -9,3 +9,4 @@ Requires
 --------
   * node-bufferlist
   * node-jspack
+  * nconf

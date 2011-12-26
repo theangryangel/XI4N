@@ -2,8 +2,8 @@ var insim = require('./insim');
 
 exports.init = function()
 {
-	console.log('registering');
-	this.client.registerHook("IS_TINY", exports.pong);
+	console.log('Registering Ping/Pong plugin');
+	this.client.registerHook('IS_TINY', exports.pong);
 }
 
 exports.pong = function()

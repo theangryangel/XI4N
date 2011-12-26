@@ -1,8 +1,14 @@
-var Client = require('./client').Client;
+var nconf = require('nconf'),
+	Client = require('./client').Client;
 
-var c = new Client('127.0.0.1', 29999, 'InodeSim');
+// Setup nconf. Argv takes presedence over any local config.json
+nconf.argv().file({ file: './config.json' });
 
+var c = new Client(nconf.get('host'), nconf.get('port'), 'xi4n');
+
+// Add our plugins
 var pong = require('./pong');
 c.addPlugin(pong);
 
+// Connect
 c.connect();
