@@ -4,11 +4,13 @@ var util = require('util'),
 	BufferList = require('bufferlist').BufferList, 
 	insim = require('./insim');
 
-var Client = function(host, port, name, maxbacklog)
+var Client = function(host, port, name, logger, maxbacklog)
 {
 	events.EventEmitter.call(this);
 
 	var self = this;
+
+	this.log = logger;
 
 	this.name = name;
 	this.host = host;
@@ -17,6 +19,9 @@ var Client = function(host, port, name, maxbacklog)
 
 	this.buffer = new BufferList;
 	this.stream = null;
+
+	// 'this' context that plugin functions are call
+	this.ctx = { 'client': self, 'log': self.log };
 };
 
 util.inherits(Client, events.EventEmitter);
@@ -43,16 +48,22 @@ Client.prototype.connect = function()
 
 	self.stream.on('close', function(err)
 	{
-		console.log('Disconnected');
+		self.log.info('Disconnected');
 
 		if (err)
-			console.log('Server disappeared');
+			self.log.info('Server disappeared');
 	});
 
 	// Eror handling
-	self.stream.on('error', self.error);
+	self.stream.on('error', function(err)
+	{
+		self.log.crit(err);
+	});
 
-	self.stream.on('timeout', self.error);
+	self.stream.on('timeout', function()
+	{
+		self.log.crit('Timeout occured');
+	});
 }
 
 Client.prototype.disconnect = function()
@@ -64,16 +75,6 @@ Client.prototype.disconnect = function()
 	self.send(p);
 
 	self.stream.end();
-}
-
-Client.prototype.error = function(err)
-{
-	console.log(err);
-}
-
-Client.prototype.timeout = function()
-{
-	console.log('Timeout occured');
 }
 
 Client.prototype.send = function(packet)
@@ -101,26 +102,26 @@ Client.prototype.receive = function(data)
 		var p = self.buffer.take(size);
 		self.buffer.advance(size);
 
-		console.log('buffer now ' + self.buffer.length);
+		self.log.debug('buffer now ' + self.buffer.length);
 
 		var pktId = p.readUInt8(1);
 
 		var pktName = insim.translatePktIdToName(pktId);
-		console.log('consumed packet ' + pktName + ' @ size ' + size);
+		self.log.debug('consumed packet ' + pktName + ' @ size ' + size);
 
 		try
 		{
 			var pkt = new insim[pktName];
 			pkt.unpack(p);
 
-			console.log('emitting pkt ' + pktName);
+			self.log.debug('emitting pkt ' + pktName);
 			self.emit(pktName);
 		}
 		catch (err)
 		{
 			if (pktName == 'undefined')
-				console.log('unknown pkt - ' + pktId);
-			console.log(util.inspect(err));
+				self.log.debug('unknown pkt - ' + pktId);
+			self.log.debug(util.inspect(err));
 		}
 
 		// Next
@@ -155,7 +156,7 @@ Client.prototype.registerHook = function(pktName, func)
 
 	self.on(pktName, function (data)
 	{
-		func.call({ client: self });
+		func.call(self.ctx);
 	});
 }
 
@@ -163,7 +164,10 @@ Client.prototype.addPlugin = function(plugin)
 {
 	var self = this;
 
-	plugin.init.call({ client: self });
+	plugin.init.call(self.ctx);
 }
 
-exports.Client = Client;
+exports.create = function (host, port, name, logger, maxbacklog)
+{
+	return new Client(host, port, name, logger, maxbacklog);
+}
