@@ -8,10 +8,10 @@ exports.init = function()
 
 exports.pong = function()
 {
-	this.log.debug('PING?');
+	this.log.info('PING?');
 	var p = this.client.createPacket('IS_TINY');
 	p.subt = insim.TINY_NONE;
 	
 	this.client.send(p);
-	this.log.debug('PONG!');
+	this.log.info('PONG!');
 }

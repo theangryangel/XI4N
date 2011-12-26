@@ -7,7 +7,13 @@ nconf.argv().file({ file: './config.json' });
 
 var log = logger.create();
 
-var c = new client.create(nconf.get('host'), nconf.get('port'), 'xi4n', log);
+var opts = {
+	'host': nconf.get('host'), 
+	'port': nconf.get('port'),
+	'maxbacklog': nconf.get('maxbacklog')
+}
+
+var c = new client.create(opts, log);
 
 // Add our plugins
 var pong = require('./pong');

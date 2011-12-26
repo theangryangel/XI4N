@@ -4,24 +4,26 @@ var util = require('util'),
 	BufferList = require('bufferlist').BufferList, 
 	insim = require('./insim');
 
-var Client = function(host, port, name, logger, maxbacklog)
+var Client = function(options, logger, name)
 {
 	events.EventEmitter.call(this);
 
 	var self = this;
 
-	this.log = logger;
+	self.options = options || {
+		'host': '127.0.0.1',
+		'port': 29999,
+		'maxbacklog': 2048,
+	};
 
-	this.name = name;
-	this.host = host;
-	this.port = port;
-	this.maxbacklog = maxbacklog || 2048;
+	self.log = logger;
+	self.name = 'xi4n';
 
-	this.buffer = new BufferList;
-	this.stream = null;
+	self.buffer = new BufferList;
+	self.stream = null;
 
 	// 'this' context that plugin functions are call
-	this.ctx = { 'client': self, 'log': self.log };
+	self.ctx = { 'client': self, 'log': self.log };
 };
 
 util.inherits(Client, events.EventEmitter);
@@ -30,7 +32,7 @@ Client.prototype.connect = function()
 {
 	var self = this;
 
-	self.stream = net.createConnection(self.port, self.host);
+	self.stream = net.createConnection(self.options.port, self.options.host);
 
 	// Connect
 	self.stream.on('connect', function(socket)
