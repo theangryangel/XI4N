@@ -39,6 +39,9 @@ Client.prototype.connect = function()
 	{
 		var p = new insim.IS_ISI;
 		p.iname = self.name;
+		p.flags |= insim.ISF_MCI;
+		p.interval = 1000;
+
 		self.send(p);
 	});
 
@@ -117,12 +120,14 @@ Client.prototype.receive = function(data)
 			pkt.unpack(p);
 
 			self.log.debug('emitting pkt ' + pktName);
-			self.emit(pktName);
+			self.emit(pktName, pkt);
 		}
 		catch (err)
 		{
 			if (pktName == 'undefined')
 				self.log.debug('unknown pkt - ' + pktId);
+			self.log.debug('Error');
+			self.log.debug(err.stack);
 			self.log.debug(util.inspect(err));
 		}
 
@@ -158,7 +163,7 @@ Client.prototype.registerHook = function(pktName, func)
 
 	self.on(pktName, function (data)
 	{
-		func.call(self.ctx);
+		func.call(self.ctx, data);
 	});
 }
 

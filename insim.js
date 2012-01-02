@@ -107,13 +107,13 @@ exports.SMALL_RTP = 6;
 exports.SMALL_NLI = 7;
 
 exports.ISP_XLATED = [ 'IS_NONE', 'IS_ISI', 'IS_VER', 'IS_TINY', 'IS_SMALL', 'IS_STA', 'IS_SCH',
-'IS_SFP', 'IS_SCC', 'IS_CPP', 'IS_ISM', 'IS_MSO', 'IS_III', 'IS_MST', 'IS_MTC',
-'IS_MOD', 'IS_VTN', 'IS_RST', 'IS_NCN', 'IS_CNL', 'IS_CPR', 'IS_NPL', 'IS_PLP',
-'IS_PLL', 'IS_LAP', 'IS_SPX', 'IS_PIT', 'IS_PSF', 'IS_PLA', 'IS_CCH', 'IS_PEN',
-'IS_TOC', 'IS_FLG', 'IS_PFL', 'IS_FIN', 'IS_RES', 'IS_REO', 'IS_NLP', 'IS_MCI',
-'IS_MSX', 'IS_MSL', 'IS_CRS', 'IS_BFN', 'IS_AXI', 'IS_AXO', 'IS_BTN', 'IS_BTC',
-'IS_BTT', 'IS_RIP', 'IS_SSH', 'IS_CON', 'IS_OBH', 'IS_HLV', 'IS_PLC', 'IS_AXM',
-'IS_ACR' ];
+	'IS_SFP', 'IS_SCC', 'IS_CPP', 'IS_ISM', 'IS_MSO', 'IS_III', 'IS_MST', 'IS_MTC',
+	'IS_MOD', 'IS_VTN', 'IS_RST', 'IS_NCN', 'IS_CNL', 'IS_CPR', 'IS_NPL', 'IS_PLP',
+	'IS_PLL', 'IS_LAP', 'IS_SPX', 'IS_PIT', 'IS_PSF', 'IS_PLA', 'IS_CCH', 'IS_PEN',
+	'IS_TOC', 'IS_FLG', 'IS_PFL', 'IS_FIN', 'IS_RES', 'IS_REO', 'IS_NLP', 'IS_MCI',
+	'IS_MSX', 'IS_MSL', 'IS_CRS', 'IS_BFN', 'IS_AXI', 'IS_AXO', 'IS_BTN', 'IS_BTC',
+	'IS_BTT', 'IS_RIP', 'IS_SSH', 'IS_CON', 'IS_OBH', 'IS_HLV', 'IS_PLC', 'IS_AXM',
+	'IS_ACR' ];
 
 exports.translatePktIdToName = function(id)
 {
@@ -130,7 +130,7 @@ exports.IS_Abstract = function()
 {
 	var self = this;
 
-	this._PACK = '';
+	this._PACK = '<';
 
 	this.size = 0;
 	this.type = exports.ISP_NONE;
@@ -176,9 +176,23 @@ exports.IS_Abstract.prototype.unpack = function(buf)
 }
 
 // IS_ISI
+
+// IS_ISI Flags
+exports.ISF_RES_0 = 0x01 		// bit 0 : spare
+exports.ISF_RES_1 = 0x02 		// bit 1 : spare
+exports.ISF_LOCAL = 0x04 		// bit 2 : guest or single player
+exports.ISF_MSO_COLS = 0x08 	// bit 3 : keep colours in MSO text
+exports.ISF_NLP = 0x10		// bit 4 : receive NLP packets
+exports.ISF_MCI = 0x20		// bit 5 : receive MCI packets
+exports.ISF_CON = 0x40 		// bit 6 : receive CON packets
+exports.ISF_OBH = 0x80 		// bit 7 : receive OBH packets
+exports.ISF_HLV = 0x100 		// bit 8 : receive HLV packets
+exports.ISF_AXM_LOAD = 0x200 	// bit 9 : receive AXM when loading a layout
+exports.ISF_AXM_EDIT = 0x400 // bit 10 : receive AXM when changing objects
+
 exports.IS_ISI = function()
 {
-	this._PACK = 'BBBxHHBBH16s16s';
+	this._PACK = '<BBBBHHBBH16s16s';
 
 	this.size = 44;
 
@@ -186,10 +200,12 @@ exports.IS_ISI = function()
 
 	this.reqi = 0;
 	this.zero = 0;
+
 	this.udpport = 0;
 	this.flags = 0;
+
 	this.sp0 = 0;
-	this.prefix;
+	this.prefix = ''; 
 	this.interval = 0;
 
 	this.admin = '';
@@ -201,7 +217,7 @@ util.inherits(exports.IS_ISI, exports.IS_Abstract);
 // IS_TINY
 exports.IS_TINY = function()
 {
-	this._PACK = 'BBBB';
+	this._PACK = '<BBBB';
 
 	this.size = 4;
 	this.type = exports.ISP_TINY;
@@ -214,7 +230,7 @@ util.inherits(exports.IS_TINY, exports.IS_Abstract);
 // IS_SMALL
 exports.IS_SMALL = function()
 {
-	this._PACK = 'BBBBL';
+	this._PACK = '<BBBBL';
 
 	this.size = 4;
 	this.type = exports.ISP_TINY;
@@ -229,13 +245,13 @@ util.inherits(exports.IS_SMALL, exports.IS_Abstract);
 // IS_VER
 exports.IS_VER = function()
 {
-	this._PACK = 'BBBB8s6sH';
+	this._PACK = '<BBBB8s6sH';
 
 	this.size = 20;
 	this.type = exports.ISP_VER;
 	this.reqi = 0;
 	this.zero = 0;
-	
+
 	this.version = '';
 	this.product = '';
 	this.insimver = 0;
@@ -246,18 +262,18 @@ util.inherits(exports.IS_VER, exports.IS_Abstract);
 // IS_STA
 exports.IS_STA = function()
 {
-	this._PACK = 'BBBBiHBBBBBBBBBB6sBB';
+	this._PACK = '<BBBBiHBBBBBBBBBB6sBB';
 
 	this.size = 28;
 	this.type = exports.ISP_STA;
 	this.reqi = 0;
 	this.zero = 0;
-	
+
 	this.replayspeed = 0;
 	this.flags = 0;
 	this.ingamecam = 0;
 	this.viewplid = 0;
-	
+
 	this.nump = 0;
 	this.numconns = 0;
 	this.numfinished = 0;
@@ -278,13 +294,13 @@ util.inherits(exports.IS_STA, exports.IS_Abstract);
 // IS_SFP
 exports.IS_SFP = function()
 {
-	this._PACK = 'BBBBHBB';
+	this._PACK = '<BBBBHBB';
 
 	this.size = 8;
 	this.type = exports.ISP_SFP;
 	this.reqi = 0;
 	this.zero = 0;
-	
+
 	this.flag = 0;
 	this.offon = 0;
 	this.sp3 = 0;
@@ -295,13 +311,13 @@ util.inherits(exports.IS_SFP, exports.IS_Abstract);
 // IS_MOD
 exports.IS_MOD = function()
 {
-	this._PACK = 'BBBBllll';
+	this._PACK = '<BBBBllll';
 
 	this.size = 20;
 	this.type = exports.ISP_MOD;
 	this.reqi = 0;
 	this.zero = 0;
-	
+
 	this.bits16 = 0;
 	this.rr = 0;
 	this.width = 0;
@@ -313,7 +329,7 @@ util.inherits(exports.IS_MOD, exports.IS_Abstract);
 // IS_MSO
 exports.IS_MSO = function()
 {
-	this._PACK = 'BBBBBBBB128s';
+	this._PACK = '<BBBBBBBB128s';
 
 	this.size = 136;
 	this.type = exports.ISP_MSO;
@@ -332,7 +348,7 @@ util.inherits(exports.IS_MSO, exports.IS_Abstract);
 // IS_III
 exports.IS_III = function()
 {
-	this._PACK = 'BBBBBBBB64s';
+	this._PACK = '<BBBBBBBB64s';
 
 	this.size = 72;
 	this.type = exports.ISP_III;
@@ -351,7 +367,7 @@ util.inherits(exports.IS_III, exports.IS_Abstract);
 // IS_ACR
 exports.IS_ACR = function()
 {
-	this._PACK = 'BBBBBBBB64s';
+	this._PACK = '<BBBBBBBB64s';
 
 	this.size = 72;
 	this.type = exports.ISP_ACR;
@@ -370,7 +386,7 @@ util.inherits(exports.IS_ACR, exports.IS_Abstract);
 // IS_MST
 exports.IS_MST = function()
 {
-	this._PACK = 'BBBB64s';
+	this._PACK = '<BBBB64s';
 
 	this.size = 60;
 	this.type = exports.ISP_MST;
@@ -385,7 +401,7 @@ util.inherits(exports.IS_MST, exports.IS_Abstract);
 // IS_MSX
 exports.IS_MSX = function()
 {
-	this._PACK = 'BBBB96s';
+	this._PACK = '<BBBB96s';
 
 	this.size = 100;
 	this.type = exports.ISP_MSX;
@@ -400,7 +416,7 @@ util.inherits(exports.IS_MSX, exports.IS_Abstract);
 // IS_MSL
 exports.IS_MSL = function()
 {
-	this._PACK = 'BBBB128s';
+	this._PACK = '<BBBB128s';
 
 	this.size = 132;
 	this.type = exports.ISP_MSL;
@@ -423,7 +439,7 @@ util.inherits(exports.IS_MTC, exports.IS_Abstract);
 // IS_SCH
 exports.IS_SCH = function()
 {
-	this._PACK = 'BBBBBBBB';
+	this._PACK = '<BBBBBBBB';
 
 	this.size = 8;
 	this.type = exports.ISP_SCH;
@@ -442,7 +458,7 @@ util.inherits(exports.IS_SCH, exports.IS_Abstract);
 // IS_ISM
 exports.IS_ISM = function()
 {
-	this._PACK = 'BBBBBBBB32s';
+	this._PACK = '<BBBBBBBB32s';
 
 	this.size = 40;
 	this.type = exports.ISP_ISM;
@@ -463,7 +479,7 @@ util.inherits(exports.IS_ISM, exports.IS_Abstract);
 // IS_VTN
 exports.IS_VTN = function()
 {
-	this._PACK = 'BBBBBBBB';
+	this._PACK = '<BBBBBBBB';
 
 	this.size = 8;
 	this.type = exports.ISP_VTN;
@@ -481,7 +497,7 @@ util.inherits(exports.IS_VTN, exports.IS_Abstract);
 // IS_PLC
 exports.IS_PLC = function()
 {
-	this._PACK = 'BBBBBBBBL';
+	this._PACK = '<BBBBBBBBL';
 
 	this.size = 12;
 	this.type = exports.ISP_PLC;
@@ -501,7 +517,7 @@ util.inherits(exports.IS_PLC, exports.IS_Abstract);
 // IS_RST
 exports.IS_RST = function()
 {
-	this._PACK = 'BBBBBBBB6sBBHHHHHH';
+	this._PACK = '<BBBBBBBB6sBBHHHHHH';
 
 	this.size = 28;
 	this.type = exports.ISP_RST;
@@ -530,7 +546,7 @@ util.inherits(exports.IS_RST, exports.IS_Abstract);
 // IS_NCN
 exports.IS_NCN = function()
 {
-	this._PACK = 'BBBB24s24sBBBB';
+	this._PACK = '<BBBB24s24sBBBB';
 
 	this.size = 56;
 	this.type = exports.ISP_NCN;
@@ -551,7 +567,7 @@ util.inherits(exports.IS_NCN, exports.IS_Abstract);
 // IS_CNL
 exports.IS_CNL = function()
 {
-	this._PACK = 'BBBBBBBB';
+	this._PACK = '<BBBBBBBB';
 
 	this.size = 8;
 	this.type = exports.ISP_CNL;
@@ -569,7 +585,7 @@ util.inherits(exports.IS_CNL, exports.IS_Abstract);
 // IS_CPR
 exports.IS_CPR = function()
 {
-	this._PACK = 'BBBB24s8s';
+	this._PACK = '<BBBB24s8s';
 
 	this.size = 36;
 	this.type = exports.ISP_CPR;
@@ -585,7 +601,7 @@ util.inherits(exports.IS_CPR, exports.IS_Abstract);
 // IS_NPL
 exports.IS_NPL = function()
 {
-	this._PACK = 'BBBBBBH24s8s4s16s4ABBBBlBBBB';
+	this._PACK = '<BBBBBBH24s8s4s16s4ABBBBlBBBB';
 
 	this.size = 76;
 	this.type = exports.ISP_NPL;
@@ -602,7 +618,7 @@ exports.IS_NPL = function()
 	this.cname = '';
 	this.sname = '';
 	this.tyres = 0;
-	
+
 	this.h_mass = 0;
 	this.h_tres = 0;
 	this.model = 0;
@@ -621,7 +637,7 @@ util.inherits(exports.IS_NPL, exports.IS_Abstract);
 // IS_PLP
 exports.IS_PLP = function()
 {
-	this._PACK = 'BBBB';
+	this._PACK = '<BBBB';
 
 	this.size = 4;
 	this.type = exports.ISP_PLP;
@@ -634,7 +650,7 @@ util.inherits(exports.IS_PLP, exports.IS_Abstract);
 // IS_PLL
 exports.IS_PLL = function()
 {
-	this._PACK = 'BBBB';
+	this._PACK = '<BBBB';
 
 	this.size = 4;
 	this.type = exports.ISP_PLL;
@@ -647,7 +663,7 @@ util.inherits(exports.IS_PLL, exports.IS_Abstract);
 // IS_CRS
 exports.IS_CRS = function()
 {
-	this._PACK = 'BBBB';
+	this._PACK = '<BBBB';
 
 	this.size = 4;
 	this.type = exports.ISP_CRS;
@@ -660,7 +676,7 @@ util.inherits(exports.IS_CRS, exports.IS_Abstract);
 // IS_LAP
 exports.IS_LAP = function()
 {
-	this._PACK = 'BBBBLLHHBBBB';
+	this._PACK = '<BBBBLLHHBBBB';
 
 	this.size = 20;
 	this.type = exports.ISP_LAP;
@@ -684,7 +700,7 @@ util.inherits(exports.IS_LAP, exports.IS_Abstract);
 // IS_SPX
 exports.IS_SPX = function()
 {
-	this._PACK = 'BBBBLLBBBB';
+	this._PACK = '<BBBBLLBBBB';
 
 	this.size = 16;
 	this.type = exports.ISP_SPX;
@@ -705,7 +721,7 @@ util.inherits(exports.IS_SPX, exports.IS_Abstract);
 // IS_PIT
 exports.IS_PIT = function()
 {
-	this._PACK = 'BBBBHHBBBB4ALL';
+	this._PACK = '<BBBBHHBBBB4ALL';
 
 	this.size = 24;
 	this.type = exports.ISP_PIT;
@@ -714,7 +730,7 @@ exports.IS_PIT = function()
 
 	this.lapsdone = 0;
 	this.flags = 0;
-	
+
 	this.sp0 = 0;
 	this.penalty = 0;
 	this.numstops = 0;
@@ -731,7 +747,7 @@ util.inherits(exports.IS_PIT, exports.IS_Abstract);
 // IS_PSF
 exports.IS_PSF = function()
 {
-	this._PACK = 'BBBBLL';
+	this._PACK = '<BBBBLL';
 
 	this.size = 12;
 	this.type = exports.ISP_PSF;
@@ -747,7 +763,7 @@ util.inherits(exports.IS_PSF, exports.IS_Abstract);
 // IS_PLA
 exports.IS_PLA = function()
 {
-	this._PACK = 'BBBBBBBB';
+	this._PACK = '<BBBBBBBB';
 
 	this.size = 8;
 	this.type = exports.ISP_PLA;
@@ -765,7 +781,7 @@ util.inherits(exports.IS_PLA, exports.IS_Abstract);
 // IS_CCH
 exports.IS_CCH = function()
 {
-	this._PACK = 'BBBBBBBB';
+	this._PACK = '<BBBBBBBB';
 
 	this.size = 8;
 	this.type = exports.ISP_CCH;
@@ -783,7 +799,7 @@ util.inherits(exports.IS_CCH, exports.IS_Abstract);
 // IS_PEN
 exports.IS_PEN = function()
 {
-	this._PACK = 'BBBBBBBB';
+	this._PACK = '<BBBBBBBB';
 
 	this.size = 8;
 	this.type = exports.ISP_PEN;
@@ -801,7 +817,7 @@ util.inherits(exports.IS_PEN, exports.IS_Abstract);
 // IS_TOC
 exports.IS_TOC = function()
 {
-	this._PACK = 'BBBBBBBB';
+	this._PACK = '<BBBBBBBB';
 
 	this.size = 8;
 	this.type = exports.ISP_TOC;
@@ -819,7 +835,7 @@ util.inherits(exports.IS_TOC, exports.IS_Abstract);
 // IS_FLG
 exports.IS_FLG = function()
 {
-	this._PACK = 'BBBBBBBB';
+	this._PACK = '<BBBBBBBB';
 
 	this.size = 8;
 	this.type = exports.ISP_FLG;
@@ -837,7 +853,7 @@ util.inherits(exports.IS_FLG, exports.IS_Abstract);
 // IS_PFL
 exports.IS_PFL = function()
 {
-	this._PACK = 'BBBBHH';
+	this._PACK = '<BBBBHH';
 
 	this.size = 8;
 	this.type = exports.ISP_PFL;
@@ -853,7 +869,7 @@ util.inherits(exports.IS_PFL, exports.IS_Abstract);
 // IS_FIN
 exports.IS_FIN = function()
 {
-	this._PACK = 'BBBBLLBBBBHH';
+	this._PACK = '<BBBBLLBBBBHH';
 
 	this.size = 20;
 	this.type = exports.ISP_FIN;
@@ -877,7 +893,7 @@ util.inherits(exports.IS_FIN, exports.IS_Abstract);
 // IS_RES
 exports.IS_RES = function()
 {
-	this._PACK = 'BBBB24s24s8s4sLLBBBBHHBBH';
+	this._PACK = '<BBBB24s24s8s4sLLBBBBHHBBH';
 
 	this.size = 84;
 	this.type = exports.ISP_RES;
@@ -910,7 +926,7 @@ util.inherits(exports.IS_RES, exports.IS_Abstract);
 // IS_REO
 exports.IS_REO = function()
 {
-	this._PACK = 'BBBB32A';
+	this._PACK = '<BBBB32A';
 
 	this.size = 36;
 	this.type = exports.ISP_REO;
@@ -925,7 +941,7 @@ util.inherits(exports.IS_REO, exports.IS_Abstract);
 // IS_AXI
 exports.IS_AXI = function()
 {
-	this._PACK = 'BBBBBBH32s';
+	this._PACK = '<BBBBBBH32s';
 
 	this.size = 40;
 	this.type = exports.ISP_AXI;
@@ -944,7 +960,7 @@ util.inherits(exports.IS_AXI, exports.IS_Abstract);
 // IS_AXO
 exports.IS_AXO = function()
 {
-	this._PACK = 'BBBB';
+	this._PACK = '<BBBB';
 
 	this.size = 4;
 	this.type = exports.ISP_AXO;
@@ -957,7 +973,7 @@ util.inherits(exports.IS_AXO, exports.IS_Abstract);
 // IS_AXO
 exports.IS_AXO = function()
 {
-	this._PACK = 'BBBB';
+	this._PACK = '<BBBB';
 
 	this.size = 4;
 	this.type = exports.ISP_AXO;
@@ -975,13 +991,87 @@ exports.IS_NLP = function()
 
 util.inherits(exports.IS_NLP, exports.IS_Abstract);
 
+// CompCar
+
+// CompCar info flags
+exports.CCI_BLUE = 1;
+exports.CCI_YELLOW = 2;
+exports.CCI_LAG = 32;
+exports.CCI_FIRST = 64;
+exports.CCI_LAST = 128;
+
+exports.IS_COMPCAR = function()
+{
+	this._PACK = '<HHBBBBlllHHHh';
+
+	this.node = 0;
+	this.lap = 0;
+	this.plid = 0;
+	this.position = 0;
+	this.info = 0;
+	this.sp3 = 0;
+	this.x = 0;
+	this.y = 0;
+	this.z = 0;
+	this.speed = 0;
+	this.direction = 0;
+	this.heading = 0;
+	this.angvel = 0;
+}
+
+util.inherits(exports.IS_COMPCAR, exports.IS_Abstract);
+
 // IS_MCI
 exports.IS_MCI = function()
 {
-	// TODO
+	this._PACK = '<BBBB';
+
+	// Variable size packet
+	// 4 + (numc * 28)
+	this.size = 0;
+	this.type = exports.ISP_MCI;
+	this.reqi = 0;
+	this.numc = 0;
+
+	this.compcar = [];
+}
+
+exports.IS_MCI.prototype.pack = function(values)
+{
+	throw new Error('Unsupported at this time');
 }
 
 util.inherits(exports.IS_MCI, exports.IS_Abstract);
+
+exports.IS_MCI.prototype.unpack = function(buf)
+{
+	var self = this;
+
+	// Base properties
+	var data = jspack.Unpack(self._PACK, buf, 0);
+
+	var properties = this.getProperties();
+	for (var i = 0; i < properties.length; i++)
+	{
+		if (properties[i] == "compcar")
+			continue;
+
+		self[properties[i]] = data[i];
+	}
+
+	// Compcar unpacking
+	for(var i = 0; i < self.numc; i++)
+	{
+		// Next packet start position
+		var start = 4 + (i * 28);
+		var tbuf = buf.slice(start, (start + 28));
+
+		var c = new exports.IS_COMPCAR;
+		c.unpack(tbuf);
+
+		self.compcar.push(c);
+	}
+}
 
 // IS_CON
 exports.IS_CON = function()
@@ -1018,7 +1108,7 @@ util.inherits(exports.IS_AXM, exports.IS_Abstract);
 // IS_SCC
 exports.IS_SCC = function()
 {
-	this._PACK = 'BBBBBBBB';
+	this._PACK = '<BBBBBBBB';
 
 	this.size = 8;
 	this.type = exports.ISP_SCC;
@@ -1036,7 +1126,7 @@ util.inherits(exports.IS_SCC, exports.IS_Abstract);
 // IS_CPP
 exports.IS_SCC = function()
 {
-	this._PACK = 'BBBB3lHHHBBfHH';
+	this._PACK = '<BBBB3lHHHBBfHH';
 
 	this.size = 32;
 	this.type = exports.ISP_SCC;
@@ -1061,7 +1151,7 @@ util.inherits(exports.IS_SCC, exports.IS_Abstract);
 // IS_RIP
 exports.IS_RIP = function()
 {
-	this._PACK = 'BBBBBBBBLL64s';
+	this._PACK = '<BBBBBBBBLL64s';
 
 	this.size = 80;
 	this.type = exports.ISP_RIP;
@@ -1084,7 +1174,7 @@ util.inherits(exports.IS_RIP, exports.IS_Abstract);
 // IS_SSH
 exports.IS_SSH = function()
 {
-	this._PACK = 'BBBBBBBB32s';
+	this._PACK = '<BBBBBBBB32s';
 
 	this.size = 40;
 	this.type = exports.ISP_SSH;
@@ -1104,7 +1194,7 @@ util.inherits(exports.IS_SSH, exports.IS_Abstract);
 // IS_BFN
 exports.IS_BFN = function()
 {
-	this._PACK = 'BBBBBBBB';
+	this._PACK = '<BBBBBBBB';
 
 	this.size = 8;
 	this.type = exports.ISP_BFN;
@@ -1123,7 +1213,7 @@ util.inherits(exports.IS_BFN, exports.IS_Abstract);
 exports.IS_BTN = function()
 {
 	// TODO - FINISH - text is not fixed
-	this._PACK = 'BBBBBBBBBBBB32s';
+	this._PACK = '<BBBBBBBBBBBB32s';
 
 	this.size = 12;
 	this.type = exports.ISP_BTN;
@@ -1148,7 +1238,7 @@ util.inherits(exports.IS_BTN, exports.IS_Abstract);
 // IS_BTC
 exports.IS_BTC = function()
 {
-	this._PACK = 'BBBBBBBB';
+	this._PACK = '<BBBBBBBB';
 
 	this.size = 8;
 	this.type = exports.ISP_BTC;
@@ -1168,7 +1258,7 @@ util.inherits(exports.IS_BTC, exports.IS_Abstract);
 // IS_BTT
 exports.IS_BTT = function()
 {
-	this._PACK = 'BBBBBBBB96s';
+	this._PACK = '<BBBBBBBB96s';
 
 	this.size = 104;
 	this.type = exports.ISP_BTT;

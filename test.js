@@ -19,5 +19,8 @@ var c = new client.create(opts, log);
 var pong = require('./pong');
 c.addPlugin(pong);
 
+var mci = require('./mci');
+c.addPlugin(mci);
+
 // Connect
 c.connect();
