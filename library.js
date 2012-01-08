@@ -5,5 +5,6 @@
 
 exports.insim = require('./lib/insim');
 exports.client = require('./lib/client');
+exports.clientmanager = require('./lib/clientmanager');
 exports.logger = require('./lib/logger');
 exports.product = require('./lib/product');
