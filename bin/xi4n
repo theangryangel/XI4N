@@ -6,13 +6,14 @@
  * https://github.com/tnantoka/LooseLeaf/blob/master/bin/looseleaf
  * https://github.com/baudehlo/Haraka/blob/master/bin/haraka
  *
- * Thanks guys!
+ * Uses portions of Matt Sergeant's bin/haraka
  */
 
 var product = require('../lib/product'),
 	util = require('util'),
 	fs = require('fs'),
-	path = require('path'),
+	path = require('path')
+	os = require('os'),
 	program = require('commander');
 
 // Additonal Useful funcs
@@ -28,69 +29,119 @@ program.invalidOptionValue = function(name, additional)
 	console.error();
 	console.error("  error: invalid option value for `%s'", name);
 	if (additional)
-		console.error("         %s", additional);
+		console.error("		 %s", additional);
 	console.error();
 	process.exit(1);
 }
 
 function mkdir(dst, force)
 {
-    try
+	try
 	{
-        fs.mkdirSync(dst, fs.statSync(__dirname).mode);
-    }
-    catch (e)
+		fs.mkdirSync(dst, fs.statSync(__dirname).mode);
+	}
+	catch (e)
 	{
-        // File exists
-        if ((e.errno = 17) && (!force))
+		// File exists
+		if (e.errno = 17)
 		{
-			console.warn();
-			console.warn("  warn: exception whilst creating '%s' - '%s'", dst, e.message);
-			console.warn();
-        }
-        else
+			if (!force)
+			{
+				console.warn();
+				console.warn("  warn: exception whilst creating '%s' - '%s'", dst, e.message);
+				console.warn();
+			}
+		}
+		else
 		{
-            throw e;
-        }
-    }
+			throw e;
+		}
+	}
 }
 
 var mkfile = function (dst, data, force)
 {
-    try
+	try
 	{
-        if (path.existsSync(dst) && !force)
-            throw filePath + " already exists";
+		if (path.existsSync(dst) && !force)
+			throw filePath + " already exists";
 
-        var fd = fs.openSync(dst, 'w');
-        fs.writeSync(fd, data);
+		var fd = fs.openSync(dst, 'w');
+		fs.writeSync(fd, data);
 		fs.close(fd);
-    }
-    catch (e)
+	}
+	catch (e)
 	{
 		console.error();
 		console.error("  error: unable to create file '%s'", file);
 		console.error();
-    }
+	}
 }
 
-var copyfile = function (src, dst, force, cb)
+var copyfile = function (src, dst, force)
 {
-	var is, os;
-
-	path.exists(dst, function(exists)
+	if (path.existsSync(dst) && !force)
 	{
-		if (exists && !force)
-		{
-			cb(exists);
-			return;
-		}
+		console.error();
+		console.error("  error: failed to copy '%s' to '%s' - already exists", src, dst);
+		console.error();
+		return;
+	}
 
-		is = fs.createReadStream(src);
-		os = fs.createWriteStream(dst);
-		util.pump(is, os, cb);
-	});
+	var data = fs.readFileSync(src);
+	fs.writeFileSync(dst, data);
 }
+
+var copydir = function(src, dst, force)
+{
+	mkdir(dst, force);
+	var files = fs.readdirSync(src);
+	
+	for(var i = 0; i < files.length; i++)
+	{
+		// Ignore dot files
+		// TODO: Add windows hidden file support
+		if (/^\./.test(files[i]))
+			continue;
+	
+		var srcFile = path.join(src, files[i]);
+		var dstFile = path.join(dst, files[i]);
+
+		var srcStat = fs.statSync(srcFile);
+	  
+		// Recursive call If direcotory
+		if (srcStat.isDirectory())
+			copydir(srcFile, dstFile, force);
+
+		// Copy to dstPath if file
+		else if (srcStat.isFile())
+			copyfile(srcFile, dstFile, force);
+	}
+}
+
+var eol = (os.platform() == 'win32') ? '\r\n' : '\n';
+
+var basePKG = JSON.stringify({
+	"name": product.name + "-" + product.version + "-custom", 
+	"description": "A custom " + product.name + " install",	
+	"version": "0.1"
+});
+
+var baseREADME = [
+	"eXtensible Insim 4 Node(js)",
+	"---------------------------",
+	"Congratulations on creating a new set of default xi4n config files and plugins.",
+	"",
+	"This directory contains a few key files and directories.",
+	"",
+	" - config.json",
+	"   This config for your client. You probably want to alter a few things in here",
+	"   such as the hostname, passwords, plugins, etc.",
+	" - plugins",
+	"   This directory contains both base and custom plugins which you write to run",
+	"   in xi4n.",
+	"",
+].join(eol);
 
 // Our program
 program
@@ -104,7 +155,7 @@ if (program.install && program.config)
 {
 	console.error();
 	console.error('  error: no support to run both install and config simultaneously.');
-	console.error('         surely you want to customise your config first?');
+	console.error('		 surely you want to customise your config first?');
 	console.error();
 	process.exit(1);
 }
@@ -116,34 +167,50 @@ if (program.install)
 		if (exists && !program.force)
 			program.invalidOptionValue('-i, --install <path>', 'Path already exists');
 
+		if (program.force)
+		{
+			console.warn();
+			console.warn("  warn: forcing overwrite of existing files and directories");
+			console.warn();
+		}
+
 		if (!exists)
 			mkdir(program.install);
 
 		// copy our crap into the relevant places
-		console.log(product.basedir);
+		console.log('  installing into \'%s\'', program.install);
 
 		// package.json file for our install directory
+		console.log('  creating \'%s\'', path.join(program.install, 'package.json'));
 		mkfile(
 			path.join(program.install, 'package.json'), 
-			JSON.stringify({
-				"name": product.name, 
-				"description": "A custom " + product.name + " install",	
-				"version": "0.1"
-			}),
+			basePKG,
 			program.force
 		);
 
 		// README file
+		console.log('  creating \'%s\'', path.join(program.install, 'README'));
 		mkfile(
 			path.join(program.install, 'README'), 
-			'Adsasd',
+			baseREADME,
 			program.force
 		);
 
 		// copy base config.json
-		copyfile(path.join(product.basedir, 'config.json'), path.join(program.install, 'config.json'))
+		console.log('  creating \'%s\'', path.join(program.install, 'config.json'));
+		copyfile(
+			path.join(product.basedir, 'config.json'), 
+			path.join(program.install, 'config.json'),
+			program.force
+		);
 
-		process.exit(0);
+		// copy base plugins
+		console.log('  creating \'%s\'', path.join(program.install, 'plugins'));
+		copydir(
+			path.join(product.basedir, 'plugins'), 
+			path.join(program.install, 'plugins'),
+			program.force
+		);
 	});
 }
 
@@ -154,7 +221,7 @@ if (program.config)
 		if (!exists)
 			program.invalidOptionValue('-c, --config <path>', 'Path does not exist');
 
-		console.log('Run with given path \'%s\'', program.config);
+		console.log('  run with given path \'%s\'', program.config);
 		process.exit(0);
 	});
 }
