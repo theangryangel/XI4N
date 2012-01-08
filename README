@@ -2,11 +2,10 @@ eXtensible Insim 4 Nodejs
 -------------------------
 Nothing special at this stage.
 
-A toy project to communicate with LiveForSpeed InSim servers. Basically emulates
-PRISM.
+A toy project to communicate with LiveForSpeed InSim servers.
 
 Requires
 --------
   * node-bufferlist
   * node-jspack
-  * nconf
+  * commander

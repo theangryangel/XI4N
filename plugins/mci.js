@@ -6,6 +6,8 @@ var plids = [];
 exports.init = function()
 {
 	this.log.info('Registering MCI plugin');
+	this.client.isiFlags |= this.insim.ISF_MCI;
+
 	this.client.registerHook('IS_MCI', exports.mci);
 
 	//this.client.registerHook('IS_NCN', exports.ncn);
@@ -19,10 +21,12 @@ exports.connected = function(pkt)
 	// request  
 }
 
+/*
 exports.ncn = function(pkt)
 {
 	ucid[pkt.ucid] = 
 }
+*/
 
 exports.mci = function(pkt)
 {
