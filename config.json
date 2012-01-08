@@ -1,11 +1,22 @@
 {
 	"clients": [
 		{
-			"id": 1,
 			"name": "localhost", 
 			"host": "127.0.0.1",
 			"port": 29999,
-			"maxbacklog": 2048
+			"maxbacklog": 2048,
+			"plugins": [
+				{
+					"path": "pong",
+					"options": {
+					}
+				},
+				{
+					"path": "mci",
+					"options": {
+					}
+				}
+			]
 		}
 	],
 	"host": "127.0.0.1",
