@@ -1,11 +1,8 @@
 var nconf = require('nconf'),
-	client = require('./client'),
-	logger = require('./logger');
+	client = require('./lib/client');
 
 // Setup nconf. Argv takes presedence over any local config.json
 nconf.argv().file({ file: './config.json' });
-
-var log = logger.create();
 
 var opts = {
 	'host': nconf.get('host'), 
@@ -13,14 +10,14 @@ var opts = {
 	'maxbacklog': nconf.get('maxbacklog')
 }
 
-var c = new client.create(opts, log);
+var c = new client.create(opts);
 
 // Add our plugins
-var pong = require('./pong');
+var pong = require('./plugins/pong');
 c.addPlugin(pong);
 
-var mci = require('./mci');
-c.addPlugin(mci);
+//var mci = require('./plugins/mci');
+//c.addPlugin(mci);
 
 // Connect
 c.connect();

@@ -1,5 +1,3 @@
-var insim = require('./insim');
-
 exports.init = function()
 {
 	this.log.info('Registering Ping/Pong plugin');
@@ -9,8 +7,8 @@ exports.init = function()
 exports.pong = function()
 {
 	this.log.info('PING?');
-	var p = this.client.createPacket('IS_TINY');
-	p.subt = insim.TINY_NONE;
+	var p = new this.insim.IS_TINY();
+	p.subt = this.insim.TINY_NONE;
 	
 	this.client.send(p);
 	this.log.info('PONG!');
