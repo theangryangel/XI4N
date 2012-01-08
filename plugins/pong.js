@@ -1,4 +1,4 @@
-exports.init = function()
+exports.init = function(options)
 {
 	this.log.info('Registering Ping/Pong plugin');
 	this.client.registerHook('IS_TINY', exports.pong);

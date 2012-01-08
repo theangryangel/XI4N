@@ -3,7 +3,7 @@ var util = require('util');
 var ucids = [];
 var plids = [];
 
-exports.init = function()
+exports.init = function(options)
 {
 	this.log.info('Registering MCI plugin');
 	this.client.isiFlags |= this.insim.ISF_MCI;
