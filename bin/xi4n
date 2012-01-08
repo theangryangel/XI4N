@@ -1,0 +1,163 @@
+#!/usr/bin/env node
+
+/** 
+ * Script takes inspiration from:
+ * https://github.com/visionmedia/express/blob/master/bin/express
+ * https://github.com/tnantoka/LooseLeaf/blob/master/bin/looseleaf
+ * https://github.com/baudehlo/Haraka/blob/master/bin/haraka
+ *
+ * Thanks guys!
+ */
+
+var product = require('../lib/product'),
+	util = require('util'),
+	fs = require('fs'),
+	path = require('path'),
+	program = require('commander');
+
+// Additonal Useful funcs
+program.writeUsageAndExit = function(code)
+{
+	var exitcode = code || 1;
+	process.stdout.write(program.helpInformation());
+	process.exit(exitcode);
+}
+
+program.invalidOptionValue = function(name, additional)
+{
+	console.error();
+	console.error("  error: invalid option value for `%s'", name);
+	if (additional)
+		console.error("         %s", additional);
+	console.error();
+	process.exit(1);
+}
+
+function mkdir(dst, force)
+{
+    try
+	{
+        fs.mkdirSync(dst, fs.statSync(__dirname).mode);
+    }
+    catch (e)
+	{
+        // File exists
+        if ((e.errno = 17) && (!force))
+		{
+			console.warn();
+			console.warn("  warn: exception whilst creating '%s' - '%s'", dst, e.message);
+			console.warn();
+        }
+        else
+		{
+            throw e;
+        }
+    }
+}
+
+var mkfile = function (dst, data, force)
+{
+    try
+	{
+        if (path.existsSync(dst) && !force)
+            throw filePath + " already exists";
+
+        var fd = fs.openSync(dst, 'w');
+        fs.writeSync(fd, data);
+		fs.close(fd);
+    }
+    catch (e)
+	{
+		console.error();
+		console.error("  error: unable to create file '%s'", file);
+		console.error();
+    }
+}
+
+var copyfile = function (src, dst, force, cb)
+{
+	var is, os;
+
+	path.exists(dst, function(exists)
+	{
+		if (exists && !force)
+		{
+			cb(exists);
+			return;
+		}
+
+		is = fs.createReadStream(src);
+		os = fs.createWriteStream(dst);
+		util.pump(is, os, cb);
+	});
+}
+
+// Our program
+program
+	.version(product.version)
+	.option('-i, --install <path>', 'Install basic config and standard plugins to <path>')
+	.option('-c, --config <path>', 'Run xi4n install, using configuration at <path>')
+	.option('-f, --force', 'Forces either install or config to run, if path already exists')
+	.parse(process.argv);
+
+if (program.install && program.config)
+{
+	console.error();
+	console.error('  error: no support to run both install and config simultaneously.');
+	console.error('         surely you want to customise your config first?');
+	console.error();
+	process.exit(1);
+}
+
+if (program.install)
+{
+	path.exists(program.install, function(exists)
+	{
+		if (exists && !program.force)
+			program.invalidOptionValue('-i, --install <path>', 'Path already exists');
+
+		if (!exists)
+			mkdir(program.install);
+
+		// copy our crap into the relevant places
+		console.log(product.basedir);
+
+		// package.json file for our install directory
+		mkfile(
+			path.join(program.install, 'package.json'), 
+			JSON.stringify({
+				"name": product.name, 
+				"description": "A custom " + product.name + " install",	
+				"version": "0.1"
+			}),
+			program.force
+		);
+
+		// README file
+		mkfile(
+			path.join(program.install, 'README'), 
+			'Adsasd',
+			program.force
+		);
+
+		// copy base config.json
+		copyfile(path.join(product.basedir, 'config.json'), path.join(program.install, 'config.json'))
+
+		process.exit(0);
+	});
+}
+
+if (program.config)
+{
+	path.exists(program.config, function(exists)
+	{
+		if (!exists)
+			program.invalidOptionValue('-c, --config <path>', 'Path does not exist');
+
+		console.log('Run with given path \'%s\'', program.config);
+		process.exit(0);
+	});
+}
+
+if (!program.install && !program.config)
+	program.writeUsageAndExit(1);
