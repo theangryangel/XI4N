@@ -1,17 +1,18 @@
 {
 	"name": "xi4n",
-	"preferGlobal": "true",
 	"version": "0.0.1",
 	"author": "the_angry_angel <karl@theangryangel.co.uk>",
-	"description": "A simple, eXtensible Insim client 4 Node(js). May be used as a library or a standalone client",
-	"bin": {
-		"xi4n": "./bin/xi4n"
-	},
-	"main": "./library",
+	"description": "A simple, eXtensible Insim client 4 Node(js). Can be used as a library or a standalone client",
 	"repository": {
 		"type": "git",
 		"url": "https://github.com/theangryangel/XI4N"
 	},
+	"bugs": "https://github.com/theangryangel/XI4N/issues",
+	"preferGlobal": "true",
+	"bin": {
+		"xi4n": "./bin/xi4n"
+	},
+	"main": "./library",
 	"keywords": [
 		"cli",
 		"insim",
@@ -20,7 +21,7 @@
 	"dependencies": {
 		"bufferlist": "*",
 		"jspack": "*",
-		"nconf": "*"
+		"commander": "*"
 	},
 	"bundleDependencies": [
 	],
