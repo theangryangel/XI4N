@@ -1,3 +1,4 @@
+  * Fix lib/insim.js so that you can call the parent when inherited. Doh.
   * Add log level support to config.json
   * Add reconnection support to ClientManager
   * Add state management to Client

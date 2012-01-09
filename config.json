@@ -13,12 +13,9 @@
 					}
 				},
 				{
-					"path": "monitor",
+					"path": "livemap",
 					"options": {
-						"log": false,
-						"seconds": 5,
-						"http": true,
-						"http-port": 9615
+						"http-port": 8081
 					}
 				}
 			]
