@@ -1,5 +1,5 @@
-  * Fix lib/insim.js so that you can call the parent when inherited. Doh.
-  * Add log level support to config.json
   * Add reconnection support to ClientManager
+  * Make ClientManager an EventEmitter 
   * Add state management to Client
-  * Add a bundled vector library
+  * Add a bundled vector library to insim.js
+  * Add plugin validation checking

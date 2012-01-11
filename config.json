@@ -1,5 +1,7 @@
 {
-	"loglevel": "debug",
+	"logger": {
+		"level": "info"
+	},
 	"clients": [
 		{
 			"name": "localhost", 
