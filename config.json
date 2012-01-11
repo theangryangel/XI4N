@@ -1,6 +1,7 @@
 {
 	"logger": {
-		"level": "info"
+		"level": "debug",
+		"stream": "stdout"
 	},
 	"clients": [
 		{

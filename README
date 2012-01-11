@@ -1,11 +1,51 @@
 eXtensible Insim 4 Nodejs
 -------------------------
-Nothing special at this stage.
-
 A toy project to communicate with LiveForSpeed InSim servers.
+
+Very much a work in progress. Doesn't yet support all InSim packets, OutSim, or
+Outguage yet. Only supports TCP.
+
+Features
+--------
+  * Can be used as library or as a standalone product
+  * Supports multiple TCP InSim connections
+  * Lightweight in comparison to other InSim clients
+
+Todo
+----
+See TODO for the interesting ones.
+Not yet a comprehensive list.
+
+Install
+-------
+  - Install nodejs (if not already done)
+  - Clone this repository 
+  - cd xi4n
+  - npm -g xi4n .
+
+Usage - As a platform (standalone)
+----------------------------------
+  * After install you will now have a xi4n command
+  * To setup a base config and plugins run "xi4n -i path/to/directory"
+  * Modify your config.json as necessary
+  * Install/update any plugins
+  * run "xi4n -c path/to/directory" to run your configuration and plugins
+
+Usage - As a library
+--------------------
+Still writing the docs for this one, however as a rough outline -
+
+  * var xi4n = require('xi4n') yields the following:
+    - xi4n.insim
+    - xi4n.client
+    - xi4n.clientmanager
+    - xi4n.logger
+    - xi4n.product
+  * See examples/ directory for some simple examples
 
 Requires
 --------
+Uses the following awesome libraries - 
   * node-bufferlist
   * node-jspack
   * commander
