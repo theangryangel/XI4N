@@ -19,8 +19,9 @@ Not yet a comprehensive list.
 Install
 -------
   - Install nodejs (if not already done)
-  - Clone this repository 
-  - cd xi4n
+  - Clone this repository (either download as a zip and extract or "git clone
+    git://github.com/theangryangel/XI4N.git")
+  - cd XI4N
   - npm -g install .
 
 Usage - As a platform (standalone)
