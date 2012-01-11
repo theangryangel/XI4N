@@ -9,9 +9,11 @@
  * Uses portions of Matt Sergeant's bin/haraka
  */
 
+"use strict";
+
 var util = require('util'),
 	fs = require('fs'),
-	path = require('path')
+	path = require('path'),
 	os = require('os'),
 	program = require('commander'),
 	product = require('../lib/product'),
