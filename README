@@ -21,7 +21,7 @@ Install
   - Install nodejs (if not already done)
   - Clone this repository 
   - cd xi4n
-  - npm -g xi4n .
+  - npm -g install .
 
 Usage - As a platform (standalone)
 ----------------------------------
