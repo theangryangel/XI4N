@@ -1,0 +1,188 @@
+<html>
+	<head>
+		<script src="/socket.io/socket.io.js"></script>
+		<script type="text/javascript" src="/static/js/jquery-1.7.1.min.js"></script>
+		<script type="text/javascript" src="/static/js/jquery-ui-1.8.17.custom.min.js"></script>
+		<script type="text/javascript" src="/static/js/d3.min.js"></script>
+		<link rel="stylesheet" href="/static/css/jquery-ui-1.8.17.custom.css" type="text/css" media="screen">
+		<style>
+			.track
+			{
+				stroke: #ccc;
+				stroke-width: 10; 
+				fill: none;
+			}
+			.title
+			{
+				font-family: Arial, Helvetica, sans-serif;
+				font-size: 0.75em;
+				color: #ccc;
+			}
+			.player
+			{
+				stroke: #fff;
+				stroke-width: 2; 
+				fill: brown;
+			}
+			#graph 
+			{
+				width:100px;
+				height:768px;
+				border:1px solid #ccc;
+
+				margin-left: auto;
+				margin-right:auto;
+			}
+		</style>
+		<script type="text/javascript">
+		$(document).ready(function() {
+
+			var x = null, y = null;
+
+			function drawTrack(data)
+			{
+				var graph = d3.select("#graph")
+					.append("svg:svg")
+					.attr("width", "100%")
+					.attr("height", "100%");
+
+				var min = { x: 0, y: 0 };
+				var max = { x: 0, y: 0 };
+
+				for (d in data.nodes)
+				{
+					if (data.nodes[d].x > max.x)
+						max.x = data.nodes[d].x;
+
+					if (data.nodes[d].x < min.x)
+						min.x = data.nodes[d].x;
+
+					if (data.nodes[d].y > max.y)
+						max.y = data.nodes[d].y;
+
+					if (data.nodes[d].y < min.y)
+						min.y = data.nodes[d].y;
+				}
+
+				var height = d3.select("#graph").style('height').replace('px','')-20;
+
+				var scalingfactor = ((max.y-min.y)/height);
+
+				var width = ((max.x-min.x)/scalingfactor);
+
+				d3.select("#graph").style('width', (width+20) + 'px');
+
+				y = d3.scale.linear().domain([min.y, max.y]).range([20, height]);
+				x = d3.scale.linear().domain([min.x, max.x]).range([20, width]);
+
+				var line = d3.svg.line()
+				.x(function(d,i)
+				{
+					return x(d.x);
+				})
+				.y(function(d)
+				{
+					return y(d.y);
+				})
+				.interpolate("basis-closed");
+
+				graph.append("svg:path").attr("d", line(data.nodes)).attr("class", "track");
+
+				var title = graph.append("text")
+					.attr("class", "title")
+					.attr("y", 20)
+					.attr("x", 10)
+					.text(data.track + ' (resolution: ~' + data.resolution + ')');
+
+				var startfinish = graph.append("svg:rect")
+					.attr("x", x(data.startfinish.x)-5)
+					.attr("y", y(data.startfinish.y))
+					.attr("width", 10)
+					.attr("height", 2)
+					.style("fill", "#666");
+			}
+
+			var clients = {};
+			var graph = null;
+
+			var socket = io.connect('http://localhost:<%= port.toString() %>');
+
+			socket.on('clients', function (data)
+			{
+				clients = data;
+				console.log(data);
+
+				var select = $('#clients');
+
+				select.find('option').remove();
+				select.append('<option value="" selected="selected">Please select a insim client</option>');	
+
+				for(var i in data)
+					select.append('<option value="' + i + '">' +
+						data[i].hostname + '(' + data[i].track + ')</option>');
+			});
+
+			socket.on('IS_MCI', function (data)
+			{
+				if ((data.hid.length <= 0) || (clients[data.hid] == 'undefined'))
+				{
+					console.log('unknown host id');
+					return;
+				}
+
+				for(var i in data.compcar)
+				{
+					console.log(data.compcar[i]);
+
+					if (!clients[data.hid].players)
+						clients[data.hid].players = {};
+
+					if (!clients[data.hid].players[data.compcar[i].plid])
+						clients[data.hid].players[data.compcar[i].plid] =
+						d3.select('#graph svg').append("svg:circle")
+							.attr("r", 4)
+							.attr("class", "player");
+
+					clients[data.hid].players[data.compcar[i].plid].transition()
+						.attr("cx", x(data.compcar[i].x))
+						.attr("cy", y(data.compcar[i].y))
+						.duration(1000)
+						.ease("linear");
+				}
+			});
+
+			$('#clients').change(function()
+			{
+				var value = $(this).val();
+				console.log(value);
+
+				if ((value.length > 1) && (clients[value] != 'undefined'))
+				{
+					var track = clients[value].track.replace(/X$/, '');
+					console.log(track);
+
+					d3.json(
+						'/static/pth/' + track + '.json',
+						function (data)
+						{
+							drawTrack(data);
+						}
+					);
+				}
+				else
+				{
+					d3.select("#graph").selectAll("svg").remove();
+				}
+			});
+			
+		});
+		</script>
+	</head>
+	<body>
+		<select id="clients">
+		</select>
+
+		<div id="graph"></div>
+
+	</body>
+</html>
