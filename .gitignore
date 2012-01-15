@@ -10,3 +10,4 @@ lib-cov
 Thumbs.db
 Desktop.ini
 node_modules
+plugins/livemap/static
