@@ -17,6 +17,7 @@ var util = require('util'),
 	os = require('os'),
 	program = require('commander'),
 	product = require('../lib/product'),
+	jsonTidy = require('../lib/json-tidy'),
 	clientmanager = require('../lib/clientmanager');
 
 // Additonal Useful funcs
@@ -233,7 +234,10 @@ if (program.config)
 	console.log('  running with given path \'%s\'', program.config);
 	console.log();
 
-	var opts = JSON.parse(fs.readFileSync(configFile, 'utf8'));
+	// parse our config file
+	// it's user-editable, so we cannot be 100% sure that it's valid JSON,
+	// so lets do some basic tidying on it first, removing some common mistakes
+	var opts = jsonTidy.tidyParseFile(configFile, 'utf8');
 
 	// setup clientmanager
 	var c = new clientmanager.create(opts, program.config);
