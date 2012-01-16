@@ -39,6 +39,12 @@
 
 			var x = null, y = null;
 
+			function clearTrack()
+			{
+				x = null, y = null;
+				d3.select("#graph").selectAll("svg").remove();
+			}
+
 			function drawTrack(data)
 			{
 				var graph = d3.select("#graph")
@@ -102,88 +108,107 @@
 					.style("fill", "#666");
 			}
 
-			var clients = {};
+			var getAndDrawTrack = function(trackname)
+			{
+				d3.json(
+					'/static/pth/' + trackname + '.json',
+					function (data)
+					{
+						drawTrack(data);
+					}
+				);
+			}
+
+			var maps = {};
+			var players = {};
 			var graph = null;
 
 			var socket = io.connect('http://localhost:<%= port.toString() %>');
 
-			socket.on('clients', function (data)
+			socket.on('maps', function (data)
 			{
+				var select = $('#maps');
+				var curr = select.val();
+
+				if (curr > 0)
+				{
+					if (!data[curr])
+						clearTrack();
+					else if (data[curr].track != maps[curr].track)
+						getAndDrawTrack(data[curr].track);
+				}
+
 				for (var i in data)
 				{
-					if (!clients[i])
+					if (!maps[i])
 					{
-						clients[i] = data[i];
+						maps[i] = data[i];
 						continue;
 					}
 
 					for(var j in data[i])
-						clients[i][j] = data[i][j];
+						maps[i][j] = data[i][j];
 				}
-
-				console.log('***CLients');
-				console.log(clients);
-
-				var select = $('#clients');
-
+	
 				select.find('option').remove();
-				select.append('<option value="" selected="selected">Please select a insim client</option>');	
+				select.append('<option value="" selected="selected">Please select a insim client</option>');
 
 				for(var i in data)
 					select.append('<option value="' + i + '">' +
-						data[i].hostname + '(' + data[i].track + ')</option>');
+						data[i].hostname + '</option>');
 			});
 
 			socket.on('IS_MCI', function (data)
 			{
-				if ((data.hid.length <= 0) || (clients[data.hid] == 'undefined'))
+				for(var i in data)
 				{
-					console.log('unknown host id');
-					return;
-				}
-
-				for(var i in data.compcar)
-				{
-					console.log(data.compcar[i]);
-
-					if (!clients[data.hid].players)
-						clients[data.hid].players = {};
-
-					if (!clients[data.hid].players[data.compcar[i].plid])
-						clients[data.hid].players[data.compcar[i].plid] =
-						d3.select('#graph svg').append("svg:circle")
+					if (!players[data[i].plid])
+						players[data[i].plid] =	d3.select('#graph svg').append("svg:circle")
 							.attr("r", 4)
 							.attr("class", "player");
 
-					clients[data.hid].players[data.compcar[i].plid].transition()
-						.attr("cx", x(data.compcar[i].x))
-						.attr("cy", y(data.compcar[i].y))
-						.duration(1000)
-						.ease("linear");
+					if ($('#fancy').is(':checked'))
+					{
+						players[data[i].plid]
+							.transition()
+							.attr("cx", x(data[i].x))
+							.attr("cy", y(data[i].y))
+							.duration(1000)
+							.ease("linear");
+					}
+					else
+					{
+						players[data[i].plid]
+							.attr("cx", x(data[i].x))
+							.attr("cy", y(data[i].y));
+					}
 				}
 			});
 
-			$('#clients').change(function()
+			socket.on('IS_PLL', function (data)
+			{
+				if (players[data])
+					players[data].remove();
+			});
+
+			$('#maps').change(function()
 			{
 				var value = $(this).val();
-				console.log(value);
 
-				if ((value.length > 1) && (clients[value] != 'undefined'))
+				if ((value.length > 1) && (maps[value] != 'undefined'))
 				{
-					var track = clients[value].track.replace(/X$/, '');
-					console.log(track);
+					var track = maps[value].track.replace(/X$/, '');
+					getAndDrawTrack(track);
 
-					d3.json(
-						'/static/pth/' + track + '.json',
-						function (data)
-						{
-							drawTrack(data);
-						}
-					);
+					socket.emit('switch', value);
 				}
 				else
 				{
-					d3.select("#graph").selectAll("svg").remove();
+					players = {};
+
+					console.log('leaving');
+					socket.emit('leave');
+					clearTrack();
 				}
 			});
 			
@@ -191,8 +216,10 @@
 		</script>
 	</head>
 	<body>
-		<select id="clients">
+
+		<select id="maps">
 		</select>
+		<label for="fancy">fancy <input type="checkbox" id="fancy" /></label>
 
 		<div id="graph"></div>
 

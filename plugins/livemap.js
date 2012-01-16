@@ -1,4 +1,12 @@
-var stats = {};
+var livemap = {};
+
+var xlate = function()
+{
+	var maps = {};
+	for (var i in livemap)
+		maps[i] = { 'hostname': livemap[i].hostname, 'track': livemap[i].track };
+	return maps;
+}
 
 exports.init = function(options)
 {
@@ -8,53 +16,62 @@ exports.init = function(options)
 
 	this.log.info('Registering LiveMap plugin');
 
-	stats[this.client.id] = {
-		hid: this.client.id, /* host id, either assigned in config.json or auto calculated */
+	livemap[this.client.id] = {
 		host: 0,
 		hostname: '',
 		track: ''
 	};
-	
-	this.client.registerHook('IS_ISM', function(pkt)
-	{
-		stats[this.client.id].hostname = pkt.hname;
-		stats[this.client.id].host = pkt.host;
 
-		io.sockets.emit('clients', stats);
-	});
-
-	this.client.registerHook('IS_STA', function(pkt)
+	this.client.registerHook('connect', function()
 	{
-		if ((pkt.track.length > 0) && (pkt.track != stats.track))
-		{
-			stats[this.client.id].track = pkt.track;
-			io.sockets.emit('clients', stats);
-		}
-	});
-
-	this.client.registerHook('IS_VER', function()
-	{
+		// request what server we're on
 		var p = new this.insim.IS_TINY();
 		p.reqi = 1;
 		p.subt = this.insim.TINY_ISM;
 	
 		this.client.send(p);
 
+		// request state
 		var p = new this.insim.IS_TINY();
 		p.reqi = 1;
 		p.subt = this.insim.TINY_SST;
 	
 		this.client.send(p);	
 	});
+	
+	this.client.registerHook('IS_ISM', function(pkt)
+	{
+		livemap[this.client.id].hostname = pkt.hname;
+		livemap[this.client.id].host = pkt.host;
+
+		io.sockets.emit('maps', xlate());
+	});
+
+	this.client.registerHook('IS_STA', function(pkt)
+	{
+		if ((pkt.track.length > 0) && (pkt.track != livemap.track))
+		{
+			livemap[this.client.id].track = pkt.track;
+
+			io.sockets.emit('maps', xlate());
+		}
+	});
 
 	this.client.registerHook('IS_MCI', function(pkt)
 	{
-		io.sockets.emit('IS_MCI', { hid: this.client.id, compcar: pkt.compcar });
+		io.sockets.in(this.client.id).emit('IS_MCI', pkt.compcar);
+	});
+
+	this.client.registerHook('IS_PLL', function(pkt)
+	{
+		io.sockets.in(this.client.id).emit('IS_PLL', pkt.plid);
 	});
 
 	// setup express and socket.io
 	var express = require('express').createServer(),
 		io = require('socket.io').listen(express);
+
+	io.set('log level', 1);
 
 	// disable the layout
 	express.set("view options", { layout: false });
@@ -87,8 +104,42 @@ exports.init = function(options)
 	});
 
 	// on connection, send the list of insim client connections
-	io.sockets.on('connection', function (socket)
+	// and hook up all our callbacks
+	io.sockets.on('connection', function(socket)
 	{
-		socket.emit('clients', stats);
+		io.sockets.emit('maps', xlate());
+
+		socket.on('join', function(map)
+		{
+			if ((map) && (map.length > 0))
+			{
+				socket.join(map);
+				socket.map = map;
+			}
+		});
+
+		socket.on('switch', function(map)
+		{
+			if (socket.map)
+				socket.leave(socket.map);
+
+			if ((map) && (map.length > 0))
+			{
+				socket.join(map);
+				socket.map = map;
+			}
+		});
+
+		socket.on('leave', function()
+		{
+			if (socket.map)
+				socket.leave(socket.map);
+		});
+
+		socket.on('disconnect', function()
+		{
+			if (socket.map)
+				socket.leave(socket.map);
+		});
 	});
 }
