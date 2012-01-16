@@ -109,8 +109,20 @@
 
 			socket.on('clients', function (data)
 			{
-				clients = data;
-				console.log(data);
+				for (var i in data)
+				{
+					if (!clients[i])
+					{
+						clients[i] = data[i];
+						continue;
+					}
+
+					for(var j in data[i])
+						clients[i][j] = data[i][j];
+				}
+
+				console.log('***CLients');
+				console.log(clients);
 
 				var select = $('#clients');
 

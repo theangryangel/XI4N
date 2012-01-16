@@ -229,12 +229,22 @@ if (program.config)
 	if (!path.existsSync(program.config))
 		program.invalidOptionValue('-c, --config <path>', 'path exists, but cannot find config.json');
 
+	console.log();
 	console.log('  running with given path \'%s\'', program.config);
+	console.log();
 
 	var opts = JSON.parse(fs.readFileSync(configFile, 'utf8'));
 
 	// setup clientmanager
 	var c = new clientmanager.create(opts, program.config);
+	c.on('drain', function()
+	{
+		console.log();
+		console.log('  lost all InSim connections');
+		console.log('  quitting');
+		console.log();
+		process.exit();
+	});
 
 	// connect
 	c.connect();
