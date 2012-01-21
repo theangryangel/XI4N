@@ -1,227 +1,211 @@
-<html>
-	<head>
-		<script src="/socket.io/socket.io.js"></script>
-		<script type="text/javascript" src="/static/js/jquery-1.7.1.min.js"></script>
-		<script type="text/javascript" src="/static/js/jquery-ui-1.8.17.custom.min.js"></script>
-		<script type="text/javascript" src="/static/js/d3.min.js"></script>
-		<link rel="stylesheet" href="/static/css/jquery-ui-1.8.17.custom.css" type="text/css" media="screen">
-		<style>
-			.track
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<title>xi4n:livemap.js</title>
+	<link rel="stylesheet" href="/static/css/screen.css" type="text/css">
+
+	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
+	<script src="/static/js/d3.min.js" type="text/javascript"></script>
+	<script src="/static/js/livemap.js" type="text/javascript"></script>
+	<script src="/static/js/chosen.jquery.min.js" type="text/javascript"></script>
+
+	<script src="/socket.io/socket.io.js"></script>
+
+	<script type="text/javascript">
+		$(document).ready(function()
+		{
+			var track = new LiveMap();
+			track.dst = '#container-inner-track';
+			track.basePath = '/static/pth/';
+
+			track.on('pth', function()
 			{
-				stroke: #ccc;
-				stroke-width: 10; 
-				fill: none;
-			}
-			.title
-			{
-				font-family: Arial, Helvetica, sans-serif;
-				font-size: 0.75em;
-				color: #ccc;
-			}
-			.player
-			{
-				stroke: #fff;
-				stroke-width: 2; 
-				fill: brown;
-			}
-			#graph 
-			{
-				width:100px;
-				height:768px;
-				border:1px solid #ccc;
+				track.drawTrack();
+			});
 
-				margin-left: auto;
-				margin-right:auto;
-			}
-		</style>
-		<script type="text/javascript">
-		$(document).ready(function() {
-
-			var x = null, y = null;
-
-			function clearTrack()
-			{
-				x = null, y = null;
-				d3.select("#graph").selectAll("svg").remove();
-			}
-
-			function drawTrack(data)
-			{
-				var graph = d3.select("#graph")
-					.append("svg:svg")
-					.attr("width", "100%")
-					.attr("height", "100%");
-
-				var min = { x: 0, y: 0 };
-				var max = { x: 0, y: 0 };
-
-				for (d in data.nodes)
-				{
-					if (data.nodes[d].x > max.x)
-						max.x = data.nodes[d].x;
-
-					if (data.nodes[d].x < min.x)
-						min.x = data.nodes[d].x;
-
-					if (data.nodes[d].y > max.y)
-						max.y = data.nodes[d].y;
-
-					if (data.nodes[d].y < min.y)
-						min.y = data.nodes[d].y;
-				}
-
-				var height = d3.select("#graph").style('height').replace('px','')-20;
-
-				var scalingfactor = ((max.y-min.y)/height);
-
-				var width = ((max.x-min.x)/scalingfactor);
-
-				d3.select("#graph").style('width', (width+20) + 'px');
-
-				y = d3.scale.linear().domain([min.y, max.y]).range([20, height]);
-				x = d3.scale.linear().domain([min.x, max.x]).range([20, width]);
-
-				var line = d3.svg.line()
-				.x(function(d,i)
-				{
-					return x(d.x);
-				})
-				.y(function(d)
-				{
-					return y(d.y);
-				})
-				.interpolate("basis-closed");
-
-				graph.append("svg:path").attr("d", line(data.nodes)).attr("class", "track");
-
-				var title = graph.append("text")
-					.attr("class", "title")
-					.attr("y", 20)
-					.attr("x", 10)
-					.text(data.track + ' (resolution: ~' + data.resolution + ')');
-
-				var startfinish = graph.append("svg:rect")
-					.attr("x", x(data.startfinish.x)-5)
-					.attr("y", y(data.startfinish.y))
-					.attr("width", 10)
-					.attr("height", 2)
-					.style("fill", "#666");
-			}
-
-			var getAndDrawTrack = function(trackname)
-			{
-				d3.json(
-					'/static/pth/' + trackname + '.json',
-					function (data)
-					{
-						drawTrack(data);
-					}
-				);
-			}
-
-			var maps = {};
-			var players = {};
-			var graph = null;
+			var servers = {};
 
 			var socket = io.connect('http://localhost:<%= port.toString() %>');
 
-			socket.on('maps', function (data)
-			{
-				var select = $('#maps');
-				var curr = select.val();
+			$(".chzn-select").chosen({ allow_single_deselect: true });
 
-				if (curr > 0)
+			$('#option-chat').change(function()
+			{
+				$('#container-chat').fadeToggle('slow');
+			});
+
+			$('#option-track').change(function()
+			{
+				$('#container-track').fadeToggle('slow');
+			});
+
+			$('#option-fancy').change(function()
+			{
+				if ($(this).is(':checked'))
 				{
-					if (!data[curr])
-						clearTrack();
-					else if (data[curr].track != maps[curr].track)
-						getAndDrawTrack(data[curr].track);
+					track.fancy = 1000;
+					return;
 				}
+
+				track.fancy = 0;
+			});
+
+			$('#option-server').change(function()
+			{
+				var val = $(this).val();
+
+				if ((val.length <= 0) || (val <= 0))
+				{
+					track.clear();
+					socket.emit('leave');
+					return;
+				}
+
+				var trackname = servers[val].track + '.json';
+				track.loadPth(trackname);
+
+				socket.emit('switch', val);
+			});
+
+			// update list of servers
+			socket.on('maps', function(data)
+			{
+				var select = $('#option-server');
+				var curr = select.val();
 
 				for (var i in data)
 				{
-					if (!maps[i])
+					if (!servers[i])
 					{
-						maps[i] = data[i];
+						servers[i] = data[i];
 						continue;
 					}
 
 					for(var j in data[i])
-						maps[i][j] = data[i][j];
+						servers[i][j] = (j == 'track') ? servers[i][j].replace(/[XY]$/i, '') : servers[i][j];
 				}
 	
-				select.find('option').remove();
-				select.append('<option value="" selected="selected">Please select a insim client</option>');
+				select.find('option[value!=]').remove();
 
 				for(var i in data)
-					select.append('<option value="' + i + '">' +
-						data[i].hostname + '</option>');
+					$('<option value="' + i + '"' + ((i == curr) ?
+							'selected="selected"' : '') + '>' + data[i].hostname + '</option>')
+						.appendTo('#option-server');
+
+				select.trigger("liszt:updated");
+
+				if (curr > 0)
+				{
+					if (!data[curr])
+						track.clear();
+
+					if ((data[curr]) && (data[curr].track != track.pth.data.track))
+						track.loadPth(data[curr].track);
+				}
 			});
 
+			// positioning update
 			socket.on('IS_MCI', function (data)
 			{
 				for(var i in data)
-				{
-					if (!players[data[i].plid])
-						players[data[i].plid] =	d3.select('#graph svg').append("svg:circle")
-							.attr("r", 4)
-							.attr("class", "player");
-
-					if ($('#fancy').is(':checked'))
-					{
-						players[data[i].plid]
-							.transition()
-							.attr("cx", x(data[i].x))
-							.attr("cy", y(data[i].y))
-							.duration(1000)
-							.ease("linear");
-					}
-					else
-					{
-						players[data[i].plid]
-							.attr("cx", x(data[i].x))
-							.attr("cy", y(data[i].y));
-					}
-				}
+					track.drawPlyr(data[i].plid, data[i].x, data[i].y);
 			});
 
+			// player pits
 			socket.on('IS_PLL', function (data)
 			{
-				if (players[data])
-					players[data].remove();
+				track.remPlyr(data);
 			});
 
-			$('#maps').change(function()
+			// player chat
+			socket.on('IS_MSO', function (data)
 			{
-				var value = $(this).val();
-
-				if ((value.length > 1) && (maps[value] != 'undefined'))
-				{
-					var track = maps[value].track.replace(/X$/, '');
-					getAndDrawTrack(track);
-
-					socket.emit('switch', value);
-				}
-				else
-				{
-					players = {};
-
-					console.log('leaving');
-					socket.emit('leave');
-					clearTrack();
-				}
+				var d = new Date;
+				$('#container-chat').append('<div class="container-chat-line"> \
+					<span class="datetime">' + d.toLocaleString() + '</span> \
+					<span class="chatter">' + data.plid + '</span> \
+					- ' + data.msg + ' \
+				</div>');
 			});
-			
 		});
-		</script>
-	</head>
-	<body>
+	</script>
+</head>
+<body>
+	<div id="container">
+		<div id="container-menu">
+			<span class="title">xi4n:livemap.js </span>
 
-		<select id="maps">
-		</select>
-		<label for="fancy">fancy <input type="checkbox" id="fancy" /></label>
+			<span class="options">
 
-		<div id="graph"></div>
+				<span class="option-track">
+					<label for="option-track">
+						<input type="checkbox" id="option-track"
+						checked="checked"> Track
+					</label>
+				</span>
 
-	</body>
+				<span class="option-fancy">
+					<label for="option-fancy">
+						<input type="checkbox" id="option-fancy"
+						checked="checked"> Smooth
+					</label>
+				</span>
+
+				<span class="option-chat">
+					<label for="option-chat">
+						<input type="checkbox" id="option-chat"
+						checked="checked"> Chat
+					</label>
+				</span>
+
+				<span class="option-servers">
+					<select id="option-server" class="chzn-select"
+						data-placeholder="Pick a Server...">
+						<option value=""></option>
+						<option value="1">asdsd</option>
+					</select>
+				</span>
+
+			</span>
+		</div>
+
+		<div id="container-inner">
+			<div id="container-tracker">
+
+				<table class="tracker-table">
+					<thead>
+						<tr>
+							<th class="pos">#</th>
+							<th class="racer">Racer</th>
+							<th class="vehicle">Vehicle</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<th>1</th>
+							<th>aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa</th>
+							<th>FZ50</th>
+						</tr>
+						<tr>
+							<th>2</th>
+							<th>Racer2</th>
+							<th>LX6</th>
+						</tr>
+					</tbody>
+				</table>
+
+			</div>
+
+			<div id="container-track">
+				<div id="container-inner-track" style="height: 768px;">
+				</div>
+			</div>
+
+		</div>
+
+		<div id="container-chat">
+		</div>
+	</div>
+</body>
 </html>
+

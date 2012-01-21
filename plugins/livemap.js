@@ -62,6 +62,13 @@ exports.init = function(options)
 		io.sockets.in(this.client.id).emit('IS_MCI', pkt.compcar);
 	});
 
+	this.client.registerHook('IS_MSO', function(pkt)
+	{
+		// system or user msgs
+		if (pkt.usertype <= this.insim.MSO_USER)
+			io.sockets.in(this.client.id).emit('IS_MSO', pkt);
+	});
+
 	this.client.registerHook('IS_PLL', function(pkt)
 	{
 		io.sockets.in(this.client.id).emit('IS_PLL', pkt.plid);
