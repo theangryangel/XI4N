@@ -76,7 +76,7 @@ span.options label, span.options
 
 select.chzn-select
 {
-	min-width: 150px;
+	min-width: 200px;
 }
 
 #container-inner
@@ -148,7 +148,7 @@ select.chzn-select
 
 #container-chat .container-chat-line .datetime
 {
-	color: #c4c4c4;
+	/*color: #c4c4c4;*/
 }
 
 #container-chat .container-chat-line .datetime:hover
