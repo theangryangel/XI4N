@@ -1,6 +1,7 @@
   * Finish plugins/livemap.js to demo posibilities
+  * Add iconv support to deal with LFS' codepage hell that works on both win and
+    everything else without compiling stuff
   * Add the other packets I've not bothered to translate yet
-  * Make ClientManager an EventEmitter 
   * Add reconnection support to ClientManager
   * Add state management to Client
   * Add a bundled vector library to insim.js

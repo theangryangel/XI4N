@@ -23,6 +23,46 @@
 				track.drawTrack();
 			});
 
+			track.on('addplyr', function(plid)
+			{
+				var plyr = track.getPlyr(plid);
+
+				if ($('#tracker-table tbody tr.' + plid).length <= 0)
+				{
+					$('<tr class="' + plid + '"> \
+							<td class="pos">' + plyr.pos + '</th> \
+							<td class="name">' + plyr.name + '</td> \
+							<td class="vehicle">' + plyr.vehicle + '</td> \
+						</tr>').appendTo('#tracker-table tbody');
+					return;
+				}
+				else
+				{
+					var row = $('#tracker-table tbody tr.' + plid);
+					row.find('td.name').text(plyr.name);
+					row.find('td.vehicle').text(plyr.vehicle);
+				}
+			});
+
+			track.on(['remplyr', 'clearplyr'], function(plid)
+			{
+				$('#tracker-table tbody tr.' + plid).remove();
+			});
+
+			track.on('drawplyr', function(plid)
+			{
+				if ($('#tracker-table tbody tr.' + plid).length <= 0)
+					track.emit('newplyr', plid);
+
+				var plyr = track.getPlyr(plid);
+
+				var row = $('#tracker-table tbody tr.' + plid);
+					row.find('td.pos').text(plyr.pos);
+
+				if (plyr.pos > 0)
+					row.insertBefore('#tracker-table tbody tr:eq(' + plyr.pos + ')');
+			});
+
 			var servers = {};
 
 			var socket = io.connect('http://localhost:<%= port.toString() %>');
@@ -108,22 +148,46 @@
 			socket.on('IS_MCI', function (data)
 			{
 				for(var i in data)
-					track.drawPlyr(data[i].plid, data[i].x, data[i].y);
+					track.drawPlyr(data[i].plid, data[i].x, data[i].y,
+						data[i].position);
 			});
 
-			// player pits
+			// player leaves
 			socket.on('IS_PLL', function (data)
 			{
 				track.remPlyr(data);
 			});
 
+			// player putting
+			socket.on('IS_PLP', function (data)
+			{
+				track.remPlyr(data);
+			});
+
+			// new player/unpitting
+			socket.on('IS_NPL', function (data)
+			{
+				if (data)
+					track.addPlyr(data.plid, data.pname, data.cname);
+			});
+
 			// player chat
 			socket.on('IS_MSO', function (data)
 			{
+				var name = (data.usertype == 0) ? 'System' : 'NonPlayer';
+
+				if (data.plid > 0)
+				{
+					name = 'unknown';
+					var plyr = track.getPlyr(data.plid);
+					if (plyr)
+						name = plyr.name;
+				}	
+
 				var d = new Date;
 				$('#container-chat').append('<div class="container-chat-line"> \
 					<span class="datetime">' + d.toLocaleString() + '</span> \
-					<span class="chatter">' + data.plid + '</span> \
+					<span class="chatter">' + name + '</span> \
 					- ' + data.msg + ' \
 				</div>');
 			});
@@ -172,7 +236,7 @@
 		<div id="container-inner">
 			<div id="container-tracker">
 
-				<table class="tracker-table">
+				<table class="tracker-table" id="tracker-table">
 					<thead>
 						<tr>
 							<th class="pos">#</th>
@@ -181,16 +245,6 @@
 						</tr>
 					</thead>
 					<tbody>
-						<tr>
-							<th>1</th>
-							<th>aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa</th>
-							<th>FZ50</th>
-						</tr>
-						<tr>
-							<th>2</th>
-							<th>Racer2</th>
-							<th>LX6</th>
-						</tr>
 					</tbody>
 				</table>
 

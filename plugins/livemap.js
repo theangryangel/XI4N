@@ -19,7 +19,8 @@ exports.init = function(options)
 	livemap[this.client.id] = {
 		host: 0,
 		hostname: '',
-		track: ''
+		track: '',
+		plyrs: {}
 	};
 
 	this.client.registerHook('connect', function()
@@ -36,7 +37,14 @@ exports.init = function(options)
 		p.reqi = 1;
 		p.subt = this.insim.TINY_SST;
 	
-		this.client.send(p);	
+		this.client.send(p);
+
+		// request players
+		var p = new this.insim.IS_TINY();
+		p.reqi = 1;
+		p.subt = this.insim.TINY_NPL;
+	
+		this.client.send(p);
 	});
 	
 	this.client.registerHook('IS_ISM', function(pkt)
@@ -69,9 +77,25 @@ exports.init = function(options)
 			io.sockets.in(this.client.id).emit('IS_MSO', pkt);
 	});
 
+	this.client.registerHook('IS_NPL', function(pkt)
+	{
+		livemap[this.client.id].plyrs[pkt.plid] = pkt;
+
+		io.sockets.in(this.client.id).emit('IS_NPL', pkt);
+	});
+
 	this.client.registerHook('IS_PLL', function(pkt)
 	{
+		livemap[this.client.id].plyrs[pkt.plid] = null;
+
 		io.sockets.in(this.client.id).emit('IS_PLL', pkt.plid);
+	});
+
+	this.client.registerHook('IS_PLP', function(pkt)
+	{
+		livemap[this.client.id].plyrs[pkt.plid] = null;
+
+		io.sockets.in(this.client.id).emit('IS_PLP', pkt.plid);
 	});
 
 	// setup express and socket.io
@@ -122,6 +146,12 @@ exports.init = function(options)
 			{
 				socket.join(map);
 				socket.map = map;
+
+				if (livemap[map])
+				{
+					for(var i in livemap[map].plyrs)
+						socket.emit('IS_NPL', livemap[map].plyrs[i]);
+				}
 			}
 		});
 
@@ -134,6 +164,12 @@ exports.init = function(options)
 			{
 				socket.join(map);
 				socket.map = map;
+			}
+
+			if (livemap[map])
+			{
+				for(var i in livemap[map].plyrs)
+					socket.emit('IS_NPL', livemap[map].plyrs[i]);
 			}
 		});
 

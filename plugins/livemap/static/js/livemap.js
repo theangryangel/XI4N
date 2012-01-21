@@ -6,8 +6,17 @@ LiveMap.prototype = {
 	// event framework
 	on: function(event, callback)
 	{
+		var self = this;
+
 		if (!callback)
 			return;
+
+		if (typeof event == 'object')
+		{
+			for (var i in event)
+				self.on(event[i], callback);
+			return;
+		}
 
 		this.callbacks[event] = this.callbacks[event] || [];
 		this.callbacks[event].push(callback);
@@ -36,6 +45,7 @@ LiveMap.prototype = {
 	pth: {},
 	plyrs: {},
 	fancy: 1000,
+	drawn: false,
 
 	// actual usable functions
 	loadPth: function(pth)
@@ -147,20 +157,47 @@ LiveMap.prototype = {
 			.attr("width", 10)
 			.attr("height", 2)
 			.style("fill", "#666");
+
+		self.drawn = true;
 	},
-	drawPlyr: function(plid, x, y)
+	addPlyr: function(plid, name, vehicle)
 	{
 		var self = this;
 
-		self.emit('drawplyr', plid);
+		self.plyrs[plid] = {
+			'name': name,
+			'vehicle': vehicle,
+			'pos': 0
+		};
 
-		self.plyrs[plid] = self.plyrs[plid] || d3.select(self.dst + ' svg').append("svg:circle")
+		self.emit('addplyr', plid);
+	},
+	getPlyr: function(plid)
+	{
+		var self = this;
+		return self.plyrs[plid];
+	},
+	drawPlyr: function(plid, x, y, pos)
+	{
+		var self = this;
+
+		if (!self.plyrs[plid])
+			self.addPlyr(plid, 'unknown', 'unknown');
+
+		if (pos)
+			self.plyrs[plid].pos = pos;
+
+		self.plyrs[plid].svg = self.plyrs[plid].svg || d3.select(self.dst + ' svg').append("svg:circle")
 			.attr("r", 4)
 			.attr("class", "player");
 
+		if (!self.drawn)
+			return;
+
 		if (self.fancy > 0)
 		{
-			self.plyrs[plid].transition()
+			self.plyrs[plid].svg
+				.transition()
 				.attr("cx", self.pth.x(x))
 				.attr("cy", self.pth.y(y))
 				.duration(self.fancy)
@@ -168,22 +205,37 @@ LiveMap.prototype = {
 		}
 		else
 		{
-			self.plyrs[plid]
+			self.plyrs[plid].svg
 				.attr("cx", self.pth.x(x))
 				.attr("cy", self.pth.y(y))
 		}
+
+		self.emit('drawplyr', plid);
 	},
 	remPlyr: function(plid)
 	{
 		var self = this;
 
-		self.emit('removeplyr', plid);
+		self.emit('remplyr', plid);
 
 		if (self.plyrs[plid])
-			self.plyrs[plid].remove();
+		{
+			self.clearPlyr();
+			self.plyrs[plid] = null;
+		}
+	},
+	clearPlyr: function(plid)
+	{
+		var self = this;
+
+		self.emit('clearplyr', plid);
+
+		if (self.plyrs[plid])
+			self.plyrs[plid].svg.remove();
 	},
 	clear: function()
 	{
+		self.drawn = false;
 		d3.select(this.dst).selectAll("svg").remove();
 
 		this.emit('clear');
