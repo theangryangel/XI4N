@@ -34,7 +34,7 @@
 
 			// cooldown between reconnection attempts
 			// TODO: Not yet implemented
-			"reconnectcooldown": 30,
+			"reconnectcooldown": 5,
 
 			// an array of plugins we want to load
 			// path should be relative to the plugins directory
