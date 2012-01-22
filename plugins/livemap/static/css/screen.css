@@ -177,6 +177,14 @@ select.chzn-select
 	stroke-width: 2; 
 	fill: brown;
 }
+
+#container-inner-track svg .player-highlight
+{
+	stroke: #fff;
+	stroke-width: 2; 
+	fill: yellow;
+}
+
 #container-inner-track 
 {
 	width:100px;

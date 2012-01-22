@@ -29,11 +29,11 @@
 
 				if ($('#tracker-table tbody tr.' + plid).length <= 0)
 				{
-					$('<tr class="' + plid + '"> \
+					$('<tr class="' + plid + ' plyr"> \
 							<td class="pos">' + plyr.pos + '</th> \
 							<td class="name">' + plyr.name + '</td> \
 							<td class="vehicle">' + plyr.vehicle + '</td> \
-						</tr>').appendTo('#tracker-table tbody');
+						</tr>').data('plid', plid).appendTo('#tracker-table tbody');
 					return;
 				}
 				else
@@ -52,7 +52,7 @@
 			track.on('drawplyr', function(plid)
 			{
 				if ($('#tracker-table tbody tr.' + plid).length <= 0)
-					track.emit('newplyr', plid);
+					track.emit('addplyr', plid);
 
 				var plyr = track.getPlyr(plid);
 
@@ -67,7 +67,7 @@
 
 			var socket = io.connect('http://localhost:<%= port.toString() %>');
 
-			$(".chzn-select").chosen({ allow_single_deselect: true });
+		//	$(".chzn-select").chosen({ allow_single_deselect: true });
 
 			$('#option-chat').change(function()
 			{
@@ -78,6 +78,20 @@
 			{
 				$('#container-track').fadeToggle('slow');
 			});
+
+			$('#tracker-table tbody').on({
+				mouseenter: function()
+				{
+					var plid = $(this).data('plid');
+					track.highlightPlyr(plid);
+				},
+				mouseleave: function()
+				{
+					var plid = $(this).data('plid');
+					track.unhighlightPlyr(plid);
+				}
+			},
+			'tr.plyr');
 
 			$('#option-fancy').change(function()
 			{
@@ -122,7 +136,24 @@
 					}
 
 					for(var j in data[i])
-						servers[i][j] = (j == 'track') ? servers[i][j].replace(/[XY]$/i, '') : servers[i][j];
+					{
+						// special case
+						if (j == 'track')
+						{
+							servers[i].track = data[i].track.replace(/[XY]$/i, '');
+
+							if ((i == curr) && (track.pth) && 
+								(track.pth.data.track != servers[i].track))
+							{
+								console.log('new track detected, loading');
+								track.loadPth(servers[i].track + '.json');
+							}
+
+							continue;
+						}
+
+						servers[i][j] = servers[i][j];
+					}
 				}
 	
 				select.find('option[value!=]').remove();
@@ -133,15 +164,6 @@
 						.appendTo('#option-server');
 
 				select.trigger("liszt:updated");
-
-				if (curr > 0)
-				{
-					if (!data[curr])
-						track.clear();
-
-					if ((data[curr]) && (data[curr].track != track.pth.data.track))
-						track.loadPth(data[curr].track);
-				}
 			});
 
 			// positioning update
@@ -167,7 +189,7 @@
 			// new player/unpitting
 			socket.on('IS_NPL', function (data)
 			{
-				if (data)
+				if ((data != null) && (data != undefined))
 					track.addPlyr(data.plid, data.pname, data.cname);
 			});
 

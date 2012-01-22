@@ -177,6 +177,22 @@ LiveMap.prototype = {
 		var self = this;
 		return self.plyrs[plid];
 	},
+	highlightPlyr: function(plid, add)
+	{
+		var self = this;
+		if (!self.plyrs[plid])
+			return;
+
+		self.plyrs[plid].svg.classed('player-highlight', true);
+	},
+	unhighlightPlyr: function(plid)
+	{
+		var self = this;
+		if (!self.plyrs[plid])
+			return;
+
+		self.plyrs[plid].svg.classed('player-highlight', false);
+	},
 	drawPlyr: function(plid, x, y, pos)
 	{
 		var self = this;
