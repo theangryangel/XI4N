@@ -1,6 +1,7 @@
   * Finish plugins/livemap.js to demo posibilities
     - make it rely on a generic statemanager, rather than dealing with it,
       itself
+  * Add dependency management to ClientManager? Somewhere else?
   * Add iconv support to deal with LFS' codepage hell that works on both win and
     everything else without compiling stuff
   * Add ButtonManager
