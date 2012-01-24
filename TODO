@@ -1,12 +1,13 @@
+  * Finish plugins/state.js
+  * Does plugins/state.js need to be an eventemitter? if not how do we
+    communicate updates with other plugins that rely on it?
   * Finish plugins/livemap.js to demo posibilities
-    - make it rely on a generic statemanager, rather than dealing with it,
-      itself
-  * Add dependency management to ClientManager? Somewhere else?
+    - make it rely on a plugins/state.js, rather than dealing with it, itself
+  * Add plugin dependency management to ClientManager? Somewhere else?
   * Add iconv support to deal with LFS' codepage hell that works on both win and
     everything else without compiling stuff
   * Add ButtonManager
   * Add the other packets I've not bothered to translate yet
-  * Add state management to Client
   * Add a bundled vector library to insim.js
   * Add plugin validation checking
   * Write documentation
