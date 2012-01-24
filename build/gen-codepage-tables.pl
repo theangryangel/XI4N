@@ -50,8 +50,9 @@ foreach (@codepages)
 	printf "%s Hex		UTF-8 Hex\n", $_ if ($table);
 	print "----------		-----------\n" if ($table);
 
-	for (my $i = 0x0; $i <= 0xFF; $i++)
+	for (my $i = 0x0; $i <= 0xff; $i++)
 	{
+
 		my $ch = chr($i);
 		my $native = Encode::decode($_, $ch);
 		my $utf8 = Encode::encode("UTF-8", $native);
@@ -59,8 +60,7 @@ foreach (@codepages)
 		next if ($i == ord($native));
 
 		printf "\t0x%04x: 0x%04x,\n", $i, ord($native) if (!$table);
-		printf "0x%02x		0x%04x\n", $i, ord($native) if ($table);
-
+		printf "0x%04x		0x%04x\n", $i, ord($native) if ($table);
 	}
 
 	printf "}\n\n", lc($_) if (!$table);

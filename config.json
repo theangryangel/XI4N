@@ -41,15 +41,12 @@
 			"plugins": [
 				{
 					"path": "pong",
-					"options": {
-					}
+					"options": {}
 				},
 				{
-					"path": "livemap",
-					"options": {
-						"http-port": 8081
-					}
-				}
+					"path": "strings",
+					"options": {}
+				},
 			]
 		}
 	]
