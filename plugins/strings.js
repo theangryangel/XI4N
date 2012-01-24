@@ -15,6 +15,6 @@ exports.init = function(options)
 		var t = strings.toUTF8(pkt.msg);
 		console.log('translated mso = \'%s\'', t);
 
-		stream.write(t);
+		stream.write(t + "\n");
 	});
 }
