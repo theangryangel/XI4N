@@ -1,6 +1,30 @@
 "use strict";
 
-var events = require('events');
+/**
+ * state.js adds a general state management and API for other plugins
+ *
+ * Events that maybe subscribed to:
+ *  - STA_CONNNEW: new connection, sends ucid
+ *  - STA_CONNLEAVE: leaving connection, sends ucid
+ *  - STA_CONNREN: connection rename, sends ucid
+ *  - STA_PLYRNEW: new player, sends plid
+ *  - STA_PLYRPIT: player telepits, sends plid
+ *  - STA_PLYRUNPIT: player leaves pits, sends plid
+ *  - STA_PLYRLEAVE: player leaves race, sends plid
+ *  - STA_PLYRSWAP: 2 connections swap (player take over), sends plid
+ *  - STA_PLYRUPDATE: player telepits, sends array of plids
+ *
+ * i.e. in your dependant plugin:
+ * this.client.on('STA_CONNNEW', function(ucid)
+ * {
+ *     var conn = this.client.state.getConnByUcid(ucid);
+ *
+ *     console.log('New connection %d - %s', ucid, conn.uname);
+ * });
+ */
+
+var utils = require('utils'),
+	events = require('events');
 
 var StateBase = function() {}
 StateBase.prototype = {
@@ -78,10 +102,7 @@ PlyrState.prototype = {
 
 util.inherits(PlyrState, StateBase);
 
-var state = function()
-{
-	events.EventEmitter.call(this);
-}
+var state = function() {}
 state.prototype = {
 	'lfs': {
 		'version': '', // lfs version
@@ -170,7 +191,7 @@ state.prototype = {
 
 	// game state
 	// IS_STA or IS_RST
-	'on_GenericCopy': function(pkt)
+	'onGeneric_Copy': function(pkt)
 	{
 		var self = this;
 
@@ -201,6 +222,7 @@ state.prototype = {
 		var c = new Conn(pkt);
 		self.conns[c.ucid] = c;
 
+		this.client.emit('STA_CONNNEW', c.ucid);
 	},
 	'onIS_CNL': function(pkt)
 	{
@@ -211,6 +233,8 @@ state.prototype = {
 			self.plyrs[self.conns[pkt.ucid].plid] = undefined;
 
 		self.conns[pkt.ucid] = undefined;
+
+		this.client.emit('STA_CONNLEAVE', pkt.ucid);
 	},
 	'onIS_CPR': function(pkt)
 	{
@@ -222,28 +246,34 @@ state.prototype = {
 
 		self.conns[pkt.ucid].pname = pkt.pname;
 		self.conns[pkt.ucid].plate = pkt.plate;
+
+		this.client.emit('STA_CONNREN', pkt.ucid);
 	},
 
 	// player specific hooks
 	'onIS_NPL': function(pkt)
 	{
 		var self = this;
-
-		// new plyr
+		var p = null;
+		
 		if (!self.plyrs[pkt.plid])
 		{
-			var c = new Plyr(pkt);
+			// new/unknown plyr
+			p = new Plyr(pkt);
 			self.plyrs[c.plid] = c;
 
+			// send new plyr
+			this.client.emit('STA_PLYRNEW', pkt.plid);
 			return;
 		}
 
 		// existing, un-pitting plyr, update our info
-		var p = self.plyrs[pkt.plid];
+		p = self.plyrs[pkt.plid];
 		p.fromPkt(pkt);
 		p.pitting = false;
 
-		p = undefined;
+		// send plyrupdate
+		this.client.emit('STA_PLYRUNPIT', [ pkt.plid ]);
 	},
 	'onIS_PLP': function(pkt)
 	{
@@ -257,6 +287,9 @@ state.prototype = {
 		p.pitting = true;
 
 		p = undefined;
+
+		// emit our custom event
+		this.client.emit('STA_PLYRPIT', plid);
 	},
 	'onIS_PLL': function(pkt)
 	{
@@ -273,6 +306,8 @@ state.prototype = {
 			self.conns[ucid] = undefined; // out of sync if this doesn't happen
 
 		ucid = undefined;
+
+		this.client.emit('STA_PLYRLEAVE', plid);
 	},
 	'onIS_TOC': function(pkt)
 	{
@@ -284,6 +319,8 @@ state.prototype = {
 
 		self.plyrs[pkt.plid].ucid = pkt.newucid;
 		self.conns[pkt.newucid].plid = pkt.plid;
+
+		this.client.emit('STA_PLYRSWAP', plid);
 	},
 	'onIS_FIN': function(pkt)
 	{
@@ -310,19 +347,15 @@ state.prototype = {
 			updated.push(pkt.plid);
 		}
 
-		// emit our event
-		// is this how we want to do it?
-		// this.client.emit('state-position', updated);
-		// or 
-		// this.client.state.emit('position', updated);
-		// ?
+		// emit our custom event
+		this.client.emit('STA_PLYRUPDATE', updated);
 	},
 
 	// hooks, helper array
 	'hooks': {
-		'IS_STA': 'on_GenericCopy',
-		'IS_RST': 'on_GenericCopy',
-		'IS_ISM': 'on_IS_ISM',
+		'IS_STA': 'onGeneric_Copy',
+		'IS_RST': 'onGeneric_Copy',
+		'IS_ISM': 'onIS_ISM',
 
 		'IS_NCN': 'onIS_NCN',
 		'IS_CNL': 'onIS_CNL',
@@ -355,8 +388,6 @@ state.prototype = {
 	}
 };
 
-util.inherits(state, events.EventEmitter);
-
 exports.init = function(options)
 {
 	this.log.info('Registering state plugin');
@@ -364,7 +395,7 @@ exports.init = function(options)
 	this.client.registerHook('connect', function()
 	{
 		// setup state
-		this.client.state = new state;
+		this.client.state = new State;
 
 		// setup hooks
 		this.client.state.registerHooks(this.client);
