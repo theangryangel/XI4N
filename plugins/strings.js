@@ -7,7 +7,7 @@ exports.init = function(options)
 {
 	this.log.info('Registering Strings Test');
 
-	stream = fs.createWriteStream("./test-utf8.log", { 'encoding': 'utf8' });
+	stream = fs.createWriteStream("./test-utf8.log");
 
 	this.client.registerHook('IS_MSO', function(pkt)
 	{
@@ -15,6 +15,6 @@ exports.init = function(options)
 		var t = strings.toUTF8(pkt.msg);
 		console.log('translated mso = \'%s\'', t);
 
-		stream.write(t + "\n");
+		stream.write(t);
 	});
 }
