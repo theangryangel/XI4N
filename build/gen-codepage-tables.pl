@@ -59,7 +59,7 @@ foreach (@codepages)
 
 		next if ($i == ord($native));
 
-		printf "\t0x%04x: 0x%04x,\n", $i, ord($native) if (!$table);
+		printf "\t0x%04x: '\\u%04x',\n", $i, ord($native) if (!$table);
 		printf "0x%04x		0x%04x\n", $i, ord($native) if ($table);
 	}
 
