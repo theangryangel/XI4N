@@ -109,17 +109,35 @@ state.prototype = {
 	'plyrs': [],
 
 	// helper functions
-	'getPlyrByPlid': function()
+	'getPlyrByPlid': function(plid)
 	{
+		var self = this;
+
+		return self.plyrs[plid];
 	},
-	'getPlyrByUcid': function()
+	'getPlyrByUcid': function(ucid)
 	{
+		var self = this;
+
+		if (!self.conns[ucid])
+			return;
+
+		return self.plyrs[self.conns[ucid].plid];
 	},
-	'getConnByUcid': function()
+	'getConnByUcid': function(ucid)
 	{
+		var self = this;
+
+		return self.conns[ucid];
 	},
-	'getConnByPlid': function()
+	'getConnByPlid': function(plid)
 	{
+		var self = this;
+
+		if (!self.plyrs[plid])
+			return;
+
+		return self.conns[self.plyr[plid].ucid];
 	},
 
 	// insim/product version
@@ -165,7 +183,7 @@ state.prototype = {
 				self[i] = pkt[i];
 		}
 	},
-	'on_IS_ISM': function()
+	'onIS_ISM': function()
 	{
 		var self = this;
 		//  multiplayer start/join
@@ -275,9 +293,29 @@ state.prototype = {
 	{
 		// player finish result
 	},
-	'on_IS_MCI': function()
+	'on_IS_MCI': function(pkt)
 	{
+		var self = this;
+
+		var updated = [];
+
 		//  positioning update
+		for(var i in data)
+		{
+			if (!self.plyrs[pkt.plid])
+				continue;
+
+			self.plyrs[pkt.plid].fromPkt(pkt);
+
+			updated.push(pkt.plid);
+		}
+
+		// emit our event
+		// is this how we want to do it?
+		// this.client.emit('state-position', updated);
+		// or 
+		// this.client.state.emit('position', updated);
+		// ?
 	},
 
 	// hooks, helper array
