@@ -23,11 +23,11 @@
  * });
  */
 
-var utils = require('utils'),
+var utils = require('util'),
 	events = require('events');
 
-var StateBase = function() {}
-StateBase.prototype = {
+exports.StateBase = function() {}
+exports.StateBase.prototype = {
 	'fromPkt': function(pkt)
 	{
 		var self = this;
@@ -40,7 +40,7 @@ StateBase.prototype = {
 	}
 }
 
-var ConnState = function(pkt)
+exports.ConnState = function(pkt)
 {
 	var self = this;
 
@@ -48,7 +48,7 @@ var ConnState = function(pkt)
 	self.fromPkt(pkt);
 }
 
-ConnState.prototype = {
+exports.ConnState.prototype = {
 	'ucid': 0,
 	'admin': false,
 	'uname': '',
@@ -57,17 +57,18 @@ ConnState.prototype = {
 	'plid': 0
 };
 
-util.inherits(ConnState, StateBase);
+utils.inherits(exports.ConnState, exports.StateBase);
 
-var PlyrState = function(pkt)
+exports.PlyrState = function(pkt)
 {
 	var self = this;
 
 	// setup from IS_NPL
-	self.fromPkt(pkt);
+	if (pkt)
+		self.fromPkt(pkt);
 }
 
-PlyrState.prototype = {
+exports.PlyrState.prototype = {
 	'plid': 0,
 
 	'ucid': 0,
@@ -100,10 +101,15 @@ PlyrState.prototype = {
 	'angvel': 0
 };
 
-util.inherits(PlyrState, StateBase);
+utils.inherits(exports.PlyrState, exports.StateBase);
 
-var state = function() {}
-state.prototype = {
+exports.ClientState = function() {
+	var self = this;
+
+	console.log('new state');
+};
+
+exports.ClientState.prototype = {
 	'lfs': {
 		'version': '', // lfs version
 		'product': '', // lfs product name (Demo, S1, S2)
@@ -283,7 +289,7 @@ state.prototype = {
 		if (!self.plyrs[pkt.plid])
 			return;
 
-		var p - self.plyrs[pkt.plid];
+		var p = self.plyrs[pkt.plid];
 		p.pitting = true;
 
 		p = undefined;
@@ -330,7 +336,7 @@ state.prototype = {
 	{
 		// player finish result
 	},
-	'on_IS_MCI': function(pkt)
+	'onIS_MCI': function(pkt)
 	{
 		var self = this;
 
@@ -395,10 +401,18 @@ exports.init = function(options)
 	this.client.registerHook('connect', function()
 	{
 		// setup state
-		this.client.state = new State;
+		this.client.state = new exports.ClientState;
+
+		var state = new exports.PlyrState();
+
+		console.log(utils.inspect(state));
 
 		// setup hooks
 		this.client.state.registerHooks(this.client);
+
+		console.log(this.client.state);
+
+		this.client.emit('STA_READY');
 	});
 
 	this.client.registerHook('disconnect', function()
