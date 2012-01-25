@@ -26,115 +26,111 @@
 var utils = require('util'),
 	events = require('events');
 
-exports.StateBase = function() {}
-exports.StateBase.prototype = {
+var StateBase = function() {
+	console.log('state base');
+};
+
+StateBase.prototype = {
 	'fromPkt': function(pkt)
 	{
 		var self = this;
-
 		for (var i in pkt.getProperties())
 		{
 			if ((typeof self[i] != 'function') && (self.hasOwnProperty(i)))
 				self[i] = pkt[i];
 		}
 	}
-}
+};
 
-exports.ConnState = function(pkt)
+var ConnState = function(pkt)
 {
 	var self = this;
+
+	self.ucid = 0;
+	self.admin = false;
+	self.uname = '';
+	self.flags = 0;
+
+	self.plid = 0;
 
 	// setup, from IS_NCN
 	self.fromPkt(pkt);
 }
 
-exports.ConnState.prototype = {
-	'ucid': 0,
-	'admin': false,
-	'uname': '',
-	'flags': 0,
+utils.inherits(ConnState, StateBase);
 
-	'plid': 0
-};
-
-utils.inherits(exports.ConnState, exports.StateBase);
-
-exports.PlyrState = function(pkt)
+var PlyrState = function(pkt)
 {
 	var self = this;
+
+	self.plid = 0;
+
+	self.ucid = 0;
+	self.ptype = 0;
+	self.flags = 0;
+
+	self.pname = '';
+	self.plate = '';
+	self.cname = '';
+	self.sname = '';
+	self.tyres = 0;
+	
+	self.h_mass = 0;
+	self.h_tres = 0;
+	self.model = 0;
+	self.pass = 0;
+	self.setf = 0;
+	self.pitting = false; // tele-pitting
+
+	self.node = 0;
+	self.lap = 0;
+	self.position = 0;
+	self.info = 0;
+	self.x = 0;
+	self.y = 0;
+	self.z = 0;
+	self.speed = 0;
+	self.direction = 0;
+	self.heading = 0;
+	self.angvel = 0;
 
 	// setup from IS_NPL
 	if (pkt)
 		self.fromPkt(pkt);
 }
 
-exports.PlyrState.prototype = {
-	'plid': 0,
+utils.inherits(PlyrState, StateBase);
 
-	'ucid': 0,
-	'ptype': 0,
-	'flags': 0,
-
-	'pname': '',
-	'plate': '',
-	'cname': '',
-	'sname': '',
-	'tyres': 0,
-	
-	'h_mass': 0,
-	'h_tres': 0,
-	'model': 0,
-	'pass': 0,
-	'setf': 0,
-	'pitting': false, // tele-pitting
-
-	'node': 0,
-	'lap': 0,
-	'position': 0,
-	'info': 0,
-	'x': 0,
-	'y': 0,
-	'z': 0,
-	'speed': 0,
-	'direction': 0,
-	'heading': 0,
-	'angvel': 0
-};
-
-utils.inherits(exports.PlyrState, exports.StateBase);
-
-exports.ClientState = function() {
+var ClientState = function() {
 	var self = this;
 
-	console.log('new state');
-};
-
-exports.ClientState.prototype = {
-	'lfs': {
+	self.lfs = {
 		'version': '', // lfs version
 		'product': '', // lfs product name (Demo, S1, S2)
 		'insimver': 5 // insim version
-	},
+	};
 
-	'host': false, // is host?
-	'hname': '', // hostname
+	self.host = false; // is host?
+	self.hname = ''; // hostname
 
-	'replayspeed': 1,
-	'flags': 0, // state flags
-	'ingamecam': 0,
-	'viewplid': 0, // currently viewing this plid
+	self.replayspeed = 1;
+	self.flags = 0; // state flags
+	self.ingamecam = 0;
+	self.viewplid = 0; // currently viewing this plid
 
-	'raceinprog': false,
-	'qualmins': 0, // number of qualifying mins
-	'racelaps': 0, // laps
+	self.raceinprog = false;
+	self.qualmins = 0; // number of qualifying mins
+	self.racelaps = 0; // laps
 
-	'track': '', // short trackname
-	'weather': '', // 0-2
-	'wind': '', // 0-2, none-weak-strong
+	self.track = ''; // short trackname
+	self.weather = ''; // 0-2
+	self.wind = ''; // 0-2, none-weak-strong
 
-	'conns': [],
-	'plyrs': [],
+	self.conns = [];
+	self.plyrs = [];
+};
 
+ClientState.prototype = {
 	// helper functions
 	'getPlyrByPlid': function(plid)
 	{
@@ -167,9 +163,11 @@ exports.ClientState.prototype = {
 		return self.conns[self.plyr[plid].ucid];
 	},
 
-	// insim/product version
+	// state ready
 	'onIS_VER': function(pkt)
 	{
+		console.log(pkt);
+
 		var self = this;
 
 		self.lfs.version = pkt.version;
@@ -359,6 +357,8 @@ exports.ClientState.prototype = {
 
 	// hooks, helper array
 	'hooks': {
+		'IS_VER': 'onIS_VER',
+
 		'IS_STA': 'onGeneric_Copy',
 		'IS_RST': 'onGeneric_Copy',
 		'IS_ISM': 'onIS_ISM',
@@ -398,19 +398,13 @@ exports.init = function(options)
 {
 	this.log.info('Registering state plugin');
 
-	this.client.registerHook('connect', function()
+	this.client.registerHook('preconnect', function()
 	{
 		// setup state
-		this.client.state = new exports.ClientState;
-
-		var state = new exports.PlyrState();
-
-		console.log(utils.inspect(state));
+		this.client.state = new ClientState;
 
 		// setup hooks
 		this.client.state.registerHooks(this.client);
-
-		console.log(this.client.state);
 
 		this.client.emit('STA_READY');
 	});
@@ -419,6 +413,8 @@ exports.init = function(options)
 	{
 		// we're going to be lazy and tear down the whole state on a 
 		// disconnection, so we'll need to completely remove all the hooks first
+
+		this.client.emit('STA_NOTREADY');
 
 		// clear hooks
 		this.client.state.unregisterHooks(this.client);
