@@ -6,10 +6,9 @@ exports.init = function(options)
 
 exports.pong = function()
 {
-	this.log.info('PING?');
+	this.log.debug('PING? PONG!');
 	var p = new this.insim.IS_TINY();
 	p.subt = this.insim.TINY_NONE;
 	
 	this.client.send(p);
-	this.log.info('PONG!');
 }

@@ -8,11 +8,9 @@
  *  - STA_CONNLEAVE: leaving connection, sends ucid
  *  - STA_CONNREN: connection rename, sends ucid
  *  - STA_PLYRNEW: new player, sends plid
- *  - STA_PLYRPIT: player telepits, sends plid
- *  - STA_PLYRUNPIT: player leaves pits, sends plid
  *  - STA_PLYRLEAVE: player leaves race, sends plid
  *  - STA_PLYRSWAP: 2 connections swap (player take over), sends plid
- *  - STA_PLYRUPDATE: player telepits, sends array of plids
+ *  - STA_PLYRUPDATE: player change (pits/unpits/position), sends array of plids
  *
  * i.e. in your dependant plugin:
  * this.client.on('STA_CONNNEW', function(ucid)
@@ -26,9 +24,7 @@
 var utils = require('util'),
 	events = require('events');
 
-var StateBase = function() {
-	console.log('state base');
-};
+var StateBase = function() {};
 
 StateBase.prototype = {
 	'fromPkt': function(pkt)
@@ -66,7 +62,6 @@ utils.inherits(ConnState, StateBase);
 
 var PlyrState = function(pkt)
 {
-	console.log('creating plyrstate');
 	var self = this;
 
 	self.plid = 0;
@@ -134,6 +129,8 @@ var ClientState = function() {
 
 	self.conns = [];
 	self.plyrs = [];
+
+	self.lastOOS = (new Date).getTime()-10000;
 };
 
 ClientState.prototype = {
@@ -174,14 +171,34 @@ ClientState.prototype = {
 		return self.conns[self.plyr[plid].ucid];
 	},
 
-	// state ready
-	'onIS_VER': function(pkt)
+	'handleOOS': function()
+	{
+		// if you decide to use STA_OOS you MUST use this function to prevent
+		// horrible loops of requests from occuring
+
+		var now = (new Date).getTime();
+
+		// prevent too many OOS'
+		if ((now - this.lastOOS) <= 10000)
+			return false;
+
+		this.lastOOS = now;	
+
+		return true;
+	},
+
+	// request the current state from LFS
+	'requestCurrentState': function()
 	{
 		var self = this.client.state;
 
-		self.lfs.version = pkt.version;
-		self.lfs.product = pkt.product;
-		self.lfs.insimver = pkt.insimver;
+		if (!self.handleOOS())
+		{
+			this.log.debug('OOS - Ignoring, <= 10s since last OOS');
+			return;
+		}
+
+		this.log.debug('OOS - Requesting data');
 
 		// FIXME in a loop sending these 4 pkts breaks horribly..
 		// TODO figure out why
@@ -204,6 +221,18 @@ ClientState.prototype = {
 		t3.reqi = 1;
 		t3.subt = this.insim.TINY_SST;
 		this.client.send(t3);
+	},
+
+	// state ready
+	'onIS_VER': function(pkt)
+	{
+		var self = this.client.state;
+
+		self.lfs.version = pkt.version;
+		self.lfs.product = pkt.product;
+		self.lfs.insimver = pkt.insimver;
+
+		this.client.emit('STA_OOS');
 	},
 
 	// game state
@@ -233,18 +262,17 @@ ClientState.prototype = {
 		
 		self.host = pkt.host;
 		self.hname = pkt.hname;
+
+		this.client.emit('STA_OOS');
 	},
 
 	// connection specific hooks
 	'onIS_NCN': function(pkt)
 	{
-		console.log('got NCN');
-
 		var self = this.client.state;
 		// new connection
 
 		var c = new ConnState(pkt);
-		console.log(c);
 		self.conns[c.ucid] = c;
 
 		this.client.emit('STA_CONNNEW', c.ucid);
@@ -257,10 +285,10 @@ ClientState.prototype = {
 		if (!self.conns[pkt.ucid])
 			return;
 		
-		if (self.conns[pkt.ucid].plid > 0)
-			self.plyrs.splice(self.conns[pkt.ucid].plid, 1);
+		if ((self.conns[pkt.ucid].plid > 0) && (self.plyrs[self.conns[pkt.ucid].plid]))
+			delete self.plyrs[self.conns[pkt.ucid].plid];
 
-		self.conns.splice(pkt.ucid, 1);
+		delete self.conns[pkt.ucid];
 
 		this.client.emit('STA_CONNLEAVE', pkt.ucid);
 	},
@@ -281,29 +309,32 @@ ClientState.prototype = {
 	// player specific hooks
 	'onIS_NPL': function(pkt)
 	{
-		console.log('GOT ISNPL');
 		var self = this.client.state;
 		var p = null;
+		var n = false;
 		
 		if (!self.plyrs[pkt.plid])
 		{
 			// new/unknown plyr
 			p = new PlyrState(pkt);
-
 			self.plyrs[p.plid] = p;
-
-			// send new plyr
-			this.client.emit('STA_PLYRNEW', pkt.plid);
-			return;
+			n = true;
+		}
+		else
+		{
+			// existing, un-pitting plyr, update our info
+			p = self.plyrs[pkt.plid];
+			p.fromPkt(pkt);
+			p.pitting = false;
 		}
 
-		// existing, un-pitting plyr, update our info
-		p = self.plyrs[pkt.plid];
-		p.fromPkt(pkt);
-		p.pitting = false;
+		if (self.conns[p.ucid])
+			self.conns[p.ucid].plid = p.plid;
 
-		// send plyrupdate
-		this.client.emit('STA_PLYRUNPIT', [ pkt.plid ]);
+		if (n)
+			this.client.emit('STA_PLYRNEW', pkt.plid);
+		else
+			this.client.emit('STA_PLYRUPDATE', [ pkt.plid ]);
 	},
 	'onIS_PLP': function(pkt)
 	{
@@ -316,7 +347,7 @@ ClientState.prototype = {
 		self.plyrs[pkt.plid].pitting = true;
 
 		// emit our custom event
-		this.client.emit('STA_PLYRPIT', plid);
+		this.client.emit('STA_PLYRUPDATE', [ pkt.plid ]);
 	},
 	'onIS_PLL': function(pkt)
 	{
@@ -324,15 +355,20 @@ ClientState.prototype = {
 
 		// player leaves
 		if (!self.plyrs[pkt.plid])
-			return; // out of sync
-		
+		{
+			// out of sync, lets get sync
+			this.log.crit('plyrs out of sync');
+			this.client.emit('STA_OOS');
+			return; 
+		}
+
 		var ucid = self.plyrs[pkt.plid].ucid;
-		self.plyrs.splice(pkt.plid, 1);
+		delete self.plyrs[pkt.plid];
 
 		if ((ucid > 0) && (self.conns[ucid]))
 			self.conns[ucid].plid = 0; // out of sync if this doesn't happen
 
-		this.client.emit('STA_PLYRLEAVE', plid);
+		this.client.emit('STA_PLYRLEAVE', pkt.plid);
 	},
 	'onIS_TOC': function(pkt)
 	{
@@ -340,12 +376,17 @@ ClientState.prototype = {
 
 		// player takes over vehicle (connection->player swapping)
 		if ((!self.plyrs[pkt.plid]) || (self.plyrs[pkt.plid].ucid != pkt.olducid))
-			return; // out of sync - TODO put in something to fix this up
+		{
+			// out of sync, lets get sync
+			this.log.crit('plyrs out of sync');
+			this.client.emit('STA_OOS');
+			return;
+		}
 
 		self.plyrs[pkt.plid].ucid = pkt.newucid;
 		self.conns[pkt.newucid].plid = pkt.plid;
 
-		this.client.emit('STA_PLYRSWAP', plid);
+		this.client.emit('STA_PLYRSWAP', pkt.plid);
 	},
 	'onIS_FIN': function(pkt)
 	{
@@ -361,15 +402,21 @@ ClientState.prototype = {
 
 		var updated = [];
 
-		//  positioning update
-		for(var i in data)
+		// positioning update
+		for(var i in pkt.compcar)
 		{
-			if (!self.plyrs[pkt.plid])
-				continue;
+			var p = pkt.compcar[i];
 
-			self.plyrs[pkt.plid].fromPkt(pkt);
+			if (!self.plyrs[p.plid])
+			{
+				// out of sync, lets get sync
+				this.log.crit('plyrs out of sync');
+				this.client.emit('STA_OOS');
+				continue; 
+			}
 
-			updated.push(pkt.plid);
+			self.plyrs[p.plid].fromPkt(p);
+			updated.push(p.plid);
 		}
 
 		// emit our custom event
@@ -378,6 +425,8 @@ ClientState.prototype = {
 
 	// hooks, helper array
 	'hooks': {
+		'STA_OOS': 'requestCurrentState',
+
 		'IS_VER': 'onIS_VER',
 
 		'IS_STA': 'onGeneric_Copy',
@@ -390,6 +439,7 @@ ClientState.prototype = {
 
 		'IS_NPL': 'onIS_NPL',
 		'IS_PLP': 'onIS_PLP',
+		'IS_PLL': 'onIS_PLL',
 		'IS_TOC': 'onIS_TOC',
 		'IS_FIN': 'onIS_FIN',
 		'IS_RES': 'onIS_RES',
@@ -418,6 +468,8 @@ ClientState.prototype = {
 exports.init = function(options)
 {
 	this.log.info('Registering state plugin');
+
+	this.client.isiFlags |= this.insim.ISF_MCI;
 
 	this.client.registerHook('preconnect', function()
 	{
