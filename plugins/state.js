@@ -33,11 +33,10 @@ var StateBase = function() {
 StateBase.prototype = {
 	'fromPkt': function(pkt)
 	{
-		var self = this;
-		for (var i in pkt.getProperties())
+		for (var i in pkt)
 		{
-			if ((typeof self[i] != 'function') && (self.hasOwnProperty(i)))
-				self[i] = pkt[i];
+			if ((typeof pkt[i] != 'function') && (self[i]))
+				this[i] = pkt[i];
 		}
 	}
 };
@@ -45,6 +44,8 @@ StateBase.prototype = {
 var ConnState = function(pkt)
 {
 	var self = this;
+
+	console.log('creating connstate');
 
 	self.ucid = 0;
 	self.admin = false;
@@ -54,13 +55,16 @@ var ConnState = function(pkt)
 	self.plid = 0;
 
 	// setup, from IS_NCN
-	self.fromPkt(pkt);
+
+
+	console.log(this);
 }
 
 utils.inherits(ConnState, StateBase);
 
 var PlyrState = function(pkt)
 {
+//	console.log('creating plyrstate');
 	var self = this;
 
 	self.plid = 0;
@@ -95,8 +99,9 @@ var PlyrState = function(pkt)
 	self.angvel = 0;
 
 	// setup from IS_NPL
-	if (pkt)
-		self.fromPkt(pkt);
+	this.fromPkt(pkt);
+
+//	console.log(this);
 }
 
 utils.inherits(PlyrState, StateBase);
@@ -173,37 +178,31 @@ ClientState.prototype = {
 	{
 		var self = this.client.state;
 
-		console.log("hname = %s", this.client.state.hname);
-
 		self.lfs.version = pkt.version;
 		self.lfs.product = pkt.product;
 		self.lfs.insimver = pkt.insimver;
 
-		// we're connected by this point so we need to request current state, 
-		// etc.
-		var subt = [
-			this.insim.TINY_ISM, // multiplayer?
-			this.insim.TINY_NCN, // conns
-			this.insim.TINY_NPL, // plyrs
-			this.insim.TINY_SST  // STA
-		];
+		// FIXME in a loop sending these 4 pkts breaks horribly..
+		// TODO figure out why
+		var t0 = new this.insim.IS_TINY();
+		t0.reqi = 1;
+		t0.subt = this.insim.TINY_ISM;
+		this.client.send(t0);
 
-			var p = new this.insim.IS_TINY();
-			p.reqi = 1;
-			p.subt = this.insim.TINY_ISM;
+		var t1 = new this.insim.IS_TINY();
+		t1.reqi = 1;
+		t1.subt = this.insim.TINY_NCN;
+		this.client.send(t1);
 
-			this.client.send(p);
+		var t2 = new this.insim.IS_TINY();
+		t2.reqi = 1;
+		t2.subt = this.insim.TINY_NPL;
+		this.client.send(t2);
 
-		/*
-		for (var i in subt)
-		{
-			var p = new this.insim.IS_TINY();
-			p.reqi = 1;
-			p.subt = i;
-
-			this.client.send(p);
-		}
-		*/
+		var t3 = new this.insim.IS_TINY();
+		t3.reqi = 1;
+		t3.subt = this.insim.TINY_SST;
+		this.client.send(t3);
 	},
 
 	// game state
@@ -236,7 +235,7 @@ ClientState.prototype = {
 		var self = this.client.state;
 		// new connection
 
-		var c = new Conn(pkt);
+		var c = new ConnState(pkt);
 		self.conns[c.ucid] = c;
 
 		this.client.emit('STA_CONNNEW', c.ucid);
@@ -270,14 +269,16 @@ ClientState.prototype = {
 	// player specific hooks
 	'onIS_NPL': function(pkt)
 	{
+		console.log('GOT ISNPL');
 		var self = this.client.state;
 		var p = null;
 		
 		if (!self.plyrs[pkt.plid])
 		{
 			// new/unknown plyr
-			p = new Plyr(pkt);
-			self.plyrs[c.plid] = c;
+			p = new PlyrState(pkt);
+
+			self.plyrs[p.plid] = p;
 
 			// send new plyr
 			this.client.emit('STA_PLYRNEW', pkt.plid);
