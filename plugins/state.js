@@ -131,6 +131,11 @@ var ClientState = function() {
 };
 
 ClientState.prototype = {
+	 'lfs': {
+		'version': '', // lfs version
+		'product': '', // lfs product name (Demo, S1, S2)
+		'insimver': 5 // insim version
+	},
 	// helper functions
 	'getPlyrByPlid': function(plid)
 	{
@@ -166,9 +171,9 @@ ClientState.prototype = {
 	// state ready
 	'onIS_VER': function(pkt)
 	{
-		console.log(pkt);
+		var self = this.client.state;
 
-		var self = this;
+		console.log("hname = %s", this.client.state.hname);
 
 		self.lfs.version = pkt.version;
 		self.lfs.product = pkt.product;
@@ -183,6 +188,13 @@ ClientState.prototype = {
 			this.insim.TINY_SST  // STA
 		];
 
+			var p = new this.insim.IS_TINY();
+			p.reqi = 1;
+			p.subt = this.insim.TINY_ISM;
+
+			this.client.send(p);
+
+		/*
 		for (var i in subt)
 		{
 			var p = new this.insim.IS_TINY();
@@ -191,13 +203,14 @@ ClientState.prototype = {
 
 			this.client.send(p);
 		}
+		*/
 	},
 
 	// game state
 	// IS_STA or IS_RST
 	'onGeneric_Copy': function(pkt)
 	{
-		var self = this;
+		var self = this.client.state;
 
 		// useful function that can be used when we just need to copy
 		// game state change or race start
@@ -208,9 +221,9 @@ ClientState.prototype = {
 				self[i] = pkt[i];
 		}
 	},
-	'onIS_ISM': function()
+	'onIS_ISM': function(pkt)
 	{
-		var self = this;
+		var self = this.client.state;
 		//  multiplayer start/join
 		
 		self.host = pkt.host;
@@ -220,7 +233,7 @@ ClientState.prototype = {
 	// connection specific hooks
 	'onIS_NCN': function(pkt)
 	{
-		var self = this;
+		var self = this.client.state;
 		// new connection
 
 		var c = new Conn(pkt);
@@ -230,7 +243,7 @@ ClientState.prototype = {
 	},
 	'onIS_CNL': function(pkt)
 	{
-		var self = this;
+		var self = this.client.state;
 		// connection leaves
 
 		if ((self.conns[pkt.ucid]) && (self.conns[pkt.ucid].plid > 0))
@@ -242,7 +255,7 @@ ClientState.prototype = {
 	},
 	'onIS_CPR': function(pkt)
 	{
-		var self = this;
+		var self = this.client.state;
 		// connection rename
 
 		if (!self.conns[pkt.ucid])
@@ -257,7 +270,7 @@ ClientState.prototype = {
 	// player specific hooks
 	'onIS_NPL': function(pkt)
 	{
-		var self = this;
+		var self = this.client.state;
 		var p = null;
 		
 		if (!self.plyrs[pkt.plid])
@@ -281,7 +294,7 @@ ClientState.prototype = {
 	},
 	'onIS_PLP': function(pkt)
 	{
-		var self = this;
+		var self = this.client.state;
 		// player tele-pits
 
 		if (!self.plyrs[pkt.plid])
@@ -297,7 +310,7 @@ ClientState.prototype = {
 	},
 	'onIS_PLL': function(pkt)
 	{
-		var self = this;
+		var self = this.client.state;
 
 		// player leaves
 		if (!self.plyrs[pkt.plid])
@@ -315,7 +328,7 @@ ClientState.prototype = {
 	},
 	'onIS_TOC': function(pkt)
 	{
-		var self = this;
+		var self = this.client.state;
 
 		// player takes over vehicle (connection->player swapping)
 		if ((!self.plyrs[pkt.plid]) || (self.plyrs[pkt.plid].ucid != pkt.olducid))
@@ -336,7 +349,7 @@ ClientState.prototype = {
 	},
 	'onIS_MCI': function(pkt)
 	{
-		var self = this;
+		var self = this.client.state;
 
 		var updated = [];
 
