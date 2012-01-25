@@ -7,7 +7,7 @@ exports.init = function(options)
 {
 	this.log.info('Registering Strings Test');
 
-	stream = fs.createWriteStream("./test-utf8.log");
+	stream = fs.createWriteStream("./test-utf8.log", { encoding: 'binary' });
 
 	this.client.registerHook('IS_MSO', function(pkt)
 	{
