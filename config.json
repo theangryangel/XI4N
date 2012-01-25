@@ -2,7 +2,7 @@
 	// logger options
 	"logger": {
 		// log level
-		"level": "info",
+		"level": "debug",
 
 		// may be any writable stream, object that implements a write function.
 		// if neither it's assumed you meant a file name and it writes to that

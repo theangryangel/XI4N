@@ -33,10 +33,15 @@ var StateBase = function() {
 StateBase.prototype = {
 	'fromPkt': function(pkt)
 	{
-		for (var i in pkt)
+		var props = pkt.getProperties();
+
+		for (var i in props)
 		{
-			if ((typeof pkt[i] != 'function') && (self[i]))
-				this[i] = pkt[i];
+			var propK = props[i];
+			var propV = pkt[propK];
+
+			if ((typeof propV != 'function') && (this[i] !== 'undefined'))
+				this[propK] = propV;
 		}
 	}
 };
@@ -44,8 +49,6 @@ StateBase.prototype = {
 var ConnState = function(pkt)
 {
 	var self = this;
-
-	console.log('creating connstate');
 
 	self.ucid = 0;
 	self.admin = false;
@@ -55,16 +58,15 @@ var ConnState = function(pkt)
 	self.plid = 0;
 
 	// setup, from IS_NCN
-
-
-	console.log(this);
+	if (pkt)
+		self.fromPkt(pkt);
 }
 
 utils.inherits(ConnState, StateBase);
 
 var PlyrState = function(pkt)
 {
-//	console.log('creating plyrstate');
+	console.log('creating plyrstate');
 	var self = this;
 
 	self.plid = 0;
@@ -99,9 +101,8 @@ var PlyrState = function(pkt)
 	self.angvel = 0;
 
 	// setup from IS_NPL
-	this.fromPkt(pkt);
-
-//	console.log(this);
+	if (pkt)
+		this.fromPkt(pkt);
 }
 
 utils.inherits(PlyrState, StateBase);
@@ -214,10 +215,15 @@ ClientState.prototype = {
 		// useful function that can be used when we just need to copy
 		// game state change or race start
 		// we just blindly copy 
-		for (var i in pkt.getProperties())
+		var props = pkt.getProperties();
+
+		for (var i in props)
 		{
-			if ((typeof self[i] != 'function') && (self.hasOwnProperty(i)))
-				self[i] = pkt[i];
+			var propK = props[i];
+			var propV = pkt[propK];
+
+			if ((typeof propV != 'function') && (self[i] !== 'undefined'))
+				self[propK] = propV;
 		}
 	},
 	'onIS_ISM': function(pkt)
@@ -232,10 +238,13 @@ ClientState.prototype = {
 	// connection specific hooks
 	'onIS_NCN': function(pkt)
 	{
+		console.log('got NCN');
+
 		var self = this.client.state;
 		// new connection
 
 		var c = new ConnState(pkt);
+		console.log(c);
 		self.conns[c.ucid] = c;
 
 		this.client.emit('STA_CONNNEW', c.ucid);
@@ -245,10 +254,13 @@ ClientState.prototype = {
 		var self = this.client.state;
 		// connection leaves
 
-		if ((self.conns[pkt.ucid]) && (self.conns[pkt.ucid].plid > 0))
-			self.plyrs[self.conns[pkt.ucid].plid] = undefined;
+		if (!self.conns[pkt.ucid])
+			return;
+		
+		if (self.conns[pkt.ucid].plid > 0)
+			self.plyrs.splice(self.conns[pkt.ucid].plid, 1);
 
-		self.conns[pkt.ucid] = undefined;
+		self.conns.splice(pkt.ucid, 1);
 
 		this.client.emit('STA_CONNLEAVE', pkt.ucid);
 	},
@@ -301,10 +313,7 @@ ClientState.prototype = {
 		if (!self.plyrs[pkt.plid])
 			return;
 
-		var p = self.plyrs[pkt.plid];
-		p.pitting = true;
-
-		p = undefined;
+		self.plyrs[pkt.plid].pitting = true;
 
 		// emit our custom event
 		this.client.emit('STA_PLYRPIT', plid);
@@ -318,12 +327,10 @@ ClientState.prototype = {
 			return; // out of sync
 		
 		var ucid = self.plyrs[pkt.plid].ucid;
-		self.plyrs[pkt.plid] = undefined;
+		self.plyrs.splice(pkt.plid, 1);
 
 		if ((ucid > 0) && (self.conns[ucid]))
-			self.conns[ucid] = undefined; // out of sync if this doesn't happen
-
-		ucid = undefined;
+			self.conns[ucid].plid = 0; // out of sync if this doesn't happen
 
 		this.client.emit('STA_PLYRLEAVE', plid);
 	},
