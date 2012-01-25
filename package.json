@@ -25,7 +25,7 @@
 	},
 	"bundleDependencies": [
 	],
-	"license": "MIT",
+	"license": "GPL",
 	"engine": {
 		"node": ">=0.6.0"
 	}
