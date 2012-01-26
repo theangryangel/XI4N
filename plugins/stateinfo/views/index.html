@@ -11,8 +11,11 @@
 <body>
 <div class="container">
 
-	<h1><%= state.hname %></h1>
 	<h1><%= datetime  %></h1>
+
+	<h1><%= state.hname %></h1>
+	<p>layout: <%= state.lname %></p>
+	<p>track: <%= state.track %></p>
 
 	<div class="left">
 		<h1>Connections</h1>
@@ -32,7 +35,10 @@
 			<thead>
 				<tr>
 					<td>Plid</td><td>Ucid</td><td>pname</td><td>pitting</td><td>x / y / z</td><td>speed</td>
-					<td>Car</td>
+					<td>Car</td><td>Position</td>
+					<td>Final Result?</td>
+					<td>lap</td>
+					<td>lap time</td>
 				</tr>
 			</thead>
 			<% _.each(state.plyrs, function(c) { %>
@@ -40,7 +46,10 @@
 					<td><%= c.plid %></td><td><%= c.ucid %></td><td><%= c.pname %></td>
 					<td><%= c.pitting %></td><td><%= c.x %> / <%= c.y %> / <%= c.z %></td>
 					<td><%= c.speed %></td>
-					<td><%= c.cname %></td>
+					<td><%= c.cname %></td><td><%= c.position %></td>
+					<td><%= c.finalresult %></td>
+					<td><%= c.lapsdone %>/<%= state.racelaps %></td>
+					<td><%= c.ltime %></td>
 				</tr>
 			<% }); %>
 		</table>

@@ -11,8 +11,11 @@
  *  - STA_PLYRLEAVE: player leaves race, sends plid
  *  - STA_PLYRSWAP: 2 connections swap (player take over), sends plid
  *  - STA_PLYRUPDATE: player change (pits/unpits/position), sends array of plids
+ *  - STA_OOS: if you subscribe to this event you MUST check whether or not you
+ *             should handle it based on the last STA_OOS. for simplicity use
+ *             state.handleOOS() to determime this
  *
- * i.e. in your dependant plugin:
+ * i.e. in your dependent plugin:
  * this.client.on('STA_CONNNEW', function(ucid)
  * {
  *     var conn = this.client.state.getConnByUcid(ucid);
@@ -95,9 +98,37 @@ var PlyrState = function(pkt)
 	self.heading = 0;
 	self.angvel = 0;
 
+	self.ttime = 0;
+	self.btime = 0;
+	self.numstops = 0;
+	self.lapsdone = 0;
+	self.resultnum = 0;
+	self.pseconds = 0;
+
+	self.penalty = 0; // current penalty, if any
+	self.ltime = 0;
+	self.etime = 0;
+	self.stime = 0;
+
+	self.finalresult = false; // is the final result
+
 	// setup from IS_NPL
 	if (pkt)
 		this.fromPkt(pkt);
+}
+
+PlyrState.prototype = {
+	'clearLastResult': function()
+	{
+		this.ttime = 0;
+		this.btime = 0;
+		this.numstops = 0;
+		this.lapsdone = 0;
+		this.resultnum = 0;
+		this.pseconds = 0;
+		this.penalty = 0;
+		this.finalresult = false;
+	}
 }
 
 utils.inherits(PlyrState, StateBase);
@@ -119,13 +150,18 @@ var ClientState = function() {
 	self.ingamecam = 0;
 	self.viewplid = 0; // currently viewing this plid
 
-	self.raceinprog = false;
+	self.raceinprog = 0; // 0 = no race, 1 = race, 2 = qualifying
 	self.qualmins = 0; // number of qualifying mins
 	self.racelaps = 0; // laps
 
 	self.track = ''; // short trackname
 	self.weather = ''; // 0-2
 	self.wind = ''; // 0-2, none-weak-strong
+
+	self.axstart = 0; // ax start node
+	self.numcp = 0; // number of cps
+	self.numo = 0; // number of objects
+	self.lname = ''; // layout name, if any
 
 	self.conns = [];
 	self.plyrs = [];
@@ -265,6 +301,16 @@ ClientState.prototype = {
 
 		this.client.emit('STA_OOS');
 	},
+	'onIS_RST': function(pkt)
+	{
+		var self = this.client.state;
+		//  multiplayer start/join
+		
+		self.onGeneric_Copy.call(this);
+		
+		for (var i in self.plyrs)
+			self.plyrs[i].clearLastResult();
+	},
 
 	// connection specific hooks
 	'onIS_NCN': function(pkt)
@@ -390,11 +436,49 @@ ClientState.prototype = {
 	},
 	'onIS_FIN': function(pkt)
 	{
-		// player finishes
+		var self = this.client.state;
+		// player finish notification
+		// not final result
+
+		if (!self.plyrs[pkt.plid])
+			return;
+
+		self.plyrs[pkt.plid].fromPkt(pkt);
+		self.plyrs[pkt.plid].finalresult = false;
+
+		// emit our custom event
+		this.client.emit('STA_PLYRUPDATE', [ pkt.plid ]);
+	},
+	'onIS_LAPSPX': function(pkt)
+	{
+		var self = this.client.state;
+
+		if (!self.plyrs[pkt.plid])
+		{
+			// out of sync, lets get sync
+			this.log.crit('plyrs out of sync');
+			this.client.emit('STA_OOS');
+			return; 
+		}
+
+		self.plyrs[pkt.plid].fromPkt(pkt);
+
+		this.client.emit('STA_PLYRUPDATE', [ pkt.plid ]);
 	},
 	'onIS_RES': function(pkt)
 	{
+		var self = this.client.state;
 		// player finish result
+		// final result
+
+		if (!self.plyrs[pkt.plid])
+			return;
+
+		self.plyrs[pkt.plid].fromPkt(pkt);
+		self.plyrs[pkt.plid].finalresult = true;
+
+		// emit our custom event
+		this.client.emit('STA_PLYRUPDATE', [ pkt.plid ]);
 	},
 	'onIS_MCI': function(pkt)
 	{
@@ -430,7 +514,8 @@ ClientState.prototype = {
 		'IS_VER': 'onIS_VER',
 
 		'IS_STA': 'onGeneric_Copy',
-		'IS_RST': 'onGeneric_Copy',
+		'IS_RST': 'onIS_RST',
+		'IS_AXI': 'onGeneric_Copy',
 		'IS_ISM': 'onIS_ISM',
 
 		'IS_NCN': 'onIS_NCN',
@@ -443,6 +528,8 @@ ClientState.prototype = {
 		'IS_TOC': 'onIS_TOC',
 		'IS_FIN': 'onIS_FIN',
 		'IS_RES': 'onIS_RES',
+		'IS_LAP': 'onIS_LAPSPX',
+		'IS_SPX': 'onIS_LAPSPX',
 		'IS_MCI': 'onIS_MCI',
 	},
 
