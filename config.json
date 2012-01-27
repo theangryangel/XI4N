@@ -1,4 +1,8 @@
 {
+	// xi4n
+	// expected/support xi4n versions
+	"xi4n": ">=0.0.1",
+
 	// logger options
 	"logger": {
 		// log level

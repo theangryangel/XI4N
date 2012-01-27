@@ -15,6 +15,7 @@ var util = require('util'),
 	fs = require('fs'),
 	path = require('path'),
 	os = require('os'),
+	sv = require('semver'),
 	program = require('commander'),
 	product = require('../lib/product'),
 	jsonTidy = require('../lib/json-tidy'),
@@ -238,6 +239,15 @@ if (program.config)
 	// it's user-editable, so we cannot be 100% sure that it's valid JSON,
 	// so lets do some basic tidying on it first, removing some common mistakes
 	var opts = jsonTidy.tidyParseFile(configFile, 'utf8');
+
+	// check out config file supports this version of xi4n
+	if ((!opts.xi4n) || (!sv.satisfies(product.version, opts.xi4n)))
+	{
+		console.error();
+		console.error('  mis-matched versions, config expects \'%s\', xi4n is \'%s\'', opts.xi4n, product.version);
+		console.error();
+		process.exit();
+	}
 
 	// setup clientmanager
 	var c = new clientmanager.create(opts, program.config);
