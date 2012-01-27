@@ -21,7 +21,8 @@
 	"dependencies": {
 		"bufferlist": "*",
 		"jspack": "*",
-		"commander": "*"
+		"commander": "*",
+		"semver", "*"
 	},
 	"bundleDependencies": [
 	],
