@@ -1,10 +1,10 @@
 var livemap = {
 	'clients': {},
-	'toList': function()
+	'getClients': function()
 	{
 		var list = [];
 
-		for (var i in this.hosts)
+		for (var i in this.clients)
 			list.push({ 'hostname': this.clients[i].hname, 'track': this.clients[i].track, 'layout': this.clients[i].lname });
 
 		return list;
@@ -18,7 +18,6 @@ var util = require('util'),
 
 exports.construct = function(options)
 {
-	io.set('logger'), this.logger);
 	io.set('log level', 1);
 
 	// disable the layout
@@ -55,7 +54,15 @@ exports.construct = function(options)
 	// and hook up all our callbacks
 	io.sockets.on('connection', function(socket)
 	{
-		io.sockets.emit('maps', livemaps.toList());
+		io.sockets.emit('maps', livemap.getClients.call(livemap));
+
+		console.log('on connection');
+
+		console.log(livemap);
+
+		console.log(livemap.getClients.call(livemap));
+
+		console.log(livemap.clients);
 
 		socket.on('join', function(map)
 		{
@@ -67,7 +74,7 @@ exports.construct = function(options)
 				socket.join(map);
 				socket.map = map;
 
-				// send list of players
+				// send list of players and current positions
 			}
 		});
 
@@ -96,41 +103,88 @@ exports.init = function()
 
 	this.client.registerHook('state:server', function(joined)
 	{
+		console.log('got state:server');
+		console.log(joined);
+
+		console.log(this.client.state.hname);
+
+		var state = this.client.state.hname;
+
 		if (joined)
-			livemaps.clients[this.client.id] = { 'hostname': this.state.hname,	'track': this.state.track, 'layout': this.state.lname };
+		{
+			livemap.clients[this.client.id] = { 'hostname': state.hname, 'track': state.track, 'layout': state.lname };
+			console.log('added');
+			console.log({ 'hostname': this.client.state.hname, 'track': this.client.state.track, 'layout': this.client.state.lname });
+		}
 		else
-			delete livemaps.clients[this.client.id];
+			delete livemap.clients[this.client.id];
+
+	 console.log('post state:server');
+		console.log(livemap.getClients());
 
 		// notify any sockets of this.client's arrival/departure
-		io.sockets.emit('maps', livemaps.toList());
+		io.sockets.emit('maps', livemap.getClients());
 	});
 
-	this.client.registerHook('state:connnew', function(ucid)
+	var plyrCompact = function(p)
 	{
-	});
+		if (!p)
+			return;
 
-	this.client.registerHook('state:connleave', function(ucid)
-	{
-	});
+		return {
+			'plid': p.plid,
+			'pname': p.pname, 'cname': p.cname,
+			'pitting': p.pitting,
+			'position': p.position,
+	   		'x': p.x, 'y': p.y, 'z': p.z,
+			'lapsdone': p.lapsdone
+		};
+	}
 
-	this.client.registerHook('state:connren', function(ucid)
+	this.client.registerHook('state:track', function(plid)
 	{
+		io.sockets.in(this.client.id).emit('track', {
+			'id': this.client.id,
+			'hostname': this.client.state.hname, 
+			'track': this.client.state.track,
+			'layout': this.client.state.lname
+		});
 	});
 
 	this.client.registerHook('state:plyrnew', function(plid)
 	{
+		var p = this.client.state.getPlyrByPlid(plid);
+
+		if (!p)
+			return; // some how got a plid that we don't know about in the state
+
+		io.sockets.in(this.client.id).emit('plyrnew', plyrCompact(p));
 	});
 
 	this.client.registerHook('state:plyrleave', function(plid)
 	{
-	});
+		var p = this.client.state.getPlyrByPlid(plid);
 
-	this.client.registerHook('state:plyrswap', function(plid)
-	{
+		if (!p)
+			return; // some how got a plid that we don't know about in the state
+
+		io.sockets.in(this.client.id).emit('plyrleave', plid);
 	});
 
 	this.client.registerHook('state:plyrupdate', function(plids)
 	{
+		var update = [];
+
+		for (var i in plids)
+		{
+			var p = this.client.state.getPlyrByPlid(plids[i]);
+			if (!p)
+				continue;
+
+			update.push(plyrCompact(p));
+		}
+
+		io.sockets.in(this.client.id).emit('plyrsupdate', update);
 	});
 
 	this.client.registerHook('IS_MSO', function(pkt)

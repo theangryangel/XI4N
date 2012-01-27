@@ -307,16 +307,16 @@ ClientState.prototype = {
 			weather = self.weather,
 			wind = self.wind;
 		
-		self.onGeneric_Copy.call(this);
+		self.onGeneric_Copy.call(this, pkt);
 
 		if (ctrack != self.track)
-			this.emit('state:track');
+			this.client.emit('state:track');
 
 		if (weather != self.weather)
-			this.emit('state:weather');
+			this.client.emit('state:weather');
 
 		if (wind != self.wind)
-			this.emit('state:wind');
+			this.client.emit('state:wind');
 	},
 	'onIS_AXI': function(pkt)
 	{
@@ -325,10 +325,10 @@ ClientState.prototype = {
 		//  state change
 		var lname = self.lname;
 		
-		self.onGeneric_Copy.call(this);
+		self.onGeneric_Copy.call(this, pkt);
 
 		if (lname != self.lname)
-			this.emit('state:track');
+			this.client.emit('state:track');
 	},
 	'onIS_ISM': function(pkt)
 	{
@@ -353,8 +353,8 @@ ClientState.prototype = {
 		self.host = 0;
 		self.hname = '';
 
-		this.emit('state:server', false);
-	}.
+		this.client.emit('state:server', false);
+	},
 	'onIS_RST': function(pkt)
 	{
 		var self = this.client.state;
@@ -362,15 +362,15 @@ ClientState.prototype = {
 		//  multiplayer start/join
 		var ctrack = self.track;
 		
-		self.onGeneric_Copy.call(this);
+		self.onGeneric_Copy.call(this, pkt);
 		
 		for (var i in self.plyrs)
 			self.plyrs[i].clearLastResult();
 
 		if (ctrack != self.track)
-			this.emit('state:track');
+			this.client.emit('state:track');
 
-		this.emit('state:race');
+		this.client.emit('state:race');
 	},
 
 	// connection specific hooks

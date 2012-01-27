@@ -6,7 +6,7 @@
 	// logger options
 	"logger": {
 		// log level
-		"level": "debug",
+		"level": "info",
 
 		// may be any writable stream, object that implements a write function.
 		// if neither it's assumed you meant a file name and it writes to that
@@ -29,8 +29,8 @@
 			"path": "state",
 			"options": {}
 		},
-		"stateinfo": {
-			"path": "stateinfo",
+		"livemap2": {
+			"path": "livemap2",
 			"options": {}
 		}
 	},
@@ -63,7 +63,7 @@
 			"reconnectcooldown": 5,
 
 			// an array of plugins we want to load for this client
-			"plugins": [ "pong", "state", "stateinfo" ]
+			"plugins": [ "pong", "state", "livemap2" ]
 		}
 	]
 }

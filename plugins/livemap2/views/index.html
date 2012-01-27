@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<title>xi4n:livemap.js</title>
+	<link rel="stylesheet" href="/static/css/screen.css" type="text/css">
+
+	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
+	<script src="/static/js/d3.min.js" type="text/javascript"></script>
+	<script src="/static/js/livemap.js" type="text/javascript"></script>
+	<script src="/static/js/chosen.jquery.min.js" type="text/javascript"></script>
+
+	<script src="/socket.io/socket.io.js"></script>
+
+	<script type="text/javascript">
+		$(document).ready(function()
+		{
+			var track = new LiveMap();
+			track.dst = '#container-inner-track';
+			track.basePath = '/static/pth/';
+
+			track.on('pth', function()
+			{
+				track.drawTrack();
+			});
+
+			track.on('addplyr', function(plid)
+			{
+				var plyr = track.getPlyr(plid);
+
+				if ($('#tracker-table tbody tr.' + plid).length <= 0)
+				{
+					$('<tr class="' + plid + ' plyr"> \
+							<td class="pos">' + plyr.pos + '</th> \
+							<td class="name">' + plyr.name + '</td> \
+							<td class="vehicle">' + plyr.vehicle + '</td> \
+						</tr>').data('plid', plid).appendTo('#tracker-table tbody');
+					return;
+				}
+				else
+				{
+					var row = $('#tracker-table tbody tr.' + plid);
+					row.find('td.name').text(plyr.name);
+					row.find('td.vehicle').text(plyr.vehicle);
+				}
+			});
+
+			track.on(['remplyr', 'clearplyr'], function(plid)
+			{
+				$('#tracker-table tbody tr.' + plid).remove();
+			});
+
+			track.on('drawplyr', function(plid)
+			{
+				if ($('#tracker-table tbody tr.' + plid).length <= 0)
+					track.emit('addplyr', plid);
+
+				var plyr = track.getPlyr(plid);
+
+				var row = $('#tracker-table tbody tr.' + plid);
+					row.find('td.pos').text(plyr.pos);
+
+				if (plyr.pos > 0)
+					row.insertBefore('#tracker-table tbody tr:eq(' + plyr.pos + ')');
+			});
+
+			var servers = {};
+
+			var socket = io.connect('http://localhost:<%= port.toString() %>');
+
+		//	$(".chzn-select").chosen({ allow_single_deselect: true });
+
+			$('#option-chat').change(function()
+			{
+				$('#container-chat').fadeToggle('slow');
+			});
+
+			$('#option-track').change(function()
+			{
+				$('#container-track').fadeToggle('slow');
+			});
+
+			$('#tracker-table tbody').on({
+				mouseenter: function()
+				{
+					var plid = $(this).data('plid');
+					track.highlightPlyr(plid);
+				},
+				mouseleave: function()
+				{
+					var plid = $(this).data('plid');
+					track.unhighlightPlyr(plid);
+				}
+			},
+			'tr.plyr');
+
+			$('#option-fancy').change(function()
+			{
+				if ($(this).is(':checked'))
+				{
+					track.fancy = 1000;
+					return;
+				}
+
+				track.fancy = 0;
+			});
+
+			$('#option-server').change(function()
+			{
+				var val = $(this).val();
+
+				if ((val.length <= 0) || (val <= 0))
+				{
+					track.clear();
+					socket.emit('leave');
+					return;
+				}
+
+				var trackname = $(this).data('track');
+				if ($(this).data('layout').length > 0)
+					trackname = $(this).data('layout');
+
+				track.loadPth(trackname + '.json');
+
+				socket.emit('join', val);
+			});
+
+			// update list of servers
+			socket.on('maps', function(data)
+			{
+				console.log(data);
+				var select = $('#option-server');
+				var curr = select.val();
+				var loaded = false;
+	
+				select.find('option[value!=]').remove();
+
+				for(var i in data)
+				{
+					var h = select.find('option[value=' + data[i].id + ']');
+
+					if (h.length > 0)
+					{
+						h.text(data[i].hostname);
+
+						if (h.data('layout') != data[i].layout)
+						{
+							h.data('layout', data[i].layout);
+							if ((curr == data[i].id) && (data[i].layout.length > 0))
+								track.loadPth(data[i].layout + '.json');
+						}
+
+						if (h.data('track') != data[i].track)
+						{
+							h.data('track', data[i].track);
+							if ((curr == data[i].id) && (!loaded) && (data[i].layout.length > 0))
+								track.loadPth(data[i].track + '.json');
+						}
+
+						continue;
+					}
+
+					$('<option value="' + data[i].id + '"' + ((i == curr) ?
+							'selected="selected"' : '') + '>' + data[i].hostname + '</option>')
+						.data('track', data[i].track)
+						.data('track', data[i].layout)
+						.appendTo('#option-server');
+				}
+
+				select.trigger("liszt:updated");
+			});
+
+			socket.on('track', function (data)
+			{
+				if (data)
+					return;
+
+				var option = $('#option-server option[value=' + data.id + ']');
+
+				option.data('track', data.track);
+				option.data('layout', data.layout);
+
+				if (data.layout.length > 0)
+					track.loadPth(data.layout + '.json');
+				else
+					track.loadPth(data.track + '.json');
+			});
+
+			// positioning update
+			socket.on('plyrsupdate', function (data)
+			{
+				for(var i in data)
+				{
+					if (data[i].pitting)
+					{
+						// remove from track
+						track.remPlyr(data[i].plid);
+						continue;
+					}
+
+					track.drawPlyr(data[i].plid, data[i].x, data[i].y,
+						data[i].position);
+				}
+			});
+
+			// player leaves
+			socket.on('plyrleave', function (data)
+			{
+				track.remPlyr(data);
+			});
+
+			// new player/unpitting
+			socket.on('plyrnew', function (data)
+			{
+				track.addPlyr(data.plid, data.pname, data.cname);
+			});
+
+			// player chat
+			socket.on('chat', function (data)
+			{
+				var name = (data.usertype == 0) ? 'System' : 'NonPlayer';
+
+				if (data.plid > 0)
+				{
+					name = 'unknown';
+					var plyr = track.getPlyr(data.plid);
+					if (plyr)
+						name = plyr.name;
+				}	
+
+				var d = new Date;
+				$('#container-chat').prepend(
+					$('<div class="container-chat-line"> \
+					<span class="datetime">' + d.toISOString() + '</span> \
+					<span class="chatter">' + name + '</span> \
+					- ' + data.msg + ' \
+					</div>').fadeIn('slow')
+				);
+			
+				$('#container-chat .container-chat-line:gt(5)').fadeOut('slow');
+			});
+		});
+	</script>
+</head>
+<body>
+	<div id="container">
+		<div id="container-menu">
+			<span class="title">xi4n:livemap.js </span>
+
+			<span class="options">
+
+				<span class="option-track">
+					<label for="option-track">
+						<input type="checkbox" id="option-track"
+						checked="checked"> Track
+					</label>
+				</span>
+
+				<span class="option-fancy">
+					<label for="option-fancy">
+						<input type="checkbox" id="option-fancy"
+						checked="checked"> Smooth
+					</label>
+				</span>
+
+				<span class="option-chat">
+					<label for="option-chat">
+						<input type="checkbox" id="option-chat"
+						checked="checked"> Chat
+					</label>
+				</span>
+
+				<span class="option-servers">
+					<select id="option-server" class="chzn-select"
+						data-placeholder="Pick a Server...">
+						<option value=""></option>
+						<option value="1">asdsd</option>
+					</select>
+				</span>
+
+			</span>
+		</div>
+
+		<div id="container-inner">
+			<div id="container-tracker">
+
+				<table class="tracker-table" id="tracker-table">
+					<thead>
+						<tr>
+							<th class="pos">#</th>
+							<th class="racer">Racer</th>
+							<th class="vehicle">Vehicle</th>
+						</tr>
+					</thead>
+					<tbody>
+					</tbody>
+				</table>
+
+			</div>
+
+			<div id="container-track">
+				<div id="container-inner-track">
+				</div>
+			</div>
+
+		</div>
+
+		<div id="container-chat">
+		</div>
+	</div>
+</body>
+</html>
+
