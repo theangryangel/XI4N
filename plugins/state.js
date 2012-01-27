@@ -4,19 +4,22 @@
  * state.js adds a general state management and API for other plugins
  *
  * Events that maybe subscribed to:
- *  - STA_CONNNEW: new connection, sends ucid
- *  - STA_CONNLEAVE: leaving connection, sends ucid
- *  - STA_CONNREN: connection rename, sends ucid
- *  - STA_PLYRNEW: new player, sends plid
- *  - STA_PLYRLEAVE: player leaves race, sends plid
- *  - STA_PLYRSWAP: 2 connections swap (player take over), sends plid
- *  - STA_PLYRUPDATE: player change (pits/unpits/position), sends array of plids
- *  - STA_OOS: if you subscribe to this event you MUST check whether or not you
- *             should handle it based on the last STA_OOS. for simplicity use
- *             state.handleOOS() to determime this
+ *  - state:connnew: new connection, sends ucid
+ *  - state:connleave: leaving connection, sends ucid
+ *  - state:connren: connection rename, sends ucid
+ *  - state:plyrnew: new player, sends plid
+ *  - state:plyrleave: player leaves race, sends plid
+ *  - state:plyrswap: 2 connections swap (player take over), sends plid
+ *  - state:plyrupdate: player change (pits/unpits/position), sends array of plids
+ *  - state:oos: if you subscribe to this event you MUST check whether or not you
+ *               should handle it based on the last state:oos. for simplicity use
+ *               state.handleOOS() to determime this
+ *  - state:track: new or changed track or layout
+ *  - state:server: joins/leaves server, argument passed to call back is true on
+ *                  join, false on leave
  *
  * i.e. in your dependent plugin:
- * this.client.on('STA_CONNNEW', function(ucid)
+ * this.client.on('state:connnew', function(ucid)
  * {
  *     var conn = this.client.state.getConnByUcid(ucid);
  *
@@ -209,7 +212,7 @@ ClientState.prototype = {
 
 	'handleOOS': function()
 	{
-		// if you decide to use STA_OOS you MUST use this function to prevent
+		// if you decide to use state:oos you MUST use this function to prevent
 		// horrible loops of requests from occuring
 
 		var now = (new Date).getTime();
@@ -268,11 +271,11 @@ ClientState.prototype = {
 		self.lfs.product = pkt.product;
 		self.lfs.insimver = pkt.insimver;
 
-		this.client.emit('STA_OOS');
+		this.client.emit('state:oos');
 	},
 
 	// game state
-	// IS_STA or IS_RST
+	// used by IS_STA IS_RST and IS_AXI
 	'onGeneric_Copy': function(pkt)
 	{
 		var self = this.client.state;
@@ -291,25 +294,69 @@ ClientState.prototype = {
 				self[propK] = propV;
 		}
 	},
+	'onIS_STA': function(pkt)
+	{
+		var self = this.client.state;
+
+		//  state change
+		var ctrack = self.track;
+		
+		self.onGeneric_Copy.call(this);
+
+		if (ctrack != self.track)
+			this.emit('state:track');
+	},
+	'onIS_AXI': function(pkt)
+	{
+		var self = this.client.state;
+
+		//  state change
+		var lname = self.lname;
+		
+		self.onGeneric_Copy.call(this);
+
+		if (lname != self.lname)
+			this.emit('state:track');
+	},
 	'onIS_ISM': function(pkt)
 	{
 		var self = this.client.state;
+
 		//  multiplayer start/join
 		
 		self.host = pkt.host;
 		self.hname = pkt.hname;
 
-		this.client.emit('STA_OOS');
+		this.client.emit('state:oos');
+
+		this.client.emit('state:server', true);
 	},
+	'onIS_TINY': function(pkt)
+	{
+		var self = this.client.state;
+
+		if (pkt.subt != this.insim.TINY_MPE)
+			return;
+
+		self.host = 0;
+		self.hname = '';
+
+		this.emit('state:server', false);
+	}.
 	'onIS_RST': function(pkt)
 	{
 		var self = this.client.state;
+
 		//  multiplayer start/join
+		var ctrack = self.track;
 		
 		self.onGeneric_Copy.call(this);
 		
 		for (var i in self.plyrs)
 			self.plyrs[i].clearLastResult();
+
+		if (ctrack != self.track)
+			this.emit('state:track');
 	},
 
 	// connection specific hooks
@@ -321,7 +368,7 @@ ClientState.prototype = {
 		var c = new ConnState(pkt);
 		self.conns[c.ucid] = c;
 
-		this.client.emit('STA_CONNNEW', c.ucid);
+		this.client.emit('state:connnew', c.ucid);
 	},
 	'onIS_CNL': function(pkt)
 	{
@@ -336,7 +383,7 @@ ClientState.prototype = {
 
 		delete self.conns[pkt.ucid];
 
-		this.client.emit('STA_CONNLEAVE', pkt.ucid);
+		this.client.emit('state:connleave', pkt.ucid);
 	},
 	'onIS_CPR': function(pkt)
 	{
@@ -349,7 +396,7 @@ ClientState.prototype = {
 		self.conns[pkt.ucid].pname = pkt.pname;
 		self.conns[pkt.ucid].plate = pkt.plate;
 
-		this.client.emit('STA_CONNREN', pkt.ucid);
+		this.client.emit('state:connren', pkt.ucid);
 	},
 
 	// player specific hooks
@@ -378,9 +425,9 @@ ClientState.prototype = {
 			self.conns[p.ucid].plid = p.plid;
 
 		if (n)
-			this.client.emit('STA_PLYRNEW', pkt.plid);
+			this.client.emit('state:plyrnew', pkt.plid);
 		else
-			this.client.emit('STA_PLYRUPDATE', [ pkt.plid ]);
+			this.client.emit('state:plyrupdate', [ pkt.plid ]);
 	},
 	'onIS_PLP': function(pkt)
 	{
@@ -393,7 +440,7 @@ ClientState.prototype = {
 		self.plyrs[pkt.plid].pitting = true;
 
 		// emit our custom event
-		this.client.emit('STA_PLYRUPDATE', [ pkt.plid ]);
+		this.client.emit('state:plyrupdate', [ pkt.plid ]);
 	},
 	'onIS_PLL': function(pkt)
 	{
@@ -403,8 +450,7 @@ ClientState.prototype = {
 		if (!self.plyrs[pkt.plid])
 		{
 			// out of sync, lets get sync
-			this.log.crit('plyrs out of sync');
-			this.client.emit('STA_OOS');
+			this.client.emit('state:oos');
 			return; 
 		}
 
@@ -414,7 +460,7 @@ ClientState.prototype = {
 		if ((ucid > 0) && (self.conns[ucid]))
 			self.conns[ucid].plid = 0; // out of sync if this doesn't happen
 
-		this.client.emit('STA_PLYRLEAVE', pkt.plid);
+		this.client.emit('state:plyrleave', pkt.plid);
 	},
 	'onIS_TOC': function(pkt)
 	{
@@ -425,14 +471,14 @@ ClientState.prototype = {
 		{
 			// out of sync, lets get sync
 			this.log.crit('plyrs out of sync');
-			this.client.emit('STA_OOS');
+			this.client.emit('state:oos');
 			return;
 		}
 
 		self.plyrs[pkt.plid].ucid = pkt.newucid;
 		self.conns[pkt.newucid].plid = pkt.plid;
 
-		this.client.emit('STA_PLYRSWAP', pkt.plid);
+		this.client.emit('state:plyrswap', pkt.plid);
 	},
 	'onIS_FIN': function(pkt)
 	{
@@ -447,7 +493,7 @@ ClientState.prototype = {
 		self.plyrs[pkt.plid].finalresult = false;
 
 		// emit our custom event
-		this.client.emit('STA_PLYRUPDATE', [ pkt.plid ]);
+		this.client.emit('state:plyrupdate', [ pkt.plid ]);
 	},
 	'onIS_LAPSPX': function(pkt)
 	{
@@ -456,14 +502,13 @@ ClientState.prototype = {
 		if (!self.plyrs[pkt.plid])
 		{
 			// out of sync, lets get sync
-			this.log.crit('plyrs out of sync');
-			this.client.emit('STA_OOS');
+			this.client.emit('state:oos');
 			return; 
 		}
 
 		self.plyrs[pkt.plid].fromPkt(pkt);
 
-		this.client.emit('STA_PLYRUPDATE', [ pkt.plid ]);
+		this.client.emit('state:plyrupdate', [ pkt.plid ]);
 	},
 	'onIS_RES': function(pkt)
 	{
@@ -478,7 +523,7 @@ ClientState.prototype = {
 		self.plyrs[pkt.plid].finalresult = true;
 
 		// emit our custom event
-		this.client.emit('STA_PLYRUPDATE', [ pkt.plid ]);
+		this.client.emit('state:plyrupdate', [ pkt.plid ]);
 	},
 	'onIS_MCI': function(pkt)
 	{
@@ -494,8 +539,7 @@ ClientState.prototype = {
 			if (!self.plyrs[p.plid])
 			{
 				// out of sync, lets get sync
-				this.log.crit('plyrs out of sync');
-				this.client.emit('STA_OOS');
+				this.client.emit('state:oos');
 				continue; 
 			}
 
@@ -504,18 +548,18 @@ ClientState.prototype = {
 		}
 
 		// emit our custom event
-		this.client.emit('STA_PLYRUPDATE', updated);
+		this.client.emit('state:plyrupdate', updated);
 	},
 
 	// hooks, helper array
 	'hooks': {
-		'STA_OOS': 'requestCurrentState',
+		'state:oos': 'requestCurrentState',
 
 		'IS_VER': 'onIS_VER',
 
-		'IS_STA': 'onGeneric_Copy',
+		'IS_STA': 'onIS_STA',
 		'IS_RST': 'onIS_RST',
-		'IS_AXI': 'onGeneric_Copy',
+		'IS_AXI': 'onIS_AXI',
 		'IS_ISM': 'onIS_ISM',
 
 		'IS_NCN': 'onIS_NCN',
@@ -566,7 +610,7 @@ exports.init = function(options)
 		// setup hooks
 		this.client.state.registerHooks(this.client);
 
-		this.client.emit('STA_READY');
+		this.client.emit('STATE:READY');
 	});
 
 	this.client.registerHook('disconnect', function()
@@ -574,7 +618,7 @@ exports.init = function(options)
 		// we're going to be lazy and tear down the whole state on a 
 		// disconnection, so we'll need to completely remove all the hooks first
 
-		this.client.emit('STA_NOTREADY');
+		this.client.emit('STATE:NOTREADY');
 
 		// clear hooks
 		this.client.state.unregisterHooks(this.client);
