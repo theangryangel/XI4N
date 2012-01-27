@@ -1,6 +1,6 @@
 {
 	"name": "xi4n",
-	"version": "0.0.1",
+	"version": "0.0.2",
 	"author": "the_angry_angel <karl@theangryangel.co.uk>",
 	"description": "A simple, eXtensible Insim client 4 Node(js). Can be used as a library or a standalone client",
 	"repository": {

@@ -1,7 +1,7 @@
 {
 	// xi4n
 	// expected/support xi4n versions
-	"xi4n": ">=0.0.1",
+	"xi4n": ">=0.0.2",
 
 	// logger options
 	"logger": {
@@ -11,6 +11,28 @@
 		// may be any writable stream, object that implements a write function.
 		// if neither it's assumed you meant a file name and it writes to that
 		"stream": "stdout" 
+	},
+
+	// an object of available plugins for clients and their options
+	// they are then referenced by key(name) in the client options
+	// the key can be arbitrary, permitting the same plugin with different
+	// options, but may not duplicate an existing one
+	//
+	// path should be relative to the plugins directory
+	// options are dictated by the plugin
+	"plugins": {
+		"pong": {
+			"path": "pong",
+			"options": {}
+		},
+		"state": {
+			"path": "state",
+			"options": {}
+		},
+		"stateinfo": {
+			"path": "stateinfo",
+			"options": {}
+		}
 	},
 
 	// an array of "clients", or insim connections
@@ -40,22 +62,8 @@
 			// TODO: Not yet implemented
 			"reconnectcooldown": 5,
 
-			// an array of plugins we want to load
-			// path should be relative to the plugins directory
-			"plugins": [
-				{
-					"path": "pong",
-					"options": {}
-				},
-				{
-					"path": "state",
-					"options": {}
-				},
-				{
-					"path": "stateinfo",
-					"options": {}
-				},
-			]
+			// an array of plugins we want to load for this client
+			"plugins": [ "pong", "state", "stateinfo" ]
 		}
 	]
 }
