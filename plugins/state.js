@@ -15,8 +15,12 @@
  *               should handle it based on the last state:oos. for simplicity use
  *               state.handleOOS() to determime this
  *  - state:track: new or changed track or layout
+ *  - state:wind: changed wind conditions
+ *  - state:weather: changed weather conditions
  *  - state:server: joins/leaves server, argument passed to call back is true on
  *                  join, false on leave
+ *  - state:race: new race
+ *
  *
  * i.e. in your dependent plugin:
  * this.client.on('state:connnew', function(ucid)
@@ -299,12 +303,20 @@ ClientState.prototype = {
 		var self = this.client.state;
 
 		//  state change
-		var ctrack = self.track;
+		var ctrack = self.track,
+			weather = self.weather,
+			wind = self.wind;
 		
 		self.onGeneric_Copy.call(this);
 
 		if (ctrack != self.track)
 			this.emit('state:track');
+
+		if (weather != self.weather)
+			this.emit('state:weather');
+
+		if (wind != self.wind)
+			this.emit('state:wind');
 	},
 	'onIS_AXI': function(pkt)
 	{
@@ -357,6 +369,8 @@ ClientState.prototype = {
 
 		if (ctrack != self.track)
 			this.emit('state:track');
+
+		this.emit('state:race');
 	},
 
 	// connection specific hooks
