@@ -124,20 +124,6 @@ var PlyrState = function(pkt)
 		this.fromPkt(pkt);
 }
 
-PlyrState.prototype = {
-	'clearLastResult': function()
-	{
-		this.ttime = 0;
-		this.btime = 0;
-		this.numstops = 0;
-		this.lapsdone = 0;
-		this.resultnum = 0;
-		this.pseconds = 0;
-		this.penalty = 0;
-		this.finalresult = false;
-	}
-}
-
 utils.inherits(PlyrState, StateBase);
 
 var ClientState = function() {
@@ -365,7 +351,20 @@ ClientState.prototype = {
 		self.onGeneric_Copy.call(this, pkt);
 		
 		for (var i in self.plyrs)
-			self.plyrs[i].clearLastResult();
+		{
+			var p = self.plyrs[i];
+			if (!p)
+				continue;
+
+			p.ttime = 0;
+			p.btime = 0;
+			p.numstops = 0;
+			p.lapsdone = 0;
+			p.resultnum = 0;
+			p.pseconds = 0;
+			p.penalty = 0;
+			p.finalresult = false;
+		}
 
 		if (ctrack != self.track)
 			this.client.emit('state:track');

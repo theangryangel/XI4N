@@ -30,17 +30,19 @@
 				if ($('#tracker-table tbody tr.' + plid).length <= 0)
 				{
 					$('<tr class="' + plid + ' plyr"> \
-							<td class="pos">' + plyr.pos + '</th> \
-							<td class="name">' + plyr.name + '</td> \
-							<td class="vehicle">' + plyr.vehicle + '</td> \
+							<td class="pos">' + plyr.position + '</th> \
+							<td class="name">' + plyr.pname + '</td> \
+							<td class="vehicle">' + plyr.cname + '</td> \
+							<td class="lapsdone">' + plyr.lapsdone + '</td> \
 						</tr>').data('plid', plid).appendTo('#tracker-table tbody');
 					return;
 				}
 				else
 				{
 					var row = $('#tracker-table tbody tr.' + plid);
-					row.find('td.name').text(plyr.name);
-					row.find('td.vehicle').text(plyr.vehicle);
+					row.find('td.name').text(plyr.pname);
+					row.find('td.vehicle').text(plyr.cname);
+					row.find('td.lapsdone').text(plyr.lapsdone);
 				}
 			});
 
@@ -57,7 +59,7 @@
 				var plyr = track.getPlyr(plid);
 
 				var row = $('#tracker-table tbody tr.' + plid);
-					row.find('td.pos').text(plyr.pos);
+					row.find('td.pos').text(plyr.position);
 
 				if (plyr.pos > 0)
 					row.insertBefore('#tracker-table tbody tr:eq(' + plyr.pos + ')');
@@ -115,9 +117,15 @@
 					return;
 				}
 
-				var trackname = $(this).data('track');
-				if ($(this).data('layout').length > 0)
-					trackname = $(this).data('layout');
+				var opt = $(this).find("option:selected");
+
+				var trackname = opt.data('track');
+				var layout = opt.data('layout');
+
+				console.log("trackname = %s, layout = %s", trackname, layout);
+
+				if ((layout) && (layout.length > 0))
+					trackname = layout;
 
 				track.loadPth(trackname + '.json');
 
@@ -136,10 +144,12 @@
 
 				for(var i in data)
 				{
-					var h = select.find('option[value=' + data[i].id + ']');
+					var h = select.find('option[value="' + data[i].id + '"]');
 
 					if (h.length > 0)
 					{
+						console.log('updating existing');
+
 						h.text(data[i].hostname);
 
 						if (h.data('layout') != data[i].layout)
@@ -159,10 +169,11 @@
 						continue;
 					}
 
+					console.log('creating new');
 					$('<option value="' + data[i].id + '"' + ((i == curr) ?
 							'selected="selected"' : '') + '>' + data[i].hostname + '</option>')
 						.data('track', data[i].track)
-						.data('track', data[i].layout)
+						.data('layout', data[i].layout)
 						.appendTo('#option-server');
 				}
 
@@ -205,13 +216,32 @@
 			// player leaves
 			socket.on('plyrleave', function (data)
 			{
+				console.log('plyrleave');
 				track.remPlyr(data);
 			});
 
 			// new player/unpitting
 			socket.on('plyrnew', function (data)
 			{
+				console.log('plyrnew');
+				console.log(data);
+
 				track.addPlyr(data.plid, data.pname, data.cname);
+			});
+
+			// multiple new players
+			socket.on('plyrsnew', function (data)
+			{
+			console.log('plyrsnew');
+			console.log(data);
+
+				for (var i in data)
+				{
+					if (!data[i])
+						continue;
+
+					track.addPlyr(data[i]);
+				}
 			});
 
 			// player chat
@@ -289,6 +319,7 @@
 							<th class="pos">#</th>
 							<th class="racer">Racer</th>
 							<th class="vehicle">Vehicle</th>
+							<th class="lapsdone">Laps</th>
 						</tr>
 					</thead>
 					<tbody>

@@ -160,24 +160,20 @@ LiveMap.prototype = {
 
 		self.drawn = true;
 	},
-	addPlyr: function(plid, name, vehicle)
+	addPlyr: function(data)
 	{
 		var self = this;
 
-		self.plyrs[plid] = {
-			'name': name,
-			'vehicle': vehicle,
-			'pos': 0
-		};
+		self.plyrs[data.plid] = data;
 
-		self.emit('addplyr', plid);
+		self.emit('addplyr', data.plid);
 	},
 	getPlyr: function(plid)
 	{
 		var self = this;
 		return self.plyrs[plid];
 	},
-	highlightPlyr: function(plid, add)
+	highlightPlyr: function(plid)
 	{
 		var self = this;
 		if (!self.plyrs[plid])
