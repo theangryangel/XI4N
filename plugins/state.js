@@ -623,7 +623,7 @@ exports.init = function(options)
 		// setup hooks
 		this.client.state.registerHooks(this.client);
 
-		this.client.emit('STATE:READY');
+		this.client.emit('state:ready');
 	});
 
 	this.client.registerHook('disconnect', function()
