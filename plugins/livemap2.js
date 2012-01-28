@@ -5,7 +5,13 @@ var livemap = {
 		var list = [];
 
 		for (var i in this.clients)
-			list.push({ 'id': i, 'hostname': this.clients[i].hostname, 'track': this.clients[i].track, 'layout': this.clients[i].layout });
+			list.push({ 
+				'id': i, 'hostname': this.clients[i].hostname, 
+				'track': this.clients[i].track, 
+				'layout': this.clients[i].layout,
+				'laps': this.clients[i].laps,
+				'qual': this.clients[i].qual
+			});
 
 		return list;
 	}
@@ -102,7 +108,9 @@ exports.init = function()
 				'hostname': sillystring.toUTF8(this.client.state.hname),
 				'track': this.client.state.track,
 				'layout': this.client.state.lname,
-				'plyrs': []
+				'plyrs': [],
+				'laps': this.client.state.racelaps,
+				'qual': this.client.state.qualmins
 			};
 		else
 			delete livemap.clients[this.client.id];
@@ -123,7 +131,8 @@ exports.init = function()
 			'pitting': p.pitting,
 			'position': p.position,
 	   		'x': p.x, 'y': p.y, 'z': p.z,
-			'lapsdone': p.lapsdone
+			'lapsdone': p.lapsdone,
+			'ltime': p.ltime
 		};
 	}
 
@@ -131,12 +140,16 @@ exports.init = function()
 	{
 		livemap.clients[this.client.id].track = this.client.state.track;
 		livemap.clients[this.client.id].layout = this.client.state.lname;
+		livemap.clients[this.client.id].laps = this.client.state.racelaps;
+		livemap.clients[this.client.id].qualmins = this.client.state.qualmins;
 
 		io.sockets.in(this.client.id).emit('track', {
 			'id': this.client.id,
 			'hostname': sillystring.toUTF8(this.client.state.hname), 
 			'track': this.client.state.track,
-			'layout': this.client.state.lname
+			'layout': this.client.state.lname,
+			'laps': this.client.state.racelaps,
+			'qualmins': this.client.state.qualmins
 		});
 
 		io.sockets.emit('maps', livemap.getClients());

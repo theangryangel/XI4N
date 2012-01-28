@@ -179,6 +179,9 @@ LiveMap.prototype = {
 		if (!self.plyrs[plid])
 			return;
 
+		if (!self.plyrs[plid].svg)
+			return; // probably an out of sync or new player
+
 		self.plyrs[plid].svg.classed('player-highlight', true);
 	},
 	unhighlightPlyr: function(plid)
@@ -250,7 +253,7 @@ LiveMap.prototype = {
 
 		if (self.plyrs[plid])
 		{
-			self.clearPlyr();
+			self.clearPlyr(plid);
 			delete self.plyrs[plid];
 		}
 	},

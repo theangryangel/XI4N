@@ -76,7 +76,7 @@ span.options label, span.options
 
 select.chzn-select
 {
-	min-width: 200px;
+	min-width: 250px;
 }
 
 #container-inner
@@ -193,6 +193,47 @@ select.chzn-select
 
 	margin-left: auto;
 	margin-right:auto;
+}
+
+/* string colours */
+span.col0, span.col8, span.col9
+{
+	color: inherit;
+}
+
+span.col1
+{
+	color: #f00;
+}
+
+span.col2
+{
+	color: #0f0;
+}
+
+span.col3
+{
+	color: #ff0;
+}
+
+span.col4
+{
+	color: #00f;
+}
+
+span.col5
+{
+	color: #f0f;
+}
+
+span.col6
+{
+	color: #0ff;
+}
+
+span.col7
+{
+	color: #ff0;
 }
 
 /* jquery chosen */
