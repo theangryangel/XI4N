@@ -29,11 +29,21 @@
 				var plyr = track.getPlyr(plid);
 
 				var row = $('#tracker-table tbody tr.' + plid);
-					row.find('td.pos').text(plyr.position);
-					row.find('td.vehicle').text(plyr.cname);
-					row.find('td.lapsdone').text(plyr.lapsdone);
+
+				if (plyr.pitting || (plyr.position <= 0) && (row.length > 0))
+				{
+					row.remove();
+					return;
+				}
+
+				row.find('td.pos').text(plyr.position);
+				row.find('td.vehicle').text(plyr.cname);
+				row.find('td.lapsdone').text(plyr.lapsdone);
 
 				track.drawPlyr(plid);
+
+				if (row.index() != plyr.position)
+					row.insertBefore('#tracker-table tbody tr:eq(' + plyr.position + ')');
 			});
 
 			track.on('addplyr', function(plid)
@@ -127,6 +137,11 @@
 				socket.emit('join', val);
 			});
 
+			var longHostname = function(data)
+			{
+				return data.hostname + ' (' + data.track + ((data.layout.length > 0) ? ('/' + data.layout) : '') + ')';
+			}
+
 			// update list of servers
 			socket.on('maps', function(data)
 			{
@@ -143,7 +158,7 @@
 					{
 						console.log('updating existing');
 
-						h.text(data[i].hostname);
+						h.text(longHostname(data[i]));
 
 						if (h.data('layout') != data[i].layout)
 						{
@@ -164,7 +179,8 @@
 
 					console.log('creating new');
 					$('<option value="' + data[i].id + '"' + ((i == curr) ?
-							'selected="selected"' : '') + '>' + data[i].hostname + '</option>')
+							'selected="selected"' : '') + '>' +
+							longHostname(data[i]) + '</option>')
 						.data('track', data[i].track)
 						.data('layout', data[i].layout)
 						.appendTo('#option-server');
