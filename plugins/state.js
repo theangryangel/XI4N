@@ -250,6 +250,11 @@ ClientState.prototype = {
 		t3.reqi = 1;
 		t3.subt = this.insim.TINY_SST;
 		this.client.send(t3);
+
+		var t4 = new this.insim.IS_TINY();
+		t4.reqi = 1;
+		t4.subt = this.insim.TINY_AXI;
+		this.client.send(t4);
 	},
 
 	// state ready
@@ -333,13 +338,22 @@ ClientState.prototype = {
 	{
 		var self = this.client.state;
 
-		if (pkt.subt != this.insim.TINY_MPE)
+		if (pkt.subt == this.insim.TINY_MPE)
+		{
+			self.host = 0;
+			self.hname = '';
+
+			this.client.emit('state:server', false);
 			return;
+		}
 
-		self.host = 0;
-		self.hname = '';
+		if (pkt.subt == this.insim.TINY_AXC)
+		{
+			self.onGeneric_Copy.call(this, pkt);
 
-		this.client.emit('state:server', false);
+			this.client.emit('state:track');
+			return;
+		}
 	},
 	'onIS_RST': function(pkt)
 	{
