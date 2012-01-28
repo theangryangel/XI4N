@@ -14,7 +14,8 @@ var livemap = {
 // setup express and socket.io
 var util = require('util'),
 	express = require('express').createServer(),
-	io = require('socket.io').listen(express);
+	io = require('socket.io').listen(express),
+	sillystring = require('../lib/strings');
 
 exports.construct = function(options)
 {
@@ -98,7 +99,7 @@ exports.init = function()
 	{
 		if (joined)
 			livemap.clients[this.client.id] = {
-				'hostname': this.client.state.hname,
+				'hostname': sillystring.toUTF8(this.client.state.hname),
 				'track': this.client.state.track,
 				'layout': this.client.state.lname,
 				'plyrs': []
@@ -117,7 +118,8 @@ exports.init = function()
 
 		return {
 			'plid': p.plid,
-			'pname': p.pname, 'cname': p.cname,
+			'pname': sillystring.toUTF8(p.pname), 
+			'cname': p.cname,
 			'pitting': p.pitting,
 			'position': p.position,
 	   		'x': p.x, 'y': p.y, 'z': p.z,
@@ -132,7 +134,7 @@ exports.init = function()
 
 		io.sockets.in(this.client.id).emit('track', {
 			'id': this.client.id,
-			'hostname': this.client.state.hname, 
+			'hostname': sillystring.toUTF8(this.client.state.hname), 
 			'track': this.client.state.track,
 			'layout': this.client.state.lname
 		});
@@ -147,6 +149,9 @@ exports.init = function()
 		if (!p)
 			return; // some how got a plid that we don't know about in the state
 
+		if (!livemap.clients[this.client.id])
+			return;
+
 		var c = plyrCompact(p);
 		livemap.clients[this.client.id].plyrs[plid] = c;
 
@@ -156,6 +161,17 @@ exports.init = function()
 	this.client.registerHook('state:plyrleave', function(plid)
 	{
 		var p = this.client.state.getPlyrByPlid(plid);
+
+		if (!p)
+			return; // some how got a plid that we don't know about in the state
+
+		delete livemap.clients[this.client.id].plyrs[plid];
+		io.sockets.in(this.client.id).emit('plyrleave', plid);
+	});
+
+	this.client.registerHook('state:connleave', function(ucid)
+	{
+		var p = this.client.state.getPlyrByUcid(ucid);
 
 		if (!p)
 			return; // some how got a plid that we don't know about in the state
@@ -185,6 +201,13 @@ exports.init = function()
 		// system or user msgs only
 		// TODO re-encode crazy string as utf8
 		if (pkt.usertype <= this.insim.MSO_USER)
-			io.sockets.in(this.client.id).emit('chat', pkt);
+		{
+			var line = {
+				'plid': pkt.plid,
+				'usertype': pkt.usertype,
+				'msg': sillystring.toUTF8(pkt.msg)
+			};
+			io.sockets.in(this.client.id).emit('chat', line);
+		}
 	});
 }

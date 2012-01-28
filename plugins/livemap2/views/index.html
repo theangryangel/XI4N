@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+	<meta charset="utf-8"> 
 	<title>xi4n:livemap.js</title>
 	<link rel="stylesheet" href="/static/css/screen.css" type="text/css">
 
@@ -21,6 +22,18 @@
 			track.on('pth', function()
 			{
 				track.drawTrack();
+			});
+
+			track.on('updateplyr', function(plid)
+			{
+				var plyr = track.getPlyr(plid);
+
+				var row = $('#tracker-table tbody tr.' + plid);
+					row.find('td.pos').text(plyr.position);
+					row.find('td.vehicle').text(plyr.cname);
+					row.find('td.lapsdone').text(plyr.lapsdone);
+
+				track.drawPlyr(plid);
 			});
 
 			track.on('addplyr', function(plid)
@@ -51,25 +64,9 @@
 				$('#tracker-table tbody tr.' + plid).remove();
 			});
 
-			track.on('drawplyr', function(plid)
-			{
-				if ($('#tracker-table tbody tr.' + plid).length <= 0)
-					track.emit('addplyr', plid);
-
-				var plyr = track.getPlyr(plid);
-
-				var row = $('#tracker-table tbody tr.' + plid);
-					row.find('td.pos').text(plyr.position);
-
-				if (plyr.pos > 0)
-					row.insertBefore('#tracker-table tbody tr:eq(' + plyr.pos + ')');
-			});
-
-			var servers = {};
-
 			var socket = io.connect('http://localhost:<%= port.toString() %>');
 
-		//	$(".chzn-select").chosen({ allow_single_deselect: true });
+			$(".chzn-select").chosen({ allow_single_deselect: true });
 
 			$('#option-chat').change(function()
 			{
@@ -122,8 +119,6 @@
 				var trackname = opt.data('track');
 				var layout = opt.data('layout');
 
-				console.log("trackname = %s, layout = %s", trackname, layout);
-
 				if ((layout) && (layout.length > 0))
 					trackname = layout;
 
@@ -140,8 +135,6 @@
 				var curr = select.val();
 				var loaded = false;
 	
-				select.find('option[value!=]').remove();
-
 				for(var i in data)
 				{
 					var h = select.find('option[value="' + data[i].id + '"]');
@@ -208,33 +201,25 @@
 						continue;
 					}
 
-					track.drawPlyr(data[i].plid, data[i].x, data[i].y,
-						data[i].position);
+					track.updatePlyr(data[i].plid, data[i]);
 				}
 			});
 
 			// player leaves
 			socket.on('plyrleave', function (data)
 			{
-				console.log('plyrleave');
 				track.remPlyr(data);
 			});
 
 			// new player/unpitting
 			socket.on('plyrnew', function (data)
 			{
-				console.log('plyrnew');
-				console.log(data);
-
-				track.addPlyr(data.plid, data.pname, data.cname);
+				track.addPlyr(data);
 			});
 
 			// multiple new players
 			socket.on('plyrsnew', function (data)
 			{
-			console.log('plyrsnew');
-			console.log(data);
-
 				for (var i in data)
 				{
 					if (!data[i])
@@ -247,14 +232,14 @@
 			// player chat
 			socket.on('chat', function (data)
 			{
-				var name = (data.usertype == 0) ? 'System' : 'NonPlayer';
+				var name = (data.usertype == 0) ? 'SERVER ' : '';
 
 				if (data.plid > 0)
 				{
 					name = 'unknown';
 					var plyr = track.getPlyr(data.plid);
 					if (plyr)
-						name = plyr.name;
+						name = plyr.pname + ' ';
 				}	
 
 				var d = new Date;
@@ -262,7 +247,7 @@
 					$('<div class="container-chat-line"> \
 					<span class="datetime">' + d.toISOString() + '</span> \
 					<span class="chatter">' + name + '</span> \
-					- ' + data.msg + ' \
+					' + data.msg + ' \
 					</div>').fadeIn('slow')
 				);
 			
@@ -303,7 +288,6 @@
 					<select id="option-server" class="chzn-select"
 						data-placeholder="Pick a Server...">
 						<option value=""></option>
-						<option value="1">asdsd</option>
 					</select>
 				</span>
 

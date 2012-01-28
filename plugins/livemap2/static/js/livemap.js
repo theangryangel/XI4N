@@ -187,17 +187,35 @@ LiveMap.prototype = {
 		if (!self.plyrs[plid])
 			return;
 
+		if (!self.plyrs[plid].svg)
+			return;
+
 		self.plyrs[plid].svg.classed('player-highlight', false);
 	},
-	drawPlyr: function(plid, x, y, pos)
+	updatePlyr: function(plid, data)
 	{
 		var self = this;
 
 		if (!self.plyrs[plid])
-			self.addPlyr(plid, 'unknown', 'unknown');
+		{
+			self.addPlyr(data);
+		}
+		else
+		{
+			for (var i in data)
+				self.plyrs[plid][i] = data[i];
+		}
 
-		if (pos)
-			self.plyrs[plid].pos = pos;
+		self.emit('updateplyr', plid)
+	},
+	drawPlyr: function(plid)
+	{
+		var self = this;
+
+		var p = self.plyrs[plid];
+
+		if (!p)
+			return;
 
 		self.plyrs[plid].svg = self.plyrs[plid].svg || d3.select(self.dst + ' svg').append("svg:circle")
 			.attr("r", 4)
@@ -210,16 +228,16 @@ LiveMap.prototype = {
 		{
 			self.plyrs[plid].svg
 				.transition()
-				.attr("cx", self.pth.x(x))
-				.attr("cy", self.pth.y(y))
+				.attr("cx", self.pth.x(p.x))
+				.attr("cy", self.pth.y(p.y))
 				.duration(self.fancy)
 				.ease("linear");
 		}
 		else
 		{
 			self.plyrs[plid].svg
-				.attr("cx", self.pth.x(x))
-				.attr("cy", self.pth.y(y))
+				.attr("cx", self.pth.x(p.x))
+				.attr("cy", self.pth.y(p.y))
 		}
 
 		self.emit('drawplyr', plid);
@@ -233,7 +251,7 @@ LiveMap.prototype = {
 		if (self.plyrs[plid])
 		{
 			self.clearPlyr();
-			self.plyrs[plid] = null;
+			delete self.plyrs[plid];
 		}
 	},
 	clearPlyr: function(plid)
