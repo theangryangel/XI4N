@@ -15,6 +15,24 @@
 	<script type="text/javascript">
 		$(document).ready(function()
 		{
+			var alert = function(text)
+			{
+				$('#alert p').text(text);
+
+				$('#alert').css({ 'margin-left': ($('#alert').width()/2)*-1 + 'px'});
+				$('#alert').css({ 'margin-top': ($('#alert').height()/2)*-1 + 'px'});
+
+				$('#alert').fadeIn();
+			}
+
+			$('#alert').hide();
+			$('#alert a.close').click(function()
+			{
+				$('#alert').fadeOut(function()
+				{
+					$('#alert p').text('');
+				});
+			})
 
 			var convertColours = function(str)
 			{
@@ -81,6 +99,15 @@
 			var track = new LiveMap();
 			track.dst = '#container-inner-track';
 			track.basePath = '/static/pth/';
+
+			track.on('track404', function()
+			{
+				alert('Failed to load track');
+				track.clear();
+
+				$('#option-server').val(0).trigger("liszt:updated");
+
+			});
 
 			track.on('pth', function()
 			{
@@ -265,10 +292,10 @@
 
 			socket.on('track', function (data)
 			{
-				if (data)
+				if (!data)
 					return;
 
-				var option = $('#option-server option[value=' + data.id + ']');
+				var option = $('#option-server option[value="' + data.id + '"]');
 
 				option.data('track', data.track);
 				option.data('layout', data.layout);
@@ -348,6 +375,11 @@
 </head>
 <body>
 	<div id="container">
+		<div id="alert" class="alert alert-message error" data-alert="alert">
+			<a class="close" href="#">&times;</a><p>test</p>
+		</div>
+
+
 		<div id="container-menu">
 			<span class="title">xi4n:livemap2.js </span>
 

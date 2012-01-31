@@ -116,7 +116,6 @@ select.chzn-select
 	font-weight: bold
 }
 
-
 .tracker-table th.pos
 {
 	min-width: 2em;
@@ -234,6 +233,52 @@ span.col6
 span.col7
 {
 	color: #ff0;
+}
+
+.alert-message
+{
+	display:none;
+}
+
+.alert
+{
+	position: absolute;
+	top:50%;
+	left:50%;
+
+	max-width: 250px;
+
+	z-index: 10000;
+	margin-bottom: 18px;
+	background-color: #fcf8e3;
+	border: 2px solid #f3edd2;
+
+	border-radius: 4px;
+
+	color: #b94a48;
+	background-color: #f2dede;
+	border-color: #e9c7c7;
+}
+
+.alert p
+{
+	padding: 10px;
+}
+
+.close
+{
+	float:right;
+	font-size: 20px;
+	font-weight: bold;
+	line-height: 18px;
+	color: #000000;
+	text-decoration: none;
+}
+.close:hover
+{
+	color: #000000;
+	text-decoration: none;
+	cursor: pointer;
 }
 
 /* jquery chosen */

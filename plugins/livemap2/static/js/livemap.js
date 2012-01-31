@@ -61,6 +61,12 @@ LiveMap.prototype = {
 			(self.basePath + pth),
 			function (data)
 			{
+				if (data == null)
+				{
+					self.emit('track404');
+					return;
+				}
+
 				self.pth.data = data;
 
 				var i = 0;

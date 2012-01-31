@@ -350,6 +350,7 @@ ClientState.prototype = {
 		if (pkt.subt == this.insim.TINY_AXC)
 		{
 			self.onGeneric_Copy.call(this, pkt);
+			this.client.state.lname = '';
 
 			this.client.emit('state:track');
 			return;
@@ -583,6 +584,7 @@ ClientState.prototype = {
 		'state:oos': 'requestCurrentState',
 
 		'IS_VER': 'onIS_VER',
+		'IS_TINY': 'onIS_TINY',
 
 		'IS_STA': 'onIS_STA',
 		'IS_RST': 'onIS_RST',
@@ -645,7 +647,7 @@ exports.init = function(options)
 		// we're going to be lazy and tear down the whole state on a 
 		// disconnection, so we'll need to completely remove all the hooks first
 
-		this.client.emit('STATE:NOTREADY');
+		this.client.emit('state:notready');
 
 		// clear hooks
 		this.client.state.unregisterHooks(this.client);
