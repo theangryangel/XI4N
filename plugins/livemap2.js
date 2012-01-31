@@ -18,6 +18,25 @@ var livemap = {
 	}
 };
 
+	var plyrCompact = function(p)
+	{
+		if (!p)
+			return;
+
+		return {
+			'plid': p.plid,
+			'pname': sillystring.toUTF8(p.pname), 
+			'cname': p.cname,
+			'pitting': p.pitting,
+			'position': p.position,
+	   		'x': p.x, 
+			'y': p.y, 
+			'z': p.z,
+			'lapsdone': p.lapsdone,
+			'ltime': p.ltime
+		};
+	}
+
 // setup express and socket.io
 var util = require('util'),
 	express = require('express').createServer(),
@@ -120,25 +139,6 @@ exports.init = function()
 		io.sockets.emit('maps', livemap.getClients());
 	});
 
-	var plyrCompact = function(p)
-	{
-		if (!p)
-			return;
-
-		return {
-			'plid': p.plid,
-			'pname': sillystring.toUTF8(p.pname), 
-			'cname': p.cname,
-			'pitting': p.pitting,
-			'position': p.position,
-	   		'x': p.x, 
-			'y': p.y, 
-			'z': p.z,
-			'lapsdone': p.lapsdone,
-			'ltime': p.ltime
-		};
-	}
-
 	this.client.registerHook('state:track', function(plid)
 	{
 		io.sockets.in(this.client.id).emit('track', {
@@ -169,22 +169,12 @@ exports.init = function()
 
 	this.client.registerHook('state:plyrleave', function(plid)
 	{
-		var p = this.client.state.getPlyrByPlid(plid);
-
-		if (!p)
-			return; // some how got a plid that we don't know about in the state
-
 		io.sockets.in(this.client.id).emit('plyrleave', plid);
 	});
 
 	this.client.registerHook('state:connleave', function(ucid)
 	{
-		var p = this.client.state.getPlyrByUcid(ucid);
-
-		if (!p)
-			return; // some how got a plid that we don't know about in the state
-
-		io.sockets.in(this.client.id).emit('plyrleave', plid);
+		io.sockets.in(this.client.id).emit('plyrleave', ucid);
 	});
 
 	this.client.registerHook('state:plyrupdate', function(plids)

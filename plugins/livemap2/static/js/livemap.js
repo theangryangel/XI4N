@@ -275,7 +275,7 @@ LiveMap.prototype = {
 
 		self.emit('clearplyr', plid);
 
-		if (self.plyrs[plid])
+		if (self.plyrs[plid] && self.plyrs[plid].svg)
 			self.plyrs[plid].svg.remove();
 	},
 	clear: function()
