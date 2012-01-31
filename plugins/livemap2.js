@@ -18,24 +18,23 @@ var livemap = {
 	}
 };
 
-	var plyrCompact = function(p)
-	{
-		if (!p)
-			return;
-
-		return {
-			'plid': p.plid,
-			'pname': sillystring.toUTF8(p.pname), 
-			'cname': p.cname,
-			'pitting': p.pitting,
-			'position': p.position,
-	   		'x': p.x, 
-			'y': p.y, 
-			'z': p.z,
-			'lapsdone': p.lapsdone,
-			'ltime': p.ltime
-		};
-	}
+var plyrCompact = function(p)
+{
+	if (!p)
+		return;
+	return {
+		'plid': p.plid,
+		'pname': sillystring.toUTF8(p.pname), 
+		'cname': p.cname,
+		'pitting': p.pitting,
+		'position': p.position,
+   		'x': p.x, 
+		'y': p.y, 
+		'z': p.z,
+		'lapsdone': p.lapsdone,
+		'ltime': p.ltime
+	};
+}
 
 // setup express and socket.io
 var util = require('util'),

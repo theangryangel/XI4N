@@ -29,10 +29,6 @@
 			"path": "state",
 			"options": {}
 		},
-		"stateinfo": {
-			"path": "stateinfo",
-			"options": { "http-port": 8081 }
-		},
 		"livemap2": {
 			"path": "livemap2",
 			"options": {}
@@ -53,7 +49,7 @@
 			"host": "127.0.0.1", 
 
 			// port number
-			"port": 29998, 
+			"port": 29999, 
 
 			// maxbacklog of insim packets, don't change if you dont need to
 			"maxbacklog": 2048, 
@@ -67,7 +63,7 @@
 			"reconnectcooldown": 5,
 
 			// an array of plugins we want to load for this client
-			"plugins": [ "pong", "state", "stateinfo", "livemap2" ]
+			"plugins": [ "pong", "state", "livemap2" ]
 		}
 	]
 }
