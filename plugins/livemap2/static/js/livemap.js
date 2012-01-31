@@ -145,18 +145,24 @@ LiveMap.prototype = {
 			.attr("d", line(self.pth.data.nodes))
 			.attr("class", "track");
 
-		graph.append("text")
-			.attr("class", "title")
-			.attr("y", 20)
-			.attr("x", 10)
-			.text(self.pth.data.track);
+		if (self.pth.data.track)
+		{
+			graph.append("text")
+				.attr("class", "title")
+				.attr("y", 20)
+				.attr("x", 10)
+				.text(self.pth.data.track);
+		}
 
-		graph.append("svg:rect")
-			.attr("x", self.pth.x(self.pth.data.startfinish.x) - 5)
-			.attr("y", self.pth.y(self.pth.data.startfinish.y))
-			.attr("width", 10)
-			.attr("height", 2)
-			.style("fill", "#666");
+		if (self.pth.data.startfinish)
+		{
+			graph.append("svg:rect")
+				.attr("x", self.pth.x(self.pth.data.startfinish.x) - 5)
+				.attr("y", self.pth.y(self.pth.data.startfinish.y))
+				.attr("width", 10)
+				.attr("height", 2)
+				.style("fill", "#666");
+		}
 
 		self.drawn = true;
 	},

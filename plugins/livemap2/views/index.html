@@ -197,7 +197,7 @@
 				var layout = opt.data('layout');
 
 				if ((layout) && (layout.length > 0))
-					trackname = layout;
+					trackname = layout2PTHName(layout, trackname);
 
 				track.loadPth(trackname + '.json');
 
@@ -208,8 +208,14 @@
 			{
 				return data.hostname.replace(/\^[012345679]+/g, '') + ' (' +
 						data.track + ((data.layout.length > 0) ? ('/' +
-								data.layout) : '') + ', ' + data.laps + ' laps' + 
+								layout2PTHName(data.layout, data.track)) : '') + ', ' + data.laps + ' lap' +
+						((data.laps > 1) ? 's' : '') + 
 						((data.qual) ? data.qual + ', mins qualifying' : '') + ')';
+			}
+
+			var layout2PTHName = function(layout, track)
+			{
+				return layout.replace(track + '_', '');
 			}
 
 			// update list of servers
@@ -232,7 +238,7 @@
 						{
 							h.data('layout', data[i].layout);
 							if ((curr == data[i].id) && (data[i].layout.length > 0))
-								track.loadPth(data[i].layout + '.json');
+								track.loadPth(layout2PTHName(data[i].layout, data[i].track) + '.json');
 						}
 
 						if (h.data('track') != data[i].track)
@@ -268,7 +274,7 @@
 				option.data('layout', data.layout);
 
 				if (data.layout.length > 0)
-					track.loadPth(data.layout + '.json');
+					track.loadPth(layout2PTHName(data.layout, data.track) + '.json');
 				else
 					track.loadPth(data.track + '.json');
 			});

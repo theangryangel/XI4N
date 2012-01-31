@@ -18,7 +18,7 @@ function pth2json($src, $dst, $resolution = 6)
 	$pth = new PTH($src);
 
 	$data = array(
-		'track' => str_replace('.pst', '', basename($src)),
+		'track' => str_replace('.pth', '', basename($src)),
 		'resolution' => round(1/$resolution, 2),
 		'version' => $pth->Version, 
 		'revision' => $pth->Revision, 
