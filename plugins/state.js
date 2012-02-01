@@ -373,7 +373,9 @@ ClientState.prototype = {
 				continue;
 
 			p.ttime = 0;
+			p.ltime = 0;
 			p.btime = 0;
+			p.etime = 0;
 			p.numstops = 0;
 			p.lapsdone = 0;
 			p.resultnum = 0;
@@ -406,6 +408,8 @@ ClientState.prototype = {
 
 		if (!self.conns[pkt.ucid])
 			return;
+
+		this.client.emit('state:connleave:pre', pkt.ucid);
 		
 		if ((self.conns[pkt.ucid].plid > 0) && (self.plyrs[self.conns[pkt.ucid].plid]))
 			delete self.plyrs[self.conns[pkt.ucid].plid];
@@ -483,6 +487,8 @@ ClientState.prototype = {
 			return; 
 		}
 
+		this.client.emit('state:plyrleave:pre', pkt.ucid);
+
 		var ucid = self.plyrs[pkt.plid].ucid;
 		delete self.plyrs[pkt.plid];
 
@@ -519,7 +525,7 @@ ClientState.prototype = {
 			return;
 
 		self.plyrs[pkt.plid].fromPkt(pkt);
-		self.plyrs[pkt.plid].finalresult = false;
+		self.plyrs[pkt.plid].finalresult = true;
 
 		// emit our custom event
 		this.client.emit('state:plyrupdate', [ pkt.plid ]);
@@ -542,7 +548,7 @@ ClientState.prototype = {
 			if (self.plyrs[pkt.plid].btime <= 0)
 				self.plyrs[pkt.plid].btime = pkt.ltime;
 
-			if (pkt.ltime < self.plyrs[pkt.plid].btime)
+			if (pkt.ltime > self.plyrs[pkt.plid].btime)
 				self.plyrs[pkt.plid].btime = pkt.ltime;
 		}
 

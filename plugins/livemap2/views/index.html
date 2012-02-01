@@ -12,7 +12,6 @@
 
 	<title>xi4n:livemap2.js</title>
 	<link rel="stylesheet" href="/static/css/livemap.css">
-	<link rel="stylesheet" href="/static/css/chosen.css">
 
 	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
 	<script src="/static/js/d3.min.js" type="text/javascript"></script>
@@ -87,15 +86,12 @@
 
 			var msToHuman = function(ms)
 			{
-				var x = ms / 1000;
-				var seconds = x % 60;
-				x /= 60;
-				var minutes = x % 60;
-				x /= 60;
-				var hours = x % 24;
+				var seconds = ((ms / 1000) % 60),
+					minutes = (((ms / 1000) / 60) % 60),
+					hours = ((((ms / 1000) / 60) / 60) % 24);
 
-				return ((hours >= 1) ? zeroPad(Math.round(hours), 2) + ':' : '') +
-					zeroPad(Math.round(minutes), 2) + ':' +
+				return ((hours >= 1) ? zeroPad(Math.floor(hours), 2) + ':' : '') +
+					zeroPad(Math.floor(minutes), 2) + ':' +
 					zeroPad(seconds.toFixed(2), 5);
 			}
 
@@ -126,20 +122,23 @@
 					return;
 				}
 
-				row.find('td.pos').text(plyr.position);
-				row.find('td.vehicle').text(plyr.cname);
-				row.find('td.lapsdone').text(plyr.lapsdone + 1);
-				row.find('td.ltime').text(msToHuman(plyr.ltime));
-
 				track.drawPlyr(plid);
 
 				if (row.index() != plyr.position)
-					row.insertBefore('#tracker-table tbody tr:eq(' + plyr.position + ')');
+				{
+					if ($('#tracker-table tbody tr:eq(' + plyr.position +')').length)
+						row.insertBefore('#tracker-table tbody tr:eq(' + plyr.position + ')')
+					else
+						row.insertAfter('#tracker-table tbody tr:last');
+				}
 			});
 
-			track.on('addplyr', function(plid)
+			track.on(['updateplyr', 'addplyr'], function(plid)
 			{
 				var plyr = track.getPlyr(plid);
+
+				if (plyr.pitting || (plyr.position <= 0))
+					return;
 
 				if ($('#tracker-table tbody tr.' + plid).length <= 0)
 				{
@@ -156,9 +155,10 @@
 				else
 				{
 					var row = $('#tracker-table tbody tr.' + plid);
+					row.find('td.pos').html(plyr.position);
 					row.find('td.name').html(convertColours(plyr.pname));
 					row.find('td.vehicle').text(plyr.cname);
-					row.find('td.lapsdone').text(plyr.lapsdone);
+					row.find('td.lapsdone').text((plyr.lapsdone + 1));
 					row.find('td.ltime').text(msToHuman(plyr.ltime));
 					row.find('td.btime').text(msToHuman(plyr.btime));
 				}
