@@ -548,7 +548,7 @@ ClientState.prototype = {
 			if (self.plyrs[pkt.plid].btime <= 0)
 				self.plyrs[pkt.plid].btime = pkt.ltime;
 
-			if (pkt.ltime > self.plyrs[pkt.plid].btime)
+			if (pkt.ltime < self.plyrs[pkt.plid].btime)
 				self.plyrs[pkt.plid].btime = pkt.ltime;
 		}
 
