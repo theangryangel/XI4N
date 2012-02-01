@@ -66,7 +66,7 @@ LiveMap.prototype = {
 			{
 				if (data == null)
 				{
-					self.emit('track404');
+					self.emit('track404', pth);
 					return;
 				}
 

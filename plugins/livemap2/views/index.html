@@ -103,9 +103,9 @@
 			track.dst = '#track';
 			track.basePath = '/static/pth/';
 
-			track.on('track404', function()
+			track.on('track404', function(pth)
 			{
-				alert('Failed to load track');
+				alert('Failed to load track "' + pth + '"');
 				track.clear();
 			});
 
