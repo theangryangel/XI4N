@@ -114,6 +114,7 @@ var PlyrState = function(pkt)
 
 	self.penalty = 0; // current penalty, if any
 	self.ltime = 0;
+	self.btime = 0;
 	self.etime = 0;
 	self.stime = 0;
 
@@ -535,6 +536,15 @@ ClientState.prototype = {
 		}
 
 		self.plyrs[pkt.plid].fromPkt(pkt);
+
+		if (pkt.ltime)
+		{
+			if (self.plyrs[pkt.plid].btime <= 0)
+				self.plyrs[pkt.plid].btime = pkt.ltime;
+
+			if (pkt.ltime < self.plyrs[pkt.plid].btime)
+				self.plyrs[pkt.plid].btime = pkt.ltime;
+		}
 
 		this.client.emit('state:plyrupdate', [ pkt.plid ]);
 	},

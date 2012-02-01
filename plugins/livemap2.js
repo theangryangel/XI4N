@@ -32,7 +32,8 @@ var plyrCompact = function(p)
 		'y': p.y, 
 		'z': p.z,
 		'lapsdone': p.lapsdone,
-		'ltime': p.ltime
+		'ltime': p.ltime,
+		'btime': p.btime
 	};
 }
 

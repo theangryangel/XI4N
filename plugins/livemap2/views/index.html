@@ -149,16 +149,18 @@
 							<td class="vehicle">' + plyr.cname + '</td> \
 							<td class="lapsdone">' + (plyr.lapsdone + 1) + '</td> \
 							<td class="ltime">' + msToHuman(plyr.ltime) + '</td> \
+							<td class="btime">' + msToHuman(plyr.btime) + '</td> \
 						</tr>').data('plid', plid).appendTo('#tracker-table tbody');
 					return;
 				}
 				else
 				{
 					var row = $('#tracker-table tbody tr.' + plid);
-					row.find('td.name').text(convertColours(plyr.pname));
+					row.find('td.name').html(convertColours(plyr.pname));
 					row.find('td.vehicle').text(plyr.cname);
 					row.find('td.lapsdone').text(plyr.lapsdone);
 					row.find('td.ltime').text(msToHuman(plyr.ltime));
+					row.find('td.btime').text(msToHuman(plyr.btime));
 				}
 			});
 
@@ -428,11 +430,11 @@
 			</div>
 
 			<div class="row">
-				<div class="span8">
+				<div class="span7">
 
 					<div class="row">
 
-						<div class="span8 container-track">
+						<div class="span7 container-track">
 							<h2>Track</h2>
 							<div id="container-track">
 								<div id="track">
@@ -440,7 +442,7 @@
 							</div>
 						</div>
 
-						<div class="span8 container-chat">
+						<div class="span7 container-chat">
 							<h2>Chat</h2>
 							<div id="container-chat">
 							</div>
@@ -448,7 +450,7 @@
 
 					</div>
 				</div>
-				<div class="span4 container-racers">
+				<div class="span5 container-racers">
 					<h2>Racers</h2>
 					<table id="tracker-table" class="table table-striped table-condensed">
 						<thead>
@@ -458,6 +460,7 @@
 								<th class="vehicle">In</th>
 								<th class="1done">On</th>
 								<th class="ltime">Last</th>
+								<th class="ltime">Best</th>
 							</tr>
 						</thead>
 						<tbody>
