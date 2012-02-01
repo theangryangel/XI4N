@@ -1,4 +1,6 @@
-var LiveMap = function() {};
+var LiveMap = function() {
+	this.showTitle = false;
+};
 
 LiveMap.prototype = {
 	callbacks: {},
@@ -46,6 +48,7 @@ LiveMap.prototype = {
 	plyrs: {},
 	fancy: 1000,
 	drawn: false,
+	showTitle: false,
 
 	// actual usable functions
 	loadPth: function(pth)
@@ -151,7 +154,7 @@ LiveMap.prototype = {
 			.attr("d", line(self.pth.data.nodes))
 			.attr("class", "track");
 
-		if (self.pth.data.track)
+		if (self.showTitle && self.pth.data.track)
 		{
 			graph.append("text")
 				.attr("class", "title")

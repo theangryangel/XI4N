@@ -1,9 +1,18 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-	<meta charset="utf-8"> 
+	<meta charset="utf-8">
 	<title>xi4n:livemap2.js</title>
-	<link rel="stylesheet" href="/static/css/screen.css" type="text/css">
+	<meta name="description" content="">
+	<meta name="author" content="">
+
+	<!--[if lt IE 9]>
+	<script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+	<![endif]-->
+
+	<title>xi4n:livemap2.js</title>
+	<link rel="stylesheet" href="/static/css/livemap.css">
+	<link rel="stylesheet" href="/static/css/chosen.css">
 
 	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
 	<script src="/static/js/d3.min.js" type="text/javascript"></script>
@@ -12,31 +21,25 @@
 
 	<script src="/socket.io/socket.io.js"></script>
 
+
 	<script type="text/javascript">
 		$(document).ready(function()
 		{
 			var alert = function(text)
 			{
 				$('#alert p').text(text);
-
-				$('#alert').css({ 'margin-left': ($('#alert').width()/2)*-1 + 'px'});
-				$('#alert').css({ 'margin-top': ($('#alert').height()/2)*-1 + 'px'});
-
 				$('#alert').fadeIn();
-			}
+			};
 
 			$('#alert').hide();
-			$('#alert a.close').click(function()
+			$('.close[data-dismiss="alert"]').click(function()
 			{
-				$('#alert').fadeOut(function()
-				{
-					$('#alert p').text('');
-				});
-			})
+				$(this).parent().fadeOut();
+			});
 
 			var convertColours = function(str)
 			{
-				var lfs = [ '^0', '^1', '^2', '^3', '^4', '^5', '^6', '^7', '^8', '^9' ];
+				var lfs = [ /\^0/g, /\^1/g, /\^2/g, /\^3/g, /\^4/g, /\^5/g, /\^6/g, /\^7/g, /\^8/g, /\^9/g ];
 				var html = [
 					'<span class="col0">',
 					'<span class="col1">',	
@@ -93,20 +96,17 @@
 
 				return ((hours >= 1) ? zeroPad(Math.round(hours), 2) + ':' : '') +
 					zeroPad(Math.round(minutes), 2) + ':' +
-					zeroPad(Math.round(seconds), 2);
+					zeroPad(seconds.toFixed(2), 5);
 			}
 
 			var track = new LiveMap();
-			track.dst = '#container-inner-track';
+			track.dst = '#track';
 			track.basePath = '/static/pth/';
 
 			track.on('track404', function()
 			{
 				alert('Failed to load track');
 				track.clear();
-
-				$('#option-server').val(0).trigger("liszt:updated");
-
 			});
 
 			track.on('pth', function()
@@ -128,7 +128,7 @@
 
 				row.find('td.pos').text(plyr.position);
 				row.find('td.vehicle').text(plyr.cname);
-				row.find('td.lapsdone').text(plyr.lapsdone);
+				row.find('td.lapsdone').text(plyr.lapsdone + 1);
 				row.find('td.ltime').text(msToHuman(plyr.ltime));
 
 				track.drawPlyr(plid);
@@ -143,12 +143,11 @@
 
 				if ($('#tracker-table tbody tr.' + plid).length <= 0)
 				{
-
 					$('<tr class="' + plid + ' plyr"> \
 							<td class="pos">' + plyr.position + '</th> \
 							<td class="name">' + convertColours(plyr.pname) + '</td> \
 							<td class="vehicle">' + plyr.cname + '</td> \
-							<td class="lapsdone">' + plyr.lapsdone + '</td> \
+							<td class="lapsdone">' + (plyr.lapsdone + 1) + '</td> \
 							<td class="ltime">' + msToHuman(plyr.ltime) + '</td> \
 						</tr>').data('plid', plid).appendTo('#tracker-table tbody');
 					return;
@@ -156,7 +155,7 @@
 				else
 				{
 					var row = $('#tracker-table tbody tr.' + plid);
-					row.find('td.name').text(plyr.pname);
+					row.find('td.name').text(convertColours(plyr.pname));
 					row.find('td.vehicle').text(plyr.cname);
 					row.find('td.lapsdone').text(plyr.lapsdone);
 					row.find('td.ltime').text(msToHuman(plyr.ltime));
@@ -171,6 +170,7 @@
 			var socket = io.connect('http://localhost:<%= port.toString() %>');
 
 			$(".chzn-select").chosen({ allow_single_deselect: true });
+			//$(".chzn-select").hide();
 
 			$('#option-chat').change(function()
 			{
@@ -356,7 +356,7 @@
 					name = 'unknown';
 					var plyr = track.getPlyr(data.plid);
 					if (plyr)
-						name = plyr.pname + ' ';
+						name = convertColours(plyr.pname) + ' ';
 				}	
 
 				var d = new Date;
@@ -364,7 +364,7 @@
 					$('<div class="container-chat-line"> \
 					<span class="datetime">' + d.toISOString() + '</span> \
 					<span class="chatter">' + name + '</span> \
-					' + data.msg + ' \
+					' + convertColours(data.msg) + ' \
 					</div>').fadeIn('slow')
 				);
 			
@@ -373,78 +373,101 @@
 		});
 	</script>
 </head>
-<body>
-	<div id="container">
-		<div id="alert" class="alert alert-message error" data-alert="alert">
-			<a class="close" href="#">&times;</a><p>test</p>
+	<body>
+		<div class="navbar">
+			<div class="navbar-inner">
+				<div class="container">
+					<div class="row">
+						<div class="span4">
+							<h1><span style="color: #eee
+									!important">xi4n:livemap2.js</span></h1>
+						</div>
+
+						<div class="span8 livemap-line-height">
+
+							<ul class="nav">
+								<li>
+								<label for="option-track">
+									<input type="checkbox" id="option-track"
+									checked="checked"> Track
+								</label>
+								</li>
+								<li>
+								<label for="option-fancy">
+									<input type="checkbox" id="option-fancy"
+									checked="checked"> Smooth
+								</label>
+								</li>
+
+								<li>
+								<label for="option-chat">
+									<input type="checkbox" id="option-chat"
+									checked="checked"> Chat
+								</label>
+								</li>
+							</ul>
+
+							<select id="option-server" class="chzn-select"
+								data-placeholder="Pick a Server...">
+								<option value=""></option>
+							</select>
+
+						</div>
+					</div>
+				</div>
+			</div>
 		</div>
 
+		<div class="container">
 
-		<div id="container-menu">
-			<span class="title">xi4n:livemap2.js </span>
 
-			<span class="options">
-
-				<span class="option-track">
-					<label for="option-track">
-						<input type="checkbox" id="option-track"
-						checked="checked"> Track
-					</label>
-				</span>
-
-				<span class="option-fancy">
-					<label for="option-fancy">
-						<input type="checkbox" id="option-fancy"
-						checked="checked"> Smooth
-					</label>
-				</span>
-
-				<span class="option-chat">
-					<label for="option-chat">
-						<input type="checkbox" id="option-chat"
-						checked="checked"> Chat
-					</label>
-				</span>
-
-				<span class="option-servers">
-					<select id="option-server" class="chzn-select"
-						data-placeholder="Pick a Server...">
-						<option value=""></option>
-					</select>
-				</span>
-
-			</span>
-		</div>
-
-		<div id="container-inner">
-			<div id="container-tracker">
-
-				<table class="tracker-table" id="tracker-table">
-					<thead>
-						<tr>
-							<th class="pos">#</th>
-							<th class="racer">Racer</th>
-							<th class="vehicle">Vehicle</th>
-							<th class="lapsdone">Laps</th>
-							<th class="ltime">LTime</th>
-						</tr>
-					</thead>
-					<tbody>
-					</tbody>
-				</table>
-
+			<div id="alert" class="alert alert-error">
+				<a class="close" data-dismiss="alert" href="#">&times;</a>
+				<h4 class="alert-heading">Oh snap! You got an error!</h4>
+				<p>asdasd</p>
 			</div>
 
-			<div id="container-track">
-				<div id="container-inner-track">
+			<div class="row">
+				<div class="span8">
+
+					<div class="row">
+
+						<div class="span8 container-track">
+							<h2>Track</h2>
+							<div id="container-track">
+								<div id="track">
+								</div>
+							</div>
+						</div>
+
+						<div class="span8 container-chat">
+							<h2>Chat</h2>
+							<div id="container-chat">
+							</div>
+						</div>
+
+					</div>
+				</div>
+				<div class="span4 container-racers">
+					<h2>Racers</h2>
+					<table id="tracker-table" class="table table-striped table-condensed">
+						<thead>
+							<tr>
+								<th class="pos"></th>
+								<th class="racer">Racer</th>
+								<th class="vehicle">In</th>
+								<th class="1done">On</th>
+								<th class="ltime">Last</th>
+							</tr>
+						</thead>
+						<tbody>
+						</tbody>
+					</table>
 				</div>
 			</div>
 
 		</div>
 
-		<div id="container-chat">
-		</div>
-	</div>
-</body>
+	</body>
 </html>
 
