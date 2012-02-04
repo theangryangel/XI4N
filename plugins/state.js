@@ -15,6 +15,8 @@
  *               should handle it based on the last state:oos. for simplicity use
  *               state.handleOOS() to determime this
  *  - state:track: new or changed track or layout
+ *  - state:best: new fastest/best lap, plid and time can be gotten from
+ *                state.best.plid and state.best.time
  *  - state:wind: changed wind conditions
  *  - state:weather: changed weather conditions
  *  - state:server: joins/leaves server, argument passed to call back is true on
@@ -92,6 +94,7 @@ var PlyrState = function(pkt)
 	self.pass = 0;
 	self.setf = 0;
 	self.pitting = false; // tele-pitting
+	self.pitstop = false; // normal pit - i.e. in game
 
 	self.node = 0;
 	self.lap = 0;
@@ -108,6 +111,10 @@ var PlyrState = function(pkt)
 	self.ttime = 0;
 	self.btime = 0;
 	self.numstops = 0;
+
+	// array of pit stops
+	self.pitstops = [];
+
 	self.lapsdone = 0;
 	self.resultnum = 0;
 	self.pseconds = 0;
@@ -160,6 +167,8 @@ var ClientState = function() {
 	self.conns = [];
 	self.plyrs = [];
 
+	self._initBest();
+
 	self.lastOOS = (new Date).getTime()-10000;
 };
 
@@ -170,6 +179,14 @@ ClientState.prototype = {
 		'insimver': 5 // insim version
 	},
 	// helper functions
+	'_initBest': function()
+	{
+		var self = this;
+		self.best = {
+			'plid': null,
+			'time': 0
+		};
+	},
 	'getPlyrByPlid': function(plid)
 	{
 		var self = this;
@@ -365,6 +382,8 @@ ClientState.prototype = {
 		var ctrack = self.track;
 		
 		self.onGeneric_Copy.call(this, pkt);
+
+		self._initBest();
 		
 		for (var i in self.plyrs)
 		{
@@ -382,6 +401,7 @@ ClientState.prototype = {
 			p.pseconds = 0;
 			p.penalty = 0;
 			p.finalresult = false;
+			p.pitstops = [];
 		}
 
 		if (ctrack != self.track)
@@ -461,6 +481,40 @@ ClientState.prototype = {
 			this.client.emit('state:plyrnew', pkt.plid);
 		else
 			this.client.emit('state:plyrupdate', [ pkt.plid ]);
+	},
+	'onIS_PIT': function(pkt)
+	{
+		var self = this.client.state;
+		// player pit stop starts (not tele-pit)
+
+		if (!self.plyrs[pkt.plid])
+			return;
+
+		self.plyrs[pkt.plid].pitstop = true;
+		self.plyrs[pkt.plid].tyres = pkt.tyres;
+		self.plyrs[pkt.plid].numstops = pkt.numstops;
+		self.plyrs[pkt.plid].lapsdone = pkt.lapsdone;
+
+		// emit our custom event
+		this.client.emit('state:plyrupdate', [ pkt.plid ]);
+	},
+	'onIS_PSF': function(pkt)
+	{
+		var self = this.client.state;
+		// player pit stop finished (not tele-pit)
+
+		if (!self.plyrs[pkt.plid])
+			return;
+
+		self.plyrs[pkt.plid].pitstop = false;
+
+		self.plyrs[pkt.plid].pitstops.push({
+			'lap': self.plyrs[pkt.plid].lapsdone,
+			'time': pkt.stime
+		});
+
+		// emit our custom event
+		this.client.emit('state:plyrupdate', [ pkt.plid ]);
 	},
 	'onIS_PLP': function(pkt)
 	{
@@ -543,13 +597,21 @@ ClientState.prototype = {
 
 		self.plyrs[pkt.plid].fromPkt(pkt);
 
-		if (pkt.ltime)
+		if (pkt.ltime > 0)
 		{
 			if (self.plyrs[pkt.plid].btime <= 0)
 				self.plyrs[pkt.plid].btime = pkt.ltime;
 
 			if (pkt.ltime < self.plyrs[pkt.plid].btime)
 				self.plyrs[pkt.plid].btime = pkt.ltime;
+
+			if ((self.best.time <= 0) || (pkt.ltime < self.best.time))
+			{
+				// new best lap
+				self.best.time = pkt.ltime; 
+				self.best.plid = pkt.plid;
+				this.client.emit('state:best');
+			}
 		}
 
 		this.client.emit('state:plyrupdate', [ pkt.plid ]);
@@ -612,6 +674,8 @@ ClientState.prototype = {
 		'IS_CPR': 'onIS_CPR',
 
 		'IS_NPL': 'onIS_NPL',
+		'IS_PIT': 'onIS_PIT',
+		'IS_PSF': 'onIS_PSF',
 		'IS_PLP': 'onIS_PLP',
 		'IS_PLL': 'onIS_PLL',
 		'IS_TOC': 'onIS_TOC',

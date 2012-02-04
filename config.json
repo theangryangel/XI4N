@@ -29,8 +29,8 @@
 			"path": "state",
 			"options": {}
 		},
-		"livemap2": {
-			"path": "livemap2",
+		"tv": {
+			"path": "tv",
 			"options": {}
 		}
 	},
@@ -63,7 +63,7 @@
 			"reconnectcooldown": 5,
 
 			// an array of plugins we want to load for this client
-			"plugins": [ "pong", "state", "livemap2" ]
+			"plugins": [ "pong", "state", "tv" ]
 		}
 	]
 }
