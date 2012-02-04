@@ -1,6 +1,4 @@
-  * Finish plugins/state.js
-  * Finish plugins/livemap.js to demo posibilities
-    - make it rely on a plugins/state.js, rather than dealing with it, itself
+General
   * Add plugin dependency management to ClientManager? Somewhere else?
   * Change lib/strings.js to also output a usable class, that maybe used by
     IS_MSO, etc.
@@ -10,3 +8,9 @@
   * Add a bundled vector library to insim.js
   * Add plugin validation checking
   * Write documentation
+
+plugins/tv.js
+  * Investigate to a scoring system? Worth while?
+  * Make aware of vehicles and weighting, i.e. if a fast car is coming through
+    the field
+  * Convert into a real plugin, rather than the crazy hacked together version

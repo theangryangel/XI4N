@@ -1,12 +1,14 @@
 "use strict";
 
+		var util = require('util');
+
 /*
  * Only supports a single insim connection.
  * Assigning multiple insim connections will yield unexpected behaviour.
  */
 
 /*
- * Things that make racing interesting -
+Things that make racing interesting -
 fastest lap
 close racing
   * overtaking
@@ -63,8 +65,13 @@ var tvDirector = function()
 		'previous': null,
 	};
 
+	// split the track into X by X grid, where X*65536
+	// a meter in LFS is 65536, so we want it not unreasonably wide
+	self.gridsize = 25*65536;
+
 	// prevent rapid changes
 	self.cooldown = 5000;
+	self.huntcooldown = 15000;
 
 	self.init = function()
 	{
@@ -77,8 +84,8 @@ var tvDirector = function()
 		self.client = this.client;
 		self.insim = this.insim;
 
-		// fire a change every 5 seconds, if not called sooner
-		//self.timer.hunt = setInterval(self.autoChange, 5000);
+		// fire a change every 10 seconds, if not called sooner
+		self.timers.hunt = setInterval(self.hunt, self.huntcooldown);
 
 		this.client.on('state:best', self.onFastest);
 		this.client.on('state:race', self.onStart);
@@ -120,23 +127,18 @@ var tvDirector = function()
 		if (self.isCurrent(pkt.plid))
 			return;
 
-		if (pkt.fact & self.insim.PITLANE_ENTER)
+		if (pkt.fact == self.insim.PITLANE_DT)
 		{
-			// entering the pit lane
+			self.log('Serving drive through');
+			self.changeAndReturn(pkt.plid);
+			return;
+		}
 
-			if (pkt.fact & self.insim.PITLANE_DT)
-			{
-				self.log('Serving drive through');
-				self.changeAndReturn(pkt.plid);
-				return;
-			}
-
-			if (pkt.fact & self.insim.PITLANE_SG)
-			{
-				self.log('Serving stop and Go');
-				self.change(pkt.plid);
-				return;
-			}
+		if (pkt.fact == self.insim.PITLANE_SG)
+		{
+			self.log('Serving stop and Go');
+			self.changeAndReturn(pkt.plid);
+			return;
 		}
 	}
 
@@ -242,9 +244,10 @@ var tvDirector = function()
 		self.last = new Date().getTime();
 	}
 
-	self.shouldChange = function()
+	self.shouldChange = function(cooldown)
 	{
-		return (((new Date().getTime()) - self.last) > self.cooldown);
+		cooldown = cooldown || self.cooldown;
+		return (((new Date().getTime()) - self.last) > cooldown);
 	}
 
 	self.isCurrent = function(plid)
@@ -304,12 +307,67 @@ var tvDirector = function()
 		self.change(plid, undefined, true);
 	}
 
-	self.autoChange = function()
+	self.hunt = function()
 	{
-		// switch the camera, called on a setInterval
-
-		if (!self.shouldChange())
+		// hunt for interesting things
+		if (!self.shouldChange(self.huntcooldown))
 			return;
+
+		self.log('Hunting');
+
+		var grid = {};
+		var plyrs = self.client.state.plyrs;
+
+		for (var i in plyrs)
+		{
+			var x = Math.round(plyrs[i].x / self.gridsize) * self.gridsize || 0;
+			var y = Math.round(plyrs[i].y / self.gridsize) * self.gridsize || 0;
+
+			if (!grid[x])
+				grid[x] = { 'length': 0 };
+
+			if (!grid[x][y])
+				grid[x][y] = new Array;
+
+			grid[x][y].push(i);
+			grid[x].length += 1;
+		}
+
+		var maxxv = 0;
+		var maxx = null;
+		var maxy = null;
+		for (var i in grid)
+		{
+			if (grid[i].length > maxxv)
+			{
+				maxxv = grid[i].length;
+				maxx = i;
+			}
+		}
+
+		if (maxx == null)
+			return;
+
+		for (var i in grid[maxx])
+		{
+			if (!Array.isArray(grid[maxx][i]))
+				continue;
+
+			if ((maxy == null) || (grid[maxx][i].length > maxy))
+				maxy = i;
+		}
+
+		if (maxy == null)
+			return;
+
+		var slot = grid[maxx][maxy];
+		var plid = slot[Math.floor(slot.length/2)];
+
+		if (!plid)
+			return;
+
+		self.log('Found via hunt');
+		self.change(plid, false);
 	}
 
 	self.updateLast();
