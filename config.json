@@ -29,6 +29,10 @@
 			"path": "state",
 			"options": {}
 		},
+		"livemap2": {
+			"path": "livemap2",
+			"options": {}
+		},
 		"tv": {
 			"path": "tv",
 			"options": {}

@@ -75,8 +75,7 @@ var tvDirector = function()
 
 	self.init = function()
 	{
-		this.client.isiFlags |= this.insim.ISF_CON;
-	   	this.client.isiFlags |= this.insim.ISF_HLV;
+		this.client.isiFlags |= this.insim.ISF_CON | this.insim.ISF_HLV | this.insim.ISF_LOCAL;
 
 		this.log.info('Registering TV');
 

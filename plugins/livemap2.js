@@ -24,7 +24,7 @@ var plyrCompact = function(p)
 		return;
 	return {
 		'plid': p.plid,
-		'pname': sillystring.toUTF8(p.pname), 
+		'pname': p.pname, 
 		'cname': p.cname,
 		'pitting': p.pitting,
 		'position': p.position,
@@ -72,6 +72,7 @@ exports.construct = function(options)
 	// render index.html as /
 	express.get('/', function (req, res)
 	{
+		res.header('Content-type', 'text/html; charset=utf-8');
 		res.render('index.html', { port: options['http-port'] || 8080 });
 	});
 
@@ -143,7 +144,7 @@ exports.init = function()
 	{
 		io.sockets.in(this.client.id).emit('track', {
 			'id': this.client.id,
-			'hostname': sillystring.toUTF8(this.client.state.hname), 
+			'hostname': this.client.state.hname, 
 			'track': this.client.state.track,
 			'layout': this.client.state.lname,
 			'laps': this.client.state.racelaps,
@@ -202,7 +203,7 @@ exports.init = function()
 			var line = {
 				'plid': pkt.plid,
 				'usertype': pkt.usertype,
-				'msg': sillystring.toUTF8(pkt.msg)
+				'msg': pkt.msg
 			};
 			io.sockets.in(this.client.id).emit('chat', line);
 		}

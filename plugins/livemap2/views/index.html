@@ -250,6 +250,7 @@
 			// update list of servers
 			socket.on('maps', function(data)
 			{
+				console.log(data);
 				var select = $('#option-server');
 				var curr = select.val();
 				var loaded = false;
