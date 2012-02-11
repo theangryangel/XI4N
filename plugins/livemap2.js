@@ -39,12 +39,15 @@ var plyrCompact = function(p)
 
 // setup express and socket.io
 var util = require('util'),
+	path = require('path'),
 	express = require('express').createServer(),
 	io = require('socket.io').listen(express),
-	sillystring = require('../lib/strings');
+	pthdata = require('../').data;
 
 exports.construct = function(options)
 {
+	console.log(pthdata);
+
 	io.set('log level', 1);
 
 	// disable the layout
@@ -68,6 +71,7 @@ exports.construct = function(options)
 
 	// setup /static to map to ./livemap/static
 	express.use('/static', require('express').static(__dirname + '/livemap2/static'));
+	express.use('/static/pth', require('express').static(path.join(pthdata, 'pth/')));
 
 	// render index.html as /
 	express.get('/', function (req, res)
