@@ -83,7 +83,7 @@ var mkfile = function (dst, data, force)
 	}
 }
 
-var copyfile = function (src, dst, force)
+var copyfile = function (src, dst, force, symlink)
 {
 	if (path.existsSync(dst) && !force)
 	{
@@ -93,12 +93,24 @@ var copyfile = function (src, dst, force)
 		return;
 	}
 
+	if (symlink)
+	{
+		fs.symlinkSync(src, dst, 'file');
+		return;
+	}
+
 	var data = fs.readFileSync(src);
 	fs.writeFileSync(dst, data);
 }
 
 var copydir = function(src, dst, force)
 {
+	if (symlink)
+	{
+		fs.symlinkSync(src, dst, 'directory');
+		return;
+	}
+
 	mkdir(dst, force);
 	var files = fs.readdirSync(src);
 	
@@ -154,6 +166,8 @@ program
 	.option('-i, --install <path>', 'Install basic config and standard plugins to <path>')
 	.option('-c, --config <path>', 'Run xi4n install, using configuration at <path>')
 	.option('-f, --force', 'Forces either install or config to run, if path already exists')
+	.option('-s, --symlink', 'Used in conjunction with --install. Instead of copying, it creates a symlink to save space')
+	.option('-u, --update <path>', 'Updates a given path with the newest plugins. --force assumed')
 	.parse(process.argv);
 
 if (program.install && program.config)
@@ -163,6 +177,31 @@ if (program.install && program.config)
 	console.error('		 surely you want to customise your config first?');
 	console.error();
 	process.exit(1);
+}
+
+if (program.update)
+{
+	path.exists(program.install, function(exists)
+	{
+		if (!exists)
+			program.invalidOptionValue('-u, --update <path>', 'Path does not exist! Cannot update');
+
+		// copy base plugins
+		console.log('  updating \'%s\'', path.join(program.install, 'plugins'));
+		copydir(
+			path.join(product.basedir, 'plugins'), 
+			path.join(program.update, 'plugins'),
+			true
+		);
+
+		// copy data
+		console.log('  updating \'%s\'', path.join(program.install, 'data'));
+		copydir(
+			path.join(product.basedir, 'data'), 
+			path.join(program.update, 'data'),
+			true
+		);
+	});
 }
 
 if (program.install)
@@ -214,7 +253,8 @@ if (program.install)
 		copydir(
 			path.join(product.basedir, 'plugins'), 
 			path.join(program.install, 'plugins'),
-			program.force
+			program.force,
+			program.symlink
 		);
 
 		// copy data
@@ -222,7 +262,8 @@ if (program.install)
 		copydir(
 			path.join(product.basedir, 'data'), 
 			path.join(program.install, 'data'),
-			program.force
+			program.force,
+			program.symlink
 		);
 
 	});
