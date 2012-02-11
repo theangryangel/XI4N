@@ -7,6 +7,7 @@ lib-cov
 *.pid
 *.gz
 *.log
+.DS_STORE
 Thumbs.db
 Desktop.ini
 node_modules

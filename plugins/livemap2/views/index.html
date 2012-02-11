@@ -3,8 +3,6 @@
 <head>
 	<meta charset="utf-8">
 	<title>xi4n:livemap2.js</title>
-	<meta name="description" content="">
-	<meta name="author" content="">
 
 	<!--[if lt IE 9]>
 	<script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
@@ -17,6 +15,7 @@
 	<script src="/static/js/d3.min.js" type="text/javascript"></script>
 	<script src="/static/js/livemap.js" type="text/javascript"></script>
 	<script src="/static/js/chosen.jquery.min.js" type="text/javascript"></script>
+	<script src="/static/js/phpjs.min.js" type="text/javascript"></script>
 
 	<script src="/socket.io/socket.io.js"></script>
 
@@ -72,7 +71,7 @@
 					c++;
 				}
 
-				return str;
+				return htmlentities(str);
 			}
 
 			function zeroPad(num, count)
@@ -474,4 +473,3 @@
 
 	</body>
 </html>
-
