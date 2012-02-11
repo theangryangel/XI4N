@@ -181,6 +181,8 @@ if (program.install && program.config)
 
 if (program.update)
 {
+	program.update = path.resolve(program.update);
+
 	path.exists(program.install, function(exists)
 	{
 		if (!exists)
@@ -202,6 +204,8 @@ if (program.update)
 			true
 		);
 	});
+
+	process.exit(0);
 }
 
 if (program.install)
@@ -214,7 +218,7 @@ if (program.install)
 		if (program.force)
 		{
 			console.warn();
-			console.warn("  warn: forcing overwrite of existing files and directories");
+			console.warn('  warn: forcing overwrite of existing files and directories');
 			console.warn();
 		}
 
