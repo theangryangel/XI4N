@@ -216,6 +216,15 @@ if (program.install)
 			path.join(program.install, 'plugins'),
 			program.force
 		);
+
+		// copy data
+		console.log('  creating \'%s\'', path.join(program.install, 'data'));
+		copydir(
+			path.join(product.basedir, 'data'), 
+			path.join(program.install, 'data'),
+			program.force
+		);
+
 	});
 }
 

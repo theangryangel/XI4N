@@ -11,4 +11,3 @@ exports.clientmanager = require('./lib/clientmanager');
 exports.logger = require('./lib/logger');
 exports.strings = require('./lib/strings');
 exports.product = require('./lib/product');
-exports.data = path.join(__dirname, 'data/');
