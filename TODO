@@ -1,11 +1,8 @@
 General
   * Add plugin dependency management to ClientManager? Somewhere else?
-  * Change lib/strings.js to also output a usable class, that maybe used by
-    IS_MSO, etc.
-  * Add support for strings.js to reverse from utf8 to a codepage?
-  * Add ButtonManager
+  * Add plugin node_module dependency management
+  * Finish ButtonManager
   * Add the other packets I've not bothered to translate yet
-  * Add a bundled vector library to insim.js
   * Add plugin validation checking
   * Write documentation
 

@@ -19,17 +19,26 @@ Not yet a comprehensive list.
 Install
 -------
   - Install nodejs (if not already done)
-  - Clone this repository (either download as a zip and extract or "git clone
-    git://github.com/theangryangel/XI4N.git")
-  - cd XI4N
-  - npm -g install .
+  - To use the latest github version:
+    * Clone this repository (either download as a zip and extract or "git clone
+      git://github.com/theangryangel/XI4N.git")
+    * cd XI4N
+    * npm -g install .
+  - To use the latest tagged version
+    * npm install xi4n -g
 
 Usage - As a platform (standalone)
 ----------------------------------
-  * After install you will now have a xi4n command
-  * To setup a base config and plugins run "xi4n -i path/to/directory"
+  * After install you will now have a xi4n command (provided npm has worked
+    properly)
+  * To setup a base config and plugins run "xi4n -i path/to/directory" (if you
+    wish to save diskspace, you can add --symlink to make symlinks instead of
+    doing a full copy. Bear in mind that you may have versioning issues if you
+    do this
   * Modify your config.json as necessary
   * Install/update any plugins
+  * Install any dependencies required for the plugins (this is currently manual
+    process - I'm working on it)
   * run "xi4n -c path/to/directory" to run your configuration and plugins
 
 Usage - As a library
@@ -43,10 +52,3 @@ Still writing the docs for this one, however as a rough outline -
     - xi4n.logger
     - xi4n.product
   * See examples/ directory for some simple examples
-
-Requires
---------
-Uses the following awesome libraries - 
-  * node-bufferlist
-  * node-jspack
-  * commander
