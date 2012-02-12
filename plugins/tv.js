@@ -68,10 +68,6 @@ var tvDirector = function()
 		'previous': null,
 	};
 
-	// split the track into X by X grid, where X*65536
-	// a meter in LFS is 65536, so we want it not unreasonably wide
-	self.gridsize = 25*65536;
-
 	// prevent rapid changes
 	self.cooldown = 5000;
 	self.huntcooldown = 15000;
@@ -93,7 +89,6 @@ var tvDirector = function()
 
 		//this.client.on('state:best', self.onFastest);
 		this.client.on('state:track', self.onTrack);
-		/*
 		this.client.on('state:race', self.onStart);
 		this.client.on('IS_PLA', self.onPitLane);
 		this.client.on('IS_CON', self.onContact);
@@ -101,7 +96,6 @@ var tvDirector = function()
 		this.client.on('IS_HLV', self.onInvalidLap);
 		this.client.on('IS_FIN', self.onFinish);
 		this.client.on('IS_RES', self.onFinalStanding);
-		*/
 	}
 	
 	self.term = function()
@@ -135,11 +129,18 @@ var tvDirector = function()
 		if (this.client.state.lname.length > 0)
 			track = this.client.state.lname;
 
+		if (track == 'FE3X')
+			track = 'F33';
+
+		if (track == 'AS1X')
+			track = 'A11';
+
 		self.track = new kd.KDTree(3);
 
 		console.log('loading pth %s', track);
 
-		var pth = JSON.parse(fs.readFileSync(path.join(__dirname, '/../data/pth', track + '.json'), 'utf8'));
+		var filename = path.join(__dirname, '/../data/pth', track + '.json');
+		var pth = JSON.parse(fs.readFileSync(filename, 'utf8'));
 
 		console.log('translating');
 		var translated = [];
@@ -186,6 +187,9 @@ var tvDirector = function()
 		if (pkt.b.speed > pkt.a.speed)
 			plid = pkt.b.plid;
 
+		if (self.client.state.plyrs[plid].finished)
+			return;
+
 		var plyra = this.client.state.getPlyrByPlid(pkt.a.plid);
 		var plyrb = this.client.state.getPlyrByPlid(pkt.b.plid);
 		self.log('New contact - between' + plyra.pname + ' and ' + plyrb.pname);
@@ -203,8 +207,14 @@ var tvDirector = function()
 		switch(pkt.flag)
 		{
 			case self.insim.FLG_BLUE:
-				self.log('Blue flag, going to overtaker');
-				self.change(pkt.carbehind);
+				self.log('Blue flag');
+				var carbehind = this.client.state.getPlyrByPlid(pkt.carbehind);
+				var carinfront = this.client.state.getPlyrByPlid(pkt.plid);
+				if (carbehind.speed > carinfront.speed)
+				{
+					self.log('Blue flag, going to overtaker as they are faster');
+					self.change(pkt.carbehind);
+				}
 				break;
 			case self.insim.FLG_YELLOW:
 				self.log('Yellow flag, going to victim');
@@ -215,7 +225,7 @@ var tvDirector = function()
 
 	self.onInvalidLap = function(pkt)
 	{
-		if (self.isCurrent(pkt.plid))
+		if (self.isCurrent(pkt.plid) || (self.client.state.plyrs[pkt.plid] && self.client.state.plyrs[pkt.plid].finished))
 			return;
 
 		switch(pkt.hlvc)
@@ -248,8 +258,13 @@ var tvDirector = function()
 				break;
 			i++;
 		}
-	
-		self.change(i, false); // force switch to the pole position
+
+		if ((i > 0) && (plyrs[i]))
+		{
+			self.change(i, false); // force switch to the pole position
+		}
+
+		self.lastUpdate(10000);
 	}
 
 	self.onFinish = function(pkt)
@@ -258,7 +273,7 @@ var tvDirector = function()
 
 		if (plyr.position == 1)
 		{
-			self.log('WINNER');
+			self.log('WINNER'); 
 			self.change(pkt.plid, false); // force chance to winner
 		}
 	}
@@ -272,9 +287,9 @@ var tvDirector = function()
 		self.change(pkt.plid, false); // force chance to winner
 	}
 
-	self.updateLast = function()
+	self.updateLast = function(plus)
 	{
-		self.last = new Date().getTime();
+		self.last = new Date().getTime() + ((plus) ? plus : 0);
 	}
 
 	self.shouldChange = function(cooldown)
@@ -309,13 +324,19 @@ var tvDirector = function()
 		if (plyr)
 			who = plyr.pname;
 
-		self.log('Switching to ' + who);
-
 		self.history.previous = self.history.current;
 		self.history.current = plid;
 
+		var cam = self.insim.VIEW_CAM;
+		var rand = Math.random();
+		if (rand >= 0.9)
+			cam = self.insim.VIEW_DRIVER;
+
+		self.log('Switching to ' + who + ' cam=' + cam);
+
 		var pkt = new self.insim.IS_SCC;
 		pkt.viewplid = plid;
+		pkt.ingamecam = cam;
 		self.client.send(pkt);
 
 		if (back)
@@ -345,8 +366,8 @@ var tvDirector = function()
 		self.log('hunt called');
 
 		// hunt for interesting things
-		//if (!self.shouldChange(self.huntcooldown))
-		//	return;
+		if (!self.shouldChange(self.huntcooldown))
+			return;
 
 		self.log('Hunting');
 
@@ -367,7 +388,8 @@ var tvDirector = function()
 			if (!grid[node.id])
 				grid[node.id] = [];
 
-			grid[node.id].splice((plyrs[i].position -1), 0, plyrs[i].plid);
+			console.log('splicing in at %d', plyrs[i].position);
+			grid[node.id].splice(plyrs[i].position, 0, plyrs[i].plid);
 		}
 
 		for (var i in grid)
@@ -398,9 +420,9 @@ var tvDirector = function()
 
 		console.log('most interesting node is ' + maxId + ' with plyrs ' + grid[maxId]);
 		for (var i in grid[maxId])
-			console.log(" - %s", plyrs[grid[maxId][i]].pname);
+			console.log(" - %s (%d) @ pos %d", plyrs[grid[maxId][i]].pname, grid[maxId][i], plyrs[grid[maxId][i]].position);
 
-		var plid = grid[maxId][Math.floor(grid[maxId].length / 2)];
+		var plid = grid[maxId][Math.floor((grid[maxId].length - 1) / 2)];
 		self.change(plid, false, false);
 
 	}

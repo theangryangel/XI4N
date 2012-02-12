@@ -126,6 +126,7 @@ var PlyrState = function(pkt)
 	self.stime = 0;
 
 	self.finalresult = false; // is the final result
+	self.finished = true; // finished, but not final result
 
 	// setup from IS_NPL
 	if (pkt)
@@ -402,6 +403,7 @@ ClientState.prototype = {
 			p.penalty = 0;
 			p.finalresult = false;
 			p.pitstops = [];
+			p.finished = false;
 		}
 
 		if (ctrack != self.track)
@@ -579,7 +581,8 @@ ClientState.prototype = {
 			return;
 
 		self.plyrs[pkt.plid].fromPkt(pkt);
-		self.plyrs[pkt.plid].finalresult = true;
+		self.plyrs[pkt.plid].finished = true;
+		self.plyrs[pkt.plid].finalresult = false;
 
 		// emit our custom event
 		this.client.emit('state:plyrupdate', [ pkt.plid ]);
@@ -626,6 +629,7 @@ ClientState.prototype = {
 			return;
 
 		self.plyrs[pkt.plid].fromPkt(pkt);
+		self.plyrs[pkt.plid].finished = true;
 		self.plyrs[pkt.plid].finalresult = true;
 
 		// emit our custom event
