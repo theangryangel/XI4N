@@ -143,7 +143,7 @@ var tvDirector = function()
 
 		console.log('translating');
 		var translated = [];
-		for (var i in pth.nodes)
+		for (var i = 0; i < pth.nodes.length; i++)
 			translated.push([pth.nodes[i].x, pth.nodes[i].y, pth.nodes[i].z]);
 
 		var start = new Date().getTime();
@@ -360,25 +360,52 @@ var tvDirector = function()
 			if (!nearest || nearest.length <= 0)
 				continue;
 
-			if (!grid[nearest[0].node.genId()])
-				grid[nearest[0].node.genId()] = [];
+			console.log(nearest[0].distance);
 
-			grid[nearest[0].node.genId()].push(plyrs[i].plid);
+			var node = nearest[0].node;
+
+			if (!grid[node.id])
+				grid[node.id] = [];
+
+			grid[node.id].splice((plyrs[i].position -1), 0, plyrs[i].plid);
 		}
+
+		for (var i in grid)
+		{
+			for (var j = 0; j < grid[i].length; j++)
+			{
+				if (!grid[i][j])
+				{
+					console.log('removing');
+					grid[i].splice(j, 1);
+					i--;
+				}
+			}
+		}
+
+		console.log(util.inspect(grid));
 
 		var maxId = null;
 		var maxV = 0;
 		for (var i in grid)
 		{
 			if (grid[i].length > maxV)
+			{
+				maxV = grid[i].length;
 				maxId = i;
+			}
 		}
 
 		console.log('most interesting node is ' + maxId + ' with plyrs ' + grid[maxId]);
+		for (var i in grid[maxId])
+			console.log(" - %s", plyrs[grid[maxId][i]].pname);
+
+		var plid = grid[maxId][Math.floor(grid[maxId].length / 2)];
+		self.change(plid, false, false);
 
 	}
 
-	//self.updateLast();
+	self.updateLast();
 };
 
 var director = new tvDirector;
