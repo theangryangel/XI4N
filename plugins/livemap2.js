@@ -204,7 +204,7 @@ exports.init = function()
 			var line = {
 				'plid': pkt.plid,
 				'usertype': pkt.usertype,
-				'msg': pkt.msg
+				'msg': pkt.msg.substr(pkt.msg.textstart)
 			};
 			io.sockets.in(this.client.id).emit('chat', line);
 		}

@@ -37,6 +37,8 @@
 
 			var convertColours = function(str)
 			{
+				str = htmlentities(str);
+
 				var lfs = [ /\^0/g, /\^1/g, /\^2/g, /\^3/g, /\^4/g, /\^5/g, /\^6/g, /\^7/g, /\^8/g, /\^9/g ];
 				var html = [
 					'<span class="col0">',
@@ -71,7 +73,7 @@
 					c++;
 				}
 
-				return htmlentities(str);
+				return str;
 			}
 
 			function zeroPad(num, count)
