@@ -1,6 +1,8 @@
 "use strict";
 
 var util = require('util'),
+	fs = require('fs'),
+	path = require('path'),
 	kd = require('kdtree.js');
 
 /*
@@ -76,7 +78,7 @@ var tvDirector = function()
 
 	self.init = function()
 	{
-		this.client.isiFlags |= this.insim.ISF_CON | this.insim.ISF_HLV | this.insim.ISF_LOCAL;
+		this.client.isiFlags |= this.insim.ISF_MCI | this.insim.ISF_CON | this.insim.ISF_HLV | this.insim.ISF_LOCAL;
 
 		this.log.info('Registering TV');
 
@@ -84,10 +86,14 @@ var tvDirector = function()
 		self.client = this.client;
 		self.insim = this.insim;
 
+		self.track = null;
+
 		// fire a change every 10 seconds, if not called sooner
 		self.timers.hunt = setInterval(self.hunt, self.huntcooldown);
 
-		this.client.on('state:best', self.onFastest);
+		//this.client.on('state:best', self.onFastest);
+		this.client.on('state:track', self.onTrack);
+		/*
 		this.client.on('state:race', self.onStart);
 		this.client.on('IS_PLA', self.onPitLane);
 		this.client.on('IS_CON', self.onContact);
@@ -95,6 +101,7 @@ var tvDirector = function()
 		this.client.on('IS_HLV', self.onInvalidLap);
 		this.client.on('IS_FIN', self.onFinish);
 		this.client.on('IS_RES', self.onFinalStanding);
+		*/
 	}
 	
 	self.term = function()
@@ -120,6 +127,32 @@ var tvDirector = function()
 
 		self.log('New fastest');
 		self.change(plid);
+	}
+
+	self.onTrack = function()
+	{
+		var track = this.client.state.track;
+		if (this.client.state.lname.length > 0)
+			track = this.client.state.lname;
+
+		self.track = new kd.KDTree(3);
+
+		console.log('loading pth %s', track);
+
+		var pth = JSON.parse(fs.readFileSync(path.join(__dirname, '/../data/pth', track + '.json'), 'utf8'));
+
+		console.log('translating');
+		var translated = [];
+		for (var i in pth.nodes)
+			translated.push([pth.nodes[i].x, pth.nodes[i].y, pth.nodes[i].z]);
+
+		var start = new Date().getTime();
+		console.log('building');
+		self.track.build(translated);
+		var end = new Date().getTime();
+		console.log('building done in %d seconds', (end - start)/1000);
+
+		self.hunt();
 	}
 
 	self.onPitLane = function(pkt)
@@ -309,9 +342,11 @@ var tvDirector = function()
 
 	self.hunt = function()
 	{
+		self.log('hunt called');
+
 		// hunt for interesting things
-		if (!self.shouldChange(self.huntcooldown))
-			return;
+		//if (!self.shouldChange(self.huntcooldown))
+		//	return;
 
 		self.log('Hunting');
 
@@ -320,57 +355,30 @@ var tvDirector = function()
 
 		for (var i in plyrs)
 		{
-			var x = Math.round(plyrs[i].x / self.gridsize) * self.gridsize || 0;
-			var y = Math.round(plyrs[i].y / self.gridsize) * self.gridsize || 0;
-
-			if (!grid[x])
-				grid[x] = { 'length': 0 };
-
-			if (!grid[x][y])
-				grid[x][y] = new Array;
-
-			grid[x][y].push(i);
-			grid[x].length += 1;
-		}
-
-		var maxxv = 0;
-		var maxx = null;
-		var maxy = null;
-		for (var i in grid)
-		{
-			if (grid[i].length > maxxv)
-			{
-				maxxv = grid[i].length;
-				maxx = i;
-			}
-		}
-
-		if (maxx == null)
-			return;
-
-		for (var i in grid[maxx])
-		{
-			if (!Array.isArray(grid[maxx][i]))
+			console.log("plyr %s (%d) x=%d,y=%d,z=%d", plyrs[i].pname, i, plyrs[i].x, plyrs[i].y, plyrs[i].z);
+			var nearest = self.track.nearest([ plyrs[i].x, plyrs[i].y, plyrs[i].z ], 1);
+			if (!nearest || nearest.length <= 0)
 				continue;
 
-			if ((maxy == null) || (grid[maxx][i].length > maxy))
-				maxy = i;
+			if (!grid[nearest[0].node.genId()])
+				grid[nearest[0].node.genId()] = [];
+
+			grid[nearest[0].node.genId()].push(plyrs[i].plid);
 		}
 
-		if (maxy == null)
-			return;
+		var maxId = null;
+		var maxV = 0;
+		for (var i in grid)
+		{
+			if (grid[i].length > maxV)
+				maxId = i;
+		}
 
-		var slot = grid[maxx][maxy];
-		var plid = slot[Math.floor(slot.length/2)];
+		console.log('most interesting node is ' + maxId + ' with plyrs ' + grid[maxId]);
 
-		if (!plid)
-			return;
-
-		self.log('Found via hunt');
-		self.change(plid, false);
 	}
 
-	self.updateLast();
+	//self.updateLast();
 };
 
 var director = new tvDirector;
