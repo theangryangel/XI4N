@@ -1,6 +1,7 @@
 "use strict";
 
-		var util = require('util');
+var util = require('util'),
+	kd = require('kdtree.js');
 
 /*
  * Only supports a single insim connection.
