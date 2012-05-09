@@ -23,7 +23,7 @@
 	"plugins": {
 		"pong": {
 			"path": "pong",
-			"options": {}
+			"options": { }
 		},
 		"state": {
 			"path": "state",
@@ -53,17 +53,15 @@
 			"host": "127.0.0.1", 
 
 			// port number
-			"port": 29999, 
+			"port": 29998, 
 
 			// maxbacklog of insim packets, don't change if you dont need to
 			"maxbacklog": 2048, 
 
 			// maximum number of reconnection attempts
-			// TODO: Not yet implemented
-			"reconnect": 3, 
+			"reconnect": 4, 
 
 			// cooldown between reconnection attempts
-			// TODO: Not yet implemented
 			"reconnectcooldown": 5,
 
 			// an array of plugins we want to load for this client
