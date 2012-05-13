@@ -170,7 +170,7 @@
 				$('#tracker-table tbody tr.' + plid).remove();
 			});
 
-			var socket = io.connect('http://localhost:<%= port.toString() %>');
+			var socket = io.connect(':<%= port.toString() %>');
 
 			$(".chzn-select").chosen({ allow_single_deselect: true });
 			//$(".chzn-select").hide();
