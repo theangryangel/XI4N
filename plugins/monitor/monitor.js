@@ -1,9 +1,7 @@
 var util = require('util');
 
-exports.init = function(options)
+exports.construct = function(options)
 {
-	this.log.info('Registering Monitor plugin');
-
 	if (options.http)
 	{
 		var http = require('http');
@@ -17,18 +15,5 @@ exports.init = function(options)
 
 			res.end(text);
 		}).listen(options['http-port'] || 9615);
-	}
-
-	var seconds = options.seconds || 10;
-
-	if (options.log && (seconds > 0))
-	{
-		var log = this.log;
-
-		setInterval(function() {
-			log.info('Mem stats ' + util.inspect(process.memoryUsage()));
-			log.info('Node Uptime ' + process.uptime());
-		},
-		1000 * seconds);
 	}
 }

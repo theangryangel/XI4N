@@ -36,6 +36,10 @@
 		"tv": {
 			"path": "tv",
 			"options": {}
+		},
+		"monitor": {
+			"path": "monitor",
+			"options": { "http": true }
 		}
 	},
 
