@@ -1,0 +1,9 @@
+{
+	"name": "xi4n-state",
+	"version": "0.0.1",
+	"main": "./state.js",
+	"engine": {
+		"node": ">=0.4"
+	}
+}
+

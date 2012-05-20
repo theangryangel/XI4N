@@ -1,0 +1,9 @@
+{
+	"name": "xi4n-livemap2",
+	"version": "0.0.1",
+	"main": "./livemap2.js",
+	"engine": {
+		"node": ">=0.4"
+	}
+}
+

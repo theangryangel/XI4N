@@ -61,14 +61,14 @@ exports.construct = function(options)
 	});
 
 	// set our templates to live in livemap/views/
-	express.set('views', __dirname + '/livemap2/views');
+	express.set('views', __dirname + '/views');
 
 	// listen on the default port
 	express.listen(options['http-port'] || 8080);
 
-	// setup /static to map to ./livemap/static
-	express.use('/static', require('express').static(__dirname + '/livemap2/static'));
-	express.use('/static/pth', require('express').static(path.join(__dirname, '../data/pth/')));
+	// setup /static to map to ./static
+	express.use('/static', require('express').static(__dirname + '/static'));
+	express.use('/static/pth', require('express').static(path.join(__dirname, '../../data/pth/')));
 
 	// render index.html as /
 	express.get('/', function (req, res)

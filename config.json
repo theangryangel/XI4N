@@ -57,7 +57,7 @@
 			"host": "127.0.0.1", 
 
 			// port number
-			"port": 29998, 
+			"port": 29999, 
 
 			// maxbacklog of insim packets, don't change if you dont need to
 			"maxbacklog": 2048, 
