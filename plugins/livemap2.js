@@ -174,11 +174,6 @@ exports.init = function()
 		io.sockets.in(this.client.id).emit('plyrleave', plid);
 	});
 
-	this.client.registerHook('state:connleave', function(ucid)
-	{
-		io.sockets.in(this.client.id).emit('plyrleave', ucid);
-	});
-
 	this.client.registerHook('state:plyrupdate', function(plids)
 	{
 		var update = [];

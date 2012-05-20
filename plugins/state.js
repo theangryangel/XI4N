@@ -568,6 +568,7 @@ ClientState.prototype = {
 
 		self.plyrs[pkt.plid].ucid = pkt.newucid;
 		self.conns[pkt.newucid].plid = pkt.plid;
+		self.conns[pkt.olducid].plid = 0;
 
 		this.client.emit('state:plyrswap', pkt.plid);
 	},
