@@ -22,7 +22,8 @@
 		"bufferlist": "*",
 		"jspack": "*",
 		"commander": "*",
-		"semver": "*"
+		"semver": "*",
+		"glob": "*"
 	},
 	"bundleDependencies": [
 	],
