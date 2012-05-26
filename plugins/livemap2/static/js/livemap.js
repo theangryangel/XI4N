@@ -84,11 +84,11 @@ LiveMap.prototype = {
 					if (data.nodes[d].x < self.pth.min.x)
 						self.pth.min.x = data.nodes[d].x;
 
-					if (data.nodes[d].y > self.pth.max.y)
-						self.pth.max.y = data.nodes[d].y;
+					if (-data.nodes[d].y > self.pth.max.y)
+						self.pth.max.y = -data.nodes[d].y;
 
-					if (data.nodes[d].y < self.pth.min.y)
-						self.pth.min.y = data.nodes[d].y;
+					if (-data.nodes[d].y < self.pth.min.y)
+						self.pth.min.y = -data.nodes[d].y;
 				}
 
 				self.pth.data.length = i;
@@ -132,7 +132,7 @@ LiveMap.prototype = {
 		d3.select(self.dst).style('width', (width + 20) + 'px');
 
 		self.pth.y = d3.scale.linear()
-			.domain([self.pth.min.y, self.pth.max.y])
+			.domain([-self.pth.min.y, -self.pth.max.y])
 			.range([20, height]);
 
 		self.pth.x = d3.scale.linear()
