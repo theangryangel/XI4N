@@ -63,8 +63,7 @@ exports.construct = function(options)
 	// render index.html as /
 	express.get('/', function (req, res)
 	{
-		res.header('Content-type', 'text/html; charset=utf-8');
-		res.render('index.html', { port: options['http-port'] || 8080 });
+		res.render('index.html');
 	});
 
 	// on connection, send the list of insim client connections
@@ -131,7 +130,7 @@ exports.init = function()
 		io.sockets.emit('maps', livemap.getClients());
 	});
 
-	this.client.registerHook('state:track', function(plid)
+	this.client.registerHook('state:track', function()
 	{
 		io.sockets.in(this.client.id).emit('track', {
 			'id': this.client.id,
