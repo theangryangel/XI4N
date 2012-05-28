@@ -50,19 +50,6 @@ exports.construct = function(options)
 	// disable the layout
 	express.set("view options", { layout: false });
 
-	// setup underscore as our templating engine
-	// jade makes me feel ill
-	express.register('.html', {
-		compile: function(str, options)
-		{
-			var compiled = require('underscore').template(str);
-			return function(locals) { return compiled(locals); };
-		}
-	});
-
-	// set our templates to live in livemap/views/
-	express.set('views', __dirname + '/views');
-
 	// listen on the default port
 	express.listen(options['http-port'] || 8080);
 
@@ -70,11 +57,13 @@ exports.construct = function(options)
 	express.use('/static', require('express').static(__dirname + '/static'));
 	express.use('/static/pth', require('express').static(path.join(__dirname, '../../data/pth/')));
 
+	// setup / to map to ./views
+	express.use(require('express').static(__dirname + '/views'));
+
 	// render index.html as /
 	express.get('/', function (req, res)
 	{
-		res.header('Content-type', 'text/html; charset=utf-8');
-		res.render('index.html', { port: options['http-port'] || 8080 });
+		res.render('index.html');
 	});
 
 	// on connection, send the list of insim client connections
@@ -141,7 +130,7 @@ exports.init = function()
 		io.sockets.emit('maps', livemap.getClients());
 	});
 
-	this.client.registerHook('state:track', function(plid)
+	this.client.registerHook('state:track', function()
 	{
 		io.sockets.in(this.client.id).emit('track', {
 			'id': this.client.id,
