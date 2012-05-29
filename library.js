@@ -4,6 +4,7 @@
  */
 
 exports.insim = require('./lib/insim');
+exports.outsim = require('./lib/outsim');
 exports.outgauge = require('./lib/outgauge');
 exports.client = require('./lib/client');
 exports.clientmanager = require('./lib/clientmanager');
