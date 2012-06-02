@@ -289,7 +289,7 @@ path3847.transform("m1.3872461,0,0,1.4128359,-501.65806,-256.16523").data('id', 
 
 	var ms2mph = function(ms)
 	{
-		return Math.round(ms * 2.2);
+		return Math.round(ms * 2.2369);
 	}
 
 	var gear2gear = function(g)
@@ -306,12 +306,33 @@ path3847.transform("m1.3872461,0,0,1.4128359,-501.65806,-256.16523").data('id', 
 
 	var rpm2angle = function (rpm)
 	{
-		var end = { value: 10000, angle: 270 };
-		var start = { value: 0, angle: 0 };
+		if (rpm <= 4000)
+		{	
+			var end = { value: 4000, angle: 57.5 };
+			var start = { value: 0, angle: 0 };
 
-		var needleRate = rpm/(end.value - start.value);
-		var needleAngle = ((end.angle - 2 * start.angle) * needleRate) + start.angle;
-		return needleAngle;
+			var needleRate = rpm/(end.value - start.value);
+			var needleAngle = ((end.angle - 2 * start.angle) * needleRate) + start.angle;
+			return needleAngle;
+		}
+		else
+		{
+			var end = { value: 10000, angle: 240 };
+			var start = { value: 4000, angle: 57.5 };
+
+			var needleRate = rpm/(end.value - start.value);
+			var needleAngle = end.angle * needleRate;
+			var needleAngle = ((end.angle - start.angle) * needleRate) -
+				start.angle - 7;		
+			return needleAngle;
+		}
+	}
+
+	var mvNeedle = function(rpm)
+	{
+		var angle = rpm2angle(rpm);
+
+		needle.animate({transform: "r" + angle + ",347,300"}, 25, 'linear');
 	}
 
 
@@ -347,8 +368,7 @@ faceOverlay.animate({opacity: 0}, 2000, '<>', function() {
 
 					gear.attr('text', gear2gear(p.gear));
 
-					var angle = rpm2angle(p.rpm);
-					needle.animate({transform: "r" + angle + ",347,300"}, 20, 'linear');
+					mvNeedle(p.rpm);
 				});
 
 			});
