@@ -55,7 +55,8 @@
 		.lap tspan {
 			font-size: 2em;
 			fill: #bbb;
-			opacity: 0.60;			
+			opacity: 0.60;
+			line-height: 2em;
 		}
 
 		.rpm-units tspan {
@@ -287,6 +288,33 @@ path3847.transform("m1.3872461,0,0,1.4128359,-501.65806,-256.16523").data('id', 
 
 	needle.push(needleBase);
 
+	var switchText = function(target, text)
+	{
+		// TODO - Workaround for raphael's moving text.
+		// Figure out a better wya. Theres got to be a better way?!
+
+		if (!target)
+			return target;
+
+		if (target.attr('text') == text)
+			return target;
+
+		var x = parseInt(target.attr('x'));
+		var y = parseInt(target.attr('y'));
+		var classes = undefined;
+
+		if (target.node)
+			classes = target.node.getAttribute('class');
+
+		target.remove();
+		target = rsr.text(x, y, text);
+		
+		if (classes)
+			target.node.setAttribute('class', classes);
+
+		return target;
+	}
+
 	var ms2mph = function(ms)
 	{
 		return Math.round(ms * 2.2369);
@@ -363,10 +391,9 @@ faceOverlay.animate({opacity: 0}, 2000, '<>', function() {
 
 				socket.on('OG_PACK', function(p)
 				{
-					speed.attr('text', ms2mph(p.speed));
-					lap.attr('text', p.display1);
-
-					gear.attr('text', gear2gear(p.gear));
+					speed = switchText(speed, ms2mph(p.speed));
+					lap = switchText(lap, p.display1);
+					gear = switchText(gear, gear2gear(p.gear));
 
 					mvNeedle(p.rpm);
 				});
@@ -390,7 +417,9 @@ faceOverlay.animate({opacity: 0}, 2000, '<>', function() {
 		m = nd.getMinutes();
 		if (h <= 9) h = "0" + h;
 		if (m <= 9) m = "0" + m;
-		clock.attr('text', h + ':' + m);
+
+		if (clock)
+			clock = switchText(clock, h + ':' + m);
 
 		timeHandle = setTimeout("timeClock()", 1000);
 	}
