@@ -6,7 +6,7 @@
 	// logger options
 	"logger": {
 		// log level
-		"level": "info",
+		"level": "crit",
 
 		// may be any writable stream, object that implements a write function.
 		// if neither it's assumed you meant a file name and it writes to that
@@ -40,6 +40,13 @@
 		"monitor": {
 			"path": "monitor",
 			"options": { "http": true }
+		},
+		"gauges": {
+			"path": "gauges",
+			"options": {
+				"port": 12345,
+				"http-port": 8081
+			}
 		}
 	},
 
@@ -69,7 +76,7 @@
 			"reconnectcooldown": 5,
 
 			// an array of plugins we want to load for this client
-			"plugins": [ "pong", "state", "livemap2" ]
+			"plugins": [ "pong", "state", "livemap2", "gauges" ]
 		}
 	]
 }

@@ -1,0 +1,9 @@
+{
+	"name": "xi4n-gauges",
+	"version": "0.0.1",
+	"main": "./gauges.js",
+	"engine": {
+		"node": ">=0.4"
+	}
+}
+
