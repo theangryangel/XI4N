@@ -1,4 +1,18 @@
 
+# exports.pkt()
+
+ * @api private
+
+ Abstract packet class. It should not be used by itself, without extending it.
+
+# this._PACK
+
+ * Pack and unpack functions use this variable to determine how to pack and
+ 	 * unpack data to and from LFS. This string must match the format specified
+ 	 * by jspack.
+ 	 *
+ 	 * @api private
+
 # Client()
 
  * @api public
