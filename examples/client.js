@@ -3,7 +3,7 @@
  * Unless you're planning on using xi4n as a library, you won't care about this
  */
 
-var client = require('../lib/client');
+var client = require('../lib/insim').client;
 
 var opts = {
 	'id': 0, // ClientManager will auto-generate an ID for you, if not provided, however Client will not
@@ -16,14 +16,11 @@ var opts = {
 // Note we don't bother setting any flags. The plugins should take care of that
 // themselves
 
-var c = new client.create(opts);
+var c = new client(opts);
 
 // Add our plugins
 var pong = require('../plugins/pong');
 c.addPlugin(pong);
-
-//var mci = require('./plugins/mci');
-//c.addPlugin(mci);
 
 // Connect
 c.connect();

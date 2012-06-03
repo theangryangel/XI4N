@@ -6,7 +6,6 @@
 exports.insim = require('./lib/insim');
 exports.outsim = require('./lib/outsim');
 exports.outgauge = require('./lib/outgauge');
-exports.client = require('./lib/client');
 exports.clientmanager = require('./lib/clientmanager');
 exports.logger = require('./lib/logger');
 exports.strings = require('./lib/strings');
