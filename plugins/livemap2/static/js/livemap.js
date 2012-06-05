@@ -180,6 +180,7 @@ LiveMap.prototype = {
 		var self = this;
 
 		self.plyrs[data.plid] = data;
+		self.plyrs[data.plid].lastUpdate = new Date().getTime();
 
 		self.emit('addplyr', data.plid);
 	},
@@ -222,6 +223,8 @@ LiveMap.prototype = {
 		{
 			for (var i in data)
 				self.plyrs[plid][i] = data[i];
+
+			self.plyrs[plid].lastUpdate = new Date().getTime();
 		}
 
 		self.emit('updateplyr', plid)
@@ -281,12 +284,45 @@ LiveMap.prototype = {
 		if (self.plyrs[plid] && self.plyrs[plid].svg)
 			self.plyrs[plid].svg.remove();
 	},
+	clearPlyrs: function()
+	{
+		// clears all players
+		// removes all players
+		var self = this;
+
+		for (var i in self.plyrs)
+		{
+			if (!self.plyrs)
+				continue;
+			self.clearPlyr(i);
+		}
+	},
+	scavengePlyrs: function(ttl)
+	{
+		// hunts through plyrs, looking for players we've not had updates from
+		// in a while, who are probably out of sync
+		console.log('Scavenging Players');
+
+		var self = this;
+		var now = new Date().getTime();
+
+		var lifetime = ttl || 60;
+
+		// getTime() returns ms, doooh :(
+		lifetime = lifetime * 1000;
+
+		for (var i in self.plyrs)
+		{
+			if (now - self.plyrs[i].lastUpdate >= lifetime)
+				self.remPlyr(i);
+		}
+	},
 	clear: function()
 	{
 		self.drawn = false;
 		d3.select(this.dst).selectAll("svg").remove();
 
 		this.emit('clear');
-	},
+	}
 };
 

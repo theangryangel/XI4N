@@ -41,13 +41,13 @@
 			"path": "monitor",
 			"options": { "http": true }
 		},
-		"gauges": {
-			"path": "gauges",
-			"options": {
-				"port": 12345,
-				"http-port": 8081
-			}
-		}
+		//"gauges": {
+		//	"path": "gauges",
+		//	"options": {
+		//		"port": 12345,
+		//		"http-port": 8081
+		//	}
+		//}
 	},
 
 	// an array of "clients", or insim connections
@@ -76,7 +76,7 @@
 			"reconnectcooldown": 5,
 
 			// an array of plugins we want to load for this client
-			"plugins": [ "pong", "state", "livemap2", "gauges" ]
+			"plugins": [ "pong", "state", "livemap2" ]
 		}
 	]
 }

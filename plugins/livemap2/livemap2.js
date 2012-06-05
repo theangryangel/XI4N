@@ -130,6 +130,11 @@ exports.init = function()
 		io.sockets.emit('maps', livemap.getClients());
 	});
 
+	this.client.registerHook('IS_RST', function(pkt)
+	{
+		io.sockets.in(this.client.id).emit('restart');
+	});
+
 	this.client.registerHook('state:track', function()
 	{
 		io.sockets.in(this.client.id).emit('track', {

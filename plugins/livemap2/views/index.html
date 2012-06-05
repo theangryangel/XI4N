@@ -100,6 +100,9 @@
 			track.dst = '#track';
 			track.basePath = '/static/pth/';
 
+			// Scavenge for non-updating players every 60 seconds
+			setInterval(function() { track.scavengePlyrs(); }, 60000);
+
 			track.on('track404', function(pth)
 			{
 				alert('Failed to load track "' + pth + '"');
@@ -251,7 +254,6 @@
 			// update list of servers
 			socket.on('maps', function(data)
 			{
-				console.log(data);
 				var select = $('#option-server');
 				var curr = select.val();
 				var loaded = false;
@@ -348,6 +350,13 @@
 
 					track.addPlyr(data[i]);
 				}
+				});
+
+			socket.on('restart', function(data)
+			{
+				// scavenge any players that we've not had updates from for a
+				// while	
+				track.scavengePlyrs();
 			});
 
 			// player chat
