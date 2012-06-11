@@ -301,8 +301,6 @@ LiveMap.prototype = {
 	{
 		// hunts through plyrs, looking for players we've not had updates from
 		// in a while, who are probably out of sync
-		console.log('Scavenging Players');
-
 		var self = this;
 		var now = new Date().getTime();
 

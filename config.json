@@ -25,54 +25,44 @@
 			"path": "pong",
 			"options": { }
 		},
-		"state": {
-			"path": "state",
-			"options": {}
-		},
-		"livemap2": {
-			"path": "livemap2",
-			"options": {}
-		},
-		"tv": {
-			"path": "tv",
-			"options": {}
-		},
-		"gauges": {
-			"path": "gauges",
-			"options": {
-				"port": 12345,
-				"http-port": 8081
-			}
-		}
+		//"state": {
+		//	"path": "state",
+		//	"options": {}
+		//},
+		//"livemap2": {
+		//	"path": "livemap2",
+		//	"options": {}
+		//},
 	},
 
 	// an array of "clients", or insim connections
 	"clients": [
-		{
+		// Example client configuration
+		//{
 			// if no id is specified, a value is auto-generated
 			// for a persistent id, it is recommended to set a value
 			// "id": "1"
 
 			// a friendly name for configuration purposes only
-			"name": "localhost", 
+			//"name": "localhost", 
 
 			// address of insim instance to connect to
-			"host": "127.0.0.1", 
+			//"host": "127.0.0.1", 
 
 			// port number
-			"port": 29999, 
+			//"port": 29999, 
 
 			// maxbacklog of insim packets, don't change if you dont need to
-			"maxbacklog": 2048, 
+			//"maxbacklog": 2048, 
 
 			// maximum number of reconnection attempts
-			"reconnect": 4, 
+			//"reconnect": 4, 
 
 			// cooldown between reconnection attempts
-			"reconnectcooldown": 5,
+			//"reconnectcooldown": 5,
 
 			// an array of plugins we want to load for this client
-			"plugins": [ "pong", "state", "gauges" ]
-		}
+			//"plugins": [ "pong", "state", "livemap2" ]
+		//}
 	]
 }

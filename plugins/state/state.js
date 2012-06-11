@@ -99,6 +99,7 @@ var PlyrState = function(pkt)
 	self.node = 0;
 	self.lap = 0;
 	self.position = 0;
+	self.position_original = 0; // starting position
 	self.info = 0;
 	self.x = 0;
 	self.y = 0;
@@ -404,12 +405,14 @@ ClientState.prototype = {
 			p.finalresult = false;
 			p.pitstops = [];
 			p.finished = false;
+			p.position_original = 0;
 		}
 
 		if (ctrack != self.track)
 			this.client.emit('state:track');
 
 		this.client.emit('state:race');
+		this.client.emit('state:racestart');
 	},
 
 	// connection specific hooks
@@ -527,6 +530,7 @@ ClientState.prototype = {
 			return;
 
 		self.plyrs[pkt.plid].pitting = true;
+		self.plyrs[pkt.plid].position_original = 0;
 
 		// emit our custom event
 		this.client.emit('state:plyrupdate', [ pkt.plid ]);
@@ -655,6 +659,10 @@ ClientState.prototype = {
 			}
 
 			self.plyrs[p.plid].fromPkt(p);
+
+			if (self.plyrs[p.plid].position_original == 0)
+				self.plyrs[p.plid].position_original = p.position;
+
 			updated.push(p.plid);
 		}
 

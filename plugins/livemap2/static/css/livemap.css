@@ -1087,7 +1087,18 @@ svg .player-highlight
 	fill: yellow;
 }
 
-/* string colours */
+/**
+ * string colours
+ * 0 - Black
+ * 1 - Red
+ * 2 - Light green
+ * 3 - Yellow
+ * 4 - Blue
+ * 5 - Purple
+ * 6 - Light blue
+ * 7 - White
+ * 8 - Dark green (default) 
+ */
 span.col0, span.col7, span.col9
 {
 color: inherit;
@@ -1100,7 +1111,7 @@ color: #AF0303;
 
 span.col2, span.col8
 {
-color: #9EFF4F;
+color: #008000;
 }
 
 span.col3
@@ -1121,4 +1132,9 @@ color: #FF0095;
 span.col6
 {
 color: #65BEDC;
+}
+
+.pos, .startpos
+{
+text-align:center !important;
 }

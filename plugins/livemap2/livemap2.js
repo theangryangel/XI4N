@@ -28,6 +28,7 @@ var plyrCompact = function(p)
 		'cname': p.cname,
 		'pitting': p.pitting,
 		'position': p.position,
+		'position_original': p.position_original,
    		'x': p.x, 
 		'y': p.y, 
 		'z': p.z,
@@ -113,29 +114,28 @@ exports.init = function()
 
 	// setup state update hooks
 	// these all depend on state.js
-	//
-	this.client.registerHook('state:ready', function()
+	this.client.on('state:ready', function()
 	{
 		livemap.clients[this.client.id] = this.client.state;
 	});
 
-	this.client.registerHook('state:notready', function()
+	this.client.on('state:notready', function()
 	{
 		delete livemap.clients[this.client.id] = this.client.state;
 	});
 
-	this.client.registerHook('state:server', function(joined)
+	this.client.on('state:server', function(joined)
 	{
 		// notify any sockets of this.client's arrival/departure
 		io.sockets.emit('maps', livemap.getClients());
 	});
 
-	this.client.registerHook('IS_RST', function(pkt)
+	this.client.on('IS_RST', function(pkt)
 	{
 		io.sockets.in(this.client.id).emit('restart');
 	});
 
-	this.client.registerHook('state:track', function()
+	this.client.on('state:track', function()
 	{
 		io.sockets.in(this.client.id).emit('track', {
 			'id': this.client.id,
@@ -149,7 +149,7 @@ exports.init = function()
 		io.sockets.emit('maps', livemap.getClients());
 	});
 
-	this.client.registerHook('state:plyrnew', function(plid)
+	this.client.on('state:plyrnew', function(plid)
 	{
 		var p = this.client.state.getPlyrByPlid(plid);
 
@@ -163,12 +163,12 @@ exports.init = function()
 		io.sockets.in(this.client.id).emit('plyrnew', c);
 	});
 
-	this.client.registerHook('state:plyrleave', function(plid)
+	this.client.on('state:plyrleave', function(plid)
 	{
 		io.sockets.in(this.client.id).emit('plyrleave', plid);
 	});
 
-	this.client.registerHook('state:plyrupdate', function(plids)
+	this.client.on('state:plyrupdate', function(plids)
 	{
 		var update = [];
 
@@ -184,7 +184,7 @@ exports.init = function()
 		io.sockets.in(this.client.id).emit('plyrsupdate', update);
 	});
 
-	this.client.registerHook('IS_MSO', function(pkt)
+	this.client.on('IS_MSO', function(pkt)
 	{
 		// system or user msgs only
 		// TODO re-encode crazy string as utf8
