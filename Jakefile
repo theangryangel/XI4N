@@ -11,7 +11,7 @@ task('generate-docs', [], function (params)
 		for (var i in files)
 		{
 			var dst = path.basename(files[i]).replace(/js$/, 'md');
-			cmds.push('dox --raw < ' + files[i] + ' | node ./build/docs.js > ./docs/' + dst);
+			cmds.push('dox --raw < ' + files[i] + ' | node ./build/docs.js > ./docs/api/' + dst);
 		}
 
 		jake.exec(cmds, function ()
