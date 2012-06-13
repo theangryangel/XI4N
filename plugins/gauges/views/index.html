@@ -19,7 +19,11 @@
 		{
 			width: 820px;
 			height: 559px;
-			margin: 0 auto;
+			position:absolute;
+			top: 50%;
+			left: 50%;
+			margin-top: -279.5px;
+			margin-left: -410px;
 			background-color: #000;
 		}
 
@@ -53,7 +57,7 @@
 		}
 
 		.lap tspan {
-			font-size: 2em;
+			font-size: 1.65em;
 			fill: #bbb;
 			opacity: 0.60;
 			line-height: 2em;
@@ -245,17 +249,46 @@ path3847.transform("m1.3872461,0,0,1.4128359,-501.65806,-256.16523").data('id', 
 	var path3848 = rsr.path('m 257 277 L 437 277').attr({ stroke: '#fff',
 			'stroke-width': 1 });
 
-	var gearsLeft = rsr.text(297, 327, "2");
-	gearsLeft.node.setAttribute('class', 'gears gears-left');
+	var gears = rsr.set();
 
-	var gearsRight = rsr.text(397, 327, "4");
-	gearsRight.node.setAttribute('class', 'gears gears-right');
+	var gearR = rsr.text(347, 330, "R");
+	var gearN = rsr.text(397, 330, "N");
 
-	var gear = rsr.text(347, 350, "3");
-	gear.node.setAttribute('class', 'gear');
+	var gear1 = rsr.text(447, 330, "1");
+	var gear2 = rsr.text(497, 330, "2");
+	
+	var gear3 = rsr.text(547, 330, "3");
 
-	var lap = rsr.text(347, 400, "Connecting ");
-	lap.node.setAttribute('class', 'lap');
+	var gear4 = rsr.text(597, 330, "4");
+	var gear5 = rsr.text(647, 330, "5");
+	var gear6 = rsr.text(697, 330, "6");
+
+	gears.push(gearR, gearN, gear1, gear2, gear3, gear4, gear5, gear6);
+	gears.attr({ opacity: 0 });
+
+	var min = 0;
+	var max = 7;
+	var time = 100;
+	var dstnc = -50;
+
+	var chgGear = function(to)
+	{
+		gears.animate({ transform: 't' + dstnc * to + ',0', opacity: 0 }, time);
+		gears[to].animate({ opacity: 1, 'font-size': '16em' }, time);
+		for (var i = ((to - 1 >= min) ? to - 1 : min); i >= min && i <= max && i <= to + 1 && i >= to - 1; i++)
+		{
+			if (i != to)
+				gears[i].animate({ opacity: 0.25, 'font-size': '9em' }, time);
+		}
+
+		return to;
+	}
+
+	var lap0 = rsr.text(347, 380, "Connecting..");
+	lap0.node.setAttribute('class', 'lap');
+
+	var lap1 = rsr.text(347, 410, " ");
+	lap1.node.setAttribute('class', 'lap');
 
 	var needle = rsr.set();
 
@@ -265,20 +298,18 @@ path3847.transform("m1.3872461,0,0,1.4128359,-501.65806,-256.16523").data('id', 
 	var speed = rsr.text(347, 215, "0");
 	speed.node.setAttribute('class', 'speed');
 
-	var speedUnits = rsr.text(347, 250, "MPH");
+	var speedUnits = rsr.text(347, 245, "MPH");
 	speedUnits.node.setAttribute('class', 'speed-units');
 	var needle = rsr.set();
 
 	var digitalOutputs = rsr.set();
 
 	digitalOutputs.push(
-		gear,
-		gearsLeft,
-		gearsRight,
 		speed,
 		speedUnits,
 		path3848,
-		lap
+		lap0,
+		lap1
 	);
 
 	digitalOutputs.attr({ opacity: 0 });
@@ -318,6 +349,11 @@ path3847.transform("m1.3872461,0,0,1.4128359,-501.65806,-256.16523").data('id', 
 	var ms2mph = function(ms)
 	{
 		return Math.round(ms * 2.2369);
+	}
+
+	var ms2kph = function(ms)
+	{
+		return Math.round(ms * 3.6);
 	}
 
 	var gear2gear = function(g)
@@ -385,17 +421,23 @@ faceOverlay.animate({opacity: 0}, 2000, '<>', function() {
 
 		needle.animate({transform: "r240,347,300"}, 750,'linear', function()
 		{
+
+			// Change to neutral
+			chgGear(1);
+
 			needle.animate({transform: "r0, 347, 300"}, 750,'linear', function()
 			{
+				// Ok, all the fancy animations are done. Lets get our data.
 				socket = io.connect('/');
 
 				socket.on('OG_PACK', function(p)
 				{
-					speed = switchText(speed, ms2mph(p.speed));
-					lap = switchText(lap, p.display1);
-					gear = switchText(gear, gear2gear(p.gear));
-
 					mvNeedle(p.rpm);
+					chgGear(p.gear);
+
+					speed = switchText(speed, ms2mph(p.speed));
+					lap0 = switchText(lap0, p.display1);
+					lap1 = switchText(lap1, p.display2);
 				});
 
 			});
@@ -424,21 +466,7 @@ faceOverlay.animate({opacity: 0}, 2000, '<>', function() {
 		timeHandle = setTimeout("timeClock()", 1000);
 	}
 
-	var speedCurr = 0;
-	var speedHandle;
-
-	function speedClock()
-	{
-		speedCurr += Math.round(Math.random()*10);
-
-		speed.attr('text', speedCurr);
-
-		speedHandle = setTimeout('speedClock()', 1000);
-	}
-
-timeClock();
-
-//speedClock();
+	timeClock();
 
 </script>
 
