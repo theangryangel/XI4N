@@ -24,3 +24,7 @@ See docs/library.md
 Please feel free to fork and submit pull requests. If you wish please also feel
 free to add yourself to the package.json as a contributor :) Credit where credit
 is due.
+
+## More Information
+  * [LFSForum](http://www.lfsforum.net/showthread.php?t=77774)
+  * [YouTube](http://www.youtube.com/playlist?list=PL91B12693323673CC)
