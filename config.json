@@ -41,7 +41,7 @@
 		//{
 			// if no id is specified, a value is auto-generated
 			// for a persistent id, it is recommended to set a value
-			// "id": "1"
+			//"id": "1",
 
 			// a friendly name for configuration purposes only
 			//"name": "localhost", 
