@@ -37,7 +37,7 @@ ButtonsState.prototype = {
 
 		for (var i = 0; i < state.length && i <= this.MAX_ID; i++)
 		{
-			var b = this.state[i];
+			var b = state[i];
 
 			if (b == null || b == undefined)
 				return i;
@@ -69,9 +69,12 @@ ButtonsState.prototype = {
 	},
 	'add': function(btn, callback)
 	{
-		var clickId = this.getNextClickId();
-		if (!clickId)
+		var clickId = this.getNextClickId(btn.ucid);
+		if (clickId == null)
+		{
+			console.log('no click id');
 			return;
+		}
 
 		var cb = callback || null;
 
@@ -101,7 +104,8 @@ ButtonsState.prototype = {
 	},
 	'onIS_BTCorBTT': function(pkt)
 	{
-		var state = this.getBtnStack(pkt.ucid);
+		var state = this.client.buttons.getBtnStack(pkt.ucid);
+
 		if (!state[pkt.clickid])
 			return;
 
@@ -111,22 +115,22 @@ ButtonsState.prototype = {
 	{
 		if (pkt.subt == this.client.insim.BFN_USER_CLEAR)
 		{
-			this.buttons[ucid] = [];
-			this.buttons[ucid].length = this.MAX_ID;
+			this.client.buttons[ucid] = [];
+			this.client.buttons[ucid].length = this.client.buttons.MAX_ID;
 			return;
 		}
 	},
 	'onStateConnNew': function(ucid)
 	{
 		// clear any previous state
-		this.buttons[ucid] = [];
-		this.buttons[ucid].length = this.MAX_ID;
+		this.client.buttons[ucid] = [];
+		this.client.buttons[ucid].length = this.client.buttons.MAX_ID;
 	},
 	'onStateConnLeave': function(ucid)
 	{
 		// clear any state
-		if (this.buttons[ucid])
-			delete this.buttons[ucid];
+		if (this.client.buttons[ucid])
+			delete this.client.buttons[ucid];
 	}
 }
 
