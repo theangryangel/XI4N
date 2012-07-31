@@ -7,6 +7,9 @@ exports.init = function()
 		if (pkt.action == this.insim.VOTE_NONE)
 			return;
 
+		if (pkt.ucid == 0)
+			return;
+
 		var cancel = new this.insim.IS_TINY;
 		cancel.subt = this.insim.TINY_VTC;
 

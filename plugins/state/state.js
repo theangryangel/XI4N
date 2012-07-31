@@ -217,7 +217,7 @@ ClientState.prototype = {
 		if (!self.plyrs[plid])
 			return;
 
-		return self.conns[self.plyr[plid].ucid];
+		return self.conns[self.plyrs[plid].ucid];
 	},
 
 	'handleOOS': function()
@@ -339,7 +339,10 @@ ClientState.prototype = {
 		self.onGeneric_Copy.call(this, pkt);
 
 		if (lname != self.lname)
+		{
 			this.client.emit('state:track');
+			this.client.emit('state:layout');
+		}
 	},
 	'onIS_ISM': function(pkt)
 	{
