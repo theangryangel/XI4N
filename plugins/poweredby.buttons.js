@@ -12,26 +12,26 @@ exports.init = function(options)
 		var welcome = new this.insim.IS_BTN;
 		welcome.ucid = pkt.ucid;
 		welcome.reqi = 1;
-		welcome.bstyle |= this.insim.ISB_DARK | this.insim.ISB_LEFT | this.insim.ISB_CLICK;
+		welcome.bstyle |= this.insim.ISB_DARK | this.insim.ISB_LEFT;
 		welcome.text = '^7Powered by ' + this.product.full;
 		welcome.l = 5;
-		welcome.t = 180;
+		welcome.t = 170;
 		welcome.w = (welcome.text.length - 2) * 1.9;
 		welcome.h = 10;
 
-		var callback = function(insim, client, ucid)
+		var clickid = this.client.buttons.add(welcome, null);
+
+		setTimeout(function(ctx, ucid, clickid)
 		{
-			return function(inbound)
+			return function()
 			{
-				var p = new insim.IS_BFN;
+				var p = new ctx.insim.IS_BFN;
 				p.ucid = ucid;
-				p.clickid = inbound.clickid;
-				p.subt = insim.BFN_DEL_BTN;
+				p.clickid = clickid;
+				p.subt = ctx.insim.BFN_DEL_BTN;
 
-				client.send(p);
-			}
-		}(this.insim, this.client, pkt.ucid);
-
-		this.client.buttons.add(welcome, callback);
+				ctx.client.send(p);
+			};
+		}(this, pkt.ucid, clickid), 5000);
 	});
 }
