@@ -201,7 +201,6 @@ exports.init = function()
 	this.client.on('IS_MSO', function(pkt)
 	{
 		// system or user msgs only
-		// TODO re-encode crazy string as utf8
 		if (pkt.usertype <= this.insim.MSO_USER)
 		{
 			var line = {
