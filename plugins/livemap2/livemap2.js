@@ -149,6 +149,20 @@ exports.init = function()
 		io.sockets.emit('maps', livemap.getClients());
 	});
 
+	this.client.on('state:layout', function()
+	{
+		io.sockets.in(this.client.id).emit('track', {
+			'id': this.client.id,
+			'hostname': this.client.state.hname, 
+			'track': this.client.state.track,
+			'layout': this.client.state.lname,
+			'laps': this.client.state.racelaps,
+			'qualmins': this.client.state.qualmins
+		});
+
+		io.sockets.emit('maps', livemap.getClients());
+	});
+
 	this.client.on('state:plyrnew', function(plid)
 	{
 		var p = this.client.state.getPlyrByPlid(plid);

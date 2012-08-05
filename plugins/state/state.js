@@ -165,6 +165,7 @@ var ClientState = function() {
 	self.numcp = 0; // number of cps
 	self.numo = 0; // number of objects
 	self.lname = ''; // layout name, if any
+	self.nump = 0; // number of players
 
 	self.conns = [];
 	self.plyrs = [];
@@ -339,10 +340,7 @@ ClientState.prototype = {
 		self.onGeneric_Copy.call(this, pkt);
 
 		if (lname != self.lname)
-		{
-			this.client.emit('state:track');
 			this.client.emit('state:layout');
-		}
 	},
 	'onIS_ISM': function(pkt)
 	{
@@ -672,6 +670,31 @@ ClientState.prototype = {
 		// emit our custom event
 		this.client.emit('state:plyrupdate', updated);
 	},
+	// Reordered track
+	'onIS_REO': function(pkt)
+	{
+		var self = this;
+
+		self.client.state.nump = pkt.nump;
+
+		for (var i = 0; i < pkt.plid.length; i++)
+		{
+			// once we reach 0's, there should be no more players
+			if (pkt.plid[i] <= 0)
+				return;
+
+			var plid = pkt.plid[i];
+
+			if (!self.plyrs[plid])
+			{
+				// out of sync, lets get sync
+				this.client.emit('state:oos');
+				continue; 
+			}
+
+			self.plyrs[plid].position_original = i + 1;
+		}
+	},
 
 	// hooks, helper array
 	'hooks': {
@@ -700,6 +723,7 @@ ClientState.prototype = {
 		'IS_LAP': 'onIS_LAPSPX',
 		'IS_SPX': 'onIS_LAPSPX',
 		'IS_MCI': 'onIS_MCI',
+		'IS_REO': 'onIS_REO'
 	},
 
 	// hook helpers
