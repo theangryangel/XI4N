@@ -673,9 +673,9 @@ ClientState.prototype = {
 	// Reordered track
 	'onIS_REO': function(pkt)
 	{
-		var self = this;
+		var self = this.client.state;
 
-		self.client.state.nump = pkt.nump;
+		self.nump = pkt.nump;
 
 		for (var i = 0; i < pkt.plid.length; i++)
 		{
