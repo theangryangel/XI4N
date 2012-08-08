@@ -4,7 +4,7 @@ exports.init = function(options)
 {
 	this.log.info('Registering poweredby plugin');
 
-	this.client.registerHook('IS_NPL', function(pkt)
+	this.client.registerHook('IS_NCN', function(pkt)
 	{
 		if (pkt.ucid <= 0)
 			return;

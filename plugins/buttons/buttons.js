@@ -39,8 +39,11 @@ ButtonsState.prototype = {
 		{
 			var b = state[i];
 
-			if (b == null || b == undefined)
+			if (b === undefined)
+			{
+				state[i] = true;
 				return i;
+			}
 		}
 
 		return null;
@@ -70,16 +73,14 @@ ButtonsState.prototype = {
 	'add': function(btn, callback)
 	{
 		var clickId = this.getNextClickId(btn.ucid);
+
 		if (clickId == null)
-		{
-			console.log('no click id');
 			return;
-		}
 
 		var cb = callback || null;
 
 		var state = this.getBtnStack(btn.ucid);
-		state[clickId] = callback || null;
+		state[clickId] = cb;
 
 		btn.clickid = clickId;
 		this.client.send(btn);
@@ -109,7 +110,7 @@ ButtonsState.prototype = {
 		if (!state[pkt.clickid])
 			return;
 
-		state[pkt.clickid](pkt);
+		state[pkt.clickid].call(this, pkt);
 	},
 	'onIS_BFN' : function(pkt)
 	{
