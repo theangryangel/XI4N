@@ -1,68 +1,48 @@
 {
-	// xi4n
-	// expected/support xi4n versions
-	"xi4n": ">=0.0.2",
+	// minimum version of xi4n required to run this config
+	"xi4n": ">=0.0.4",
 
-	// logger options
+	// logger setup
+	// outputs to the screen
 	"logger": {
-		// log level
 		"level": "crit",
-
-		// may be any writable stream, object that implements a write function.
-		// if neither it's assumed you meant a file name and it writes to that
 		"stream": "stdout" 
 	},
 
-	// an object of available plugins for clients and their options
-	// they are then referenced by key(name) in the client options
-	// the key can be arbitrary, permitting the same plugin with different
-	// options, but may not duplicate an existing one
-	//
-	// path should be relative to the plugins directory
-	// options are dictated by the plugin
+	// an array of plugins, and their options
 	"plugins": {
+
+		// ping-pong plugin, required to keep the connection alive
 		"pong": {
 			"path": "pong",
 			"options": { }
 		},
-		//"state": {
-		//	"path": "state",
-		//	"options": {}
-		//},
-		//"livemap2": {
-		//	"path": "livemap2",
-		//	"options": {}
-		//},
+
+		// gauges plugin
+		"gauges": {
+			"path": "gauges",
+			"options": {
+				// UDP port used by outgauge
+				"port": 12345,
+
+				// HTTP port used by Express
+				"http-port": 3000
+			}
+		}
 	},
 
 	// an array of "clients", or insim connections
 	"clients": [
-		// Example client configuration
-		//{
-			// if no id is specified, a value is auto-generated
-			// for a persistent id, it is recommended to set a value
-			//"id": "1",
-
-			// a friendly name for configuration purposes only
-			//"name": "localhost", 
-
-			// address of insim instance to connect to
-			//"host": "127.0.0.1", 
-
-			// port number
-			//"port": 29999, 
-
-			// maxbacklog of insim packets, don't change if you dont need to
-			//"maxbacklog": 2048, 
-
-			// maximum number of reconnection attempts
-			//"reconnect": 4, 
-
-			// cooldown between reconnection attempts
-			//"reconnectcooldown": 5,
-
-			// an array of plugins we want to load for this client
-			//"plugins": [ "pong", "state", "livemap2" ]
-		//}
+		{
+			"name": "localhost", 
+			"host": "127.0.0.1", 
+			"port": 29999, 
+			"reconnect": 4, 
+			"reconnectcooldown": 5,
+			"maxbacklog": 2048, 
+			"admin": "",
+	
+			"plugins": [ "pong", "gauges" ]
+		}
 	]
 }
