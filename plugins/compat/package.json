@@ -1,0 +1,10 @@
+{
+	"name": "xi4n-compat",
+	"version": "0.0.1",
+	"description": "API compatibility layer to migrate between 0.0.x and 0.1.x versions of xi4n",
+	"main": "./compat",
+	"engine": {
+		"node": ">=0.8"
+	}
+}
+

@@ -74,12 +74,12 @@ var tvDirector = function()
 
 	self.init = function()
 	{
-		this.client.isiFlags |= this.insim.ISF_MCI | this.insim.ISF_CON | this.insim.ISF_HLV | this.insim.ISF_LOCAL;
+		this.isiFlags |= this.insim.ISF_MCI | this.insim.ISF_CON | this.insim.ISF_HLV | this.insim.ISF_LOCAL;
 
 		this.log.info('Registering TV');
 
 		self.logger = this.log;
-		self.client = this.client;
+		self.client = this;
 		self.insim = this.insim;
 
 		self.track = null;
@@ -87,15 +87,15 @@ var tvDirector = function()
 		// fire a change every 10 seconds, if not called sooner
 		self.timers.hunt = setInterval(self.hunt, self.huntcooldown);
 
-		//this.client.on('state:best', self.onFastest);
-		this.client.on('state:track', self.onTrack);
-		this.client.on('state:race', self.onStart);
-		this.client.on('IS_PLA', self.onPitLane);
-		this.client.on('IS_CON', self.onContact);
-		this.client.on('IS_FLG', self.onFlag);
-		this.client.on('IS_HLV', self.onInvalidLap);
-		this.client.on('IS_FIN', self.onFinish);
-		this.client.on('IS_RES', self.onFinalStanding);
+		//this.on('state:best', self.onFastest);
+		this.on('state:track', self.onTrack);
+		this.on('state:race', self.onStart);
+		this.on('IS_PLA', self.onPitLane);
+		this.on('IS_CON', self.onContact);
+		this.on('IS_FLG', self.onFlag);
+		this.on('IS_HLV', self.onInvalidLap);
+		this.on('IS_FIN', self.onFinish);
+		this.on('IS_RES', self.onFinalStanding);
 	}
 	
 	self.term = function()
@@ -114,7 +114,7 @@ var tvDirector = function()
 
 	self.onFastest = function()
 	{
-		var plid = this.client.state.best.plid;
+		var plid = this.state.best.plid;
 
 		if (plid <= 0)
 			return;
@@ -125,9 +125,9 @@ var tvDirector = function()
 
 	self.onTrack = function()
 	{
-		var track = this.client.state.track;
-		if (this.client.state.lname.length > 0)
-			track = this.client.state.lname;
+		var track = this.state.track;
+		if (this.state.lname.length > 0)
+			track = this.state.lname;
 
 		if (track == 'FE3X')
 			track = 'F33';
@@ -190,8 +190,8 @@ var tvDirector = function()
 		if (self.client.state.plyrs[plid].finished)
 			return;
 
-		var plyra = this.client.state.getPlyrByPlid(pkt.a.plid);
-		var plyrb = this.client.state.getPlyrByPlid(pkt.b.plid);
+		var plyra = this.state.getPlyrByPlid(pkt.a.plid);
+		var plyrb = this.state.getPlyrByPlid(pkt.b.plid);
 		self.log('New contact - between' + plyra.pname + ' and ' + plyrb.pname);
 		self.change(plid);
 	}
@@ -208,8 +208,8 @@ var tvDirector = function()
 		{
 			case self.insim.FLG_BLUE:
 				self.log('Blue flag');
-				var carbehind = this.client.state.getPlyrByPlid(pkt.carbehind);
-				var carinfront = this.client.state.getPlyrByPlid(pkt.plid);
+				var carbehind = this.state.getPlyrByPlid(pkt.carbehind);
+				var carinfront = this.state.getPlyrByPlid(pkt.plid);
 				if (carbehind.speed > carinfront.speed)
 				{
 					self.log('Blue flag, going to overtaker as they are faster');
@@ -269,7 +269,7 @@ var tvDirector = function()
 
 	self.onFinish = function(pkt)
 	{
-		var plyr = this.client.state.getPlyrByPlid(pkt.plid);
+		var plyr = this.state.getPlyrByPlid(pkt.plid);
 
 		if (plyr.position == 1)
 		{
@@ -432,5 +432,5 @@ var tvDirector = function()
 
 var director = new tvDirector;
 
-exports.init = director.init;
+exports.associate = director.init;
 exports.term = director.term;

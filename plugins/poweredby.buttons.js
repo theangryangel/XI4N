@@ -1,10 +1,10 @@
 "use strict";
 
-exports.init = function(options)
+exports.associate = function(options)
 {
 	this.log.info('Registering poweredby plugin');
 
-	this.client.registerHook('IS_NCN', function(pkt)
+	this.on('IS_NCN', function(pkt)
 	{
 		if (pkt.ucid <= 0)
 			return;
@@ -19,7 +19,7 @@ exports.init = function(options)
 		welcome.w = (welcome.text.length - 2) * 1.9;
 		welcome.h = 10;
 
-		var clickid = this.client.buttons.add(welcome, null);
+		var clickid = this.buttons.add(welcome, null);
 
 		setTimeout(function(ctx, ucid, clickid)
 		{

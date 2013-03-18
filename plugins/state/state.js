@@ -25,9 +25,9 @@
  *
  *
  * i.e. in your dependent plugin:
- * this.client.on('state:connnew', function(ucid)
+ * this.on('state:connnew', function(ucid)
  * {
- *     var conn = this.client.state.getConnByUcid(ucid);
+ *     var conn = this.state.getConnByUcid(ucid);
  *
  *     console.log('New connection %d - %s', ucid, conn.uname);
  * });
@@ -240,7 +240,7 @@ ClientState.prototype = {
 	// request the current state from LFS
 	'requestCurrentState': function()
 	{
-		var self = this.client.state;
+		var self = this.state;
 
 		if (!self.handleOOS())
 		{
@@ -255,46 +255,46 @@ ClientState.prototype = {
 		var t0 = new this.insim.IS_TINY();
 		t0.reqi = 1;
 		t0.subt = this.insim.TINY_ISM;
-		this.client.send(t0);
+		this.send(t0);
 
 		var t1 = new this.insim.IS_TINY();
 		t1.reqi = 1;
 		t1.subt = this.insim.TINY_NCN;
-		this.client.send(t1);
+		this.send(t1);
 
 		var t2 = new this.insim.IS_TINY();
 		t2.reqi = 1;
 		t2.subt = this.insim.TINY_NPL;
-		this.client.send(t2);
+		this.send(t2);
 
 		var t3 = new this.insim.IS_TINY();
 		t3.reqi = 1;
 		t3.subt = this.insim.TINY_SST;
-		this.client.send(t3);
+		this.send(t3);
 
 		var t4 = new this.insim.IS_TINY();
 		t4.reqi = 1;
 		t4.subt = this.insim.TINY_AXI;
-		this.client.send(t4);
+		this.send(t4);
 	},
 
 	// state ready
 	'onIS_VER': function(pkt)
 	{
-		var self = this.client.state;
+		var self = this.state;
 
 		self.lfs.version = pkt.version;
 		self.lfs.product = pkt.product;
 		self.lfs.insimver = pkt.insimver;
 
-		this.client.emit('state:oos');
+		this.emit('state:oos');
 	},
 
 	// game state
 	// used by IS_STA IS_RST and IS_AXI
 	'onGeneric_Copy': function(pkt)
 	{
-		var self = this.client.state;
+		var self = this.state;
 
 		// useful function that can be used when we just need to copy
 		// game state change or race start
@@ -312,7 +312,7 @@ ClientState.prototype = {
 	},
 	'onIS_STA': function(pkt)
 	{
-		var self = this.client.state;
+		var self = this.state;
 
 		//  state change
 		var ctrack = self.track,
@@ -322,17 +322,17 @@ ClientState.prototype = {
 		self.onGeneric_Copy.call(this, pkt);
 
 		if (ctrack != self.track)
-			this.client.emit('state:track');
+			this.emit('state:track');
 
 		if (weather != self.weather)
-			this.client.emit('state:weather');
+			this.emit('state:weather');
 
 		if (wind != self.wind)
-			this.client.emit('state:wind');
+			this.emit('state:wind');
 	},
 	'onIS_AXI': function(pkt)
 	{
-		var self = this.client.state;
+		var self = this.state;
 
 		//  state change
 		var lname = self.lname;
@@ -340,46 +340,46 @@ ClientState.prototype = {
 		self.onGeneric_Copy.call(this, pkt);
 
 		if (lname != self.lname)
-			this.client.emit('state:layout');
+			this.emit('state:layout');
 	},
 	'onIS_ISM': function(pkt)
 	{
-		var self = this.client.state;
+		var self = this.state;
 
 		//  multiplayer start/join
 		
 		self.host = pkt.host;
 		self.hname = pkt.hname;
 
-		this.client.emit('state:oos');
+		this.emit('state:oos');
 
-		this.client.emit('state:server', true);
+		this.emit('state:server', true);
 	},
 	'onIS_TINY': function(pkt)
 	{
-		var self = this.client.state;
+		var self = this.state;
 
 		if (pkt.subt == this.insim.TINY_MPE)
 		{
 			self.host = 0;
 			self.hname = '';
 
-			this.client.emit('state:server', false);
+			this.emit('state:server', false);
 			return;
 		}
 
 		if (pkt.subt == this.insim.TINY_AXC)
 		{
 			self.onGeneric_Copy.call(this, pkt);
-			this.client.state.lname = '';
+			this.state.lname = '';
 
-			this.client.emit('state:track');
+			this.emit('state:track');
 			return;
 		}
 	},
 	'onIS_RST': function(pkt)
 	{
-		var self = this.client.state;
+		var self = this.state;
 
 		//  multiplayer start/join
 		var ctrack = self.track;
@@ -410,43 +410,43 @@ ClientState.prototype = {
 		}
 
 		if (ctrack != self.track)
-			this.client.emit('state:track');
+			this.emit('state:track');
 
-		this.client.emit('state:race');
-		this.client.emit('state:racestart');
+		this.emit('state:race');
+		this.emit('state:racestart');
 	},
 
 	// connection specific hooks
 	'onIS_NCN': function(pkt)
 	{
-		var self = this.client.state;
+		var self = this.state;
 		// new connection
 
 		var c = new ConnState(pkt);
 		self.conns[c.ucid] = c;
 
-		this.client.emit('state:connnew', c.ucid);
+		this.emit('state:connnew', c.ucid);
 	},
 	'onIS_CNL': function(pkt)
 	{
-		var self = this.client.state;
+		var self = this.state;
 		// connection leaves
 
 		if (!self.conns[pkt.ucid])
 			return;
 
-		this.client.emit('state:connleave:pre', pkt.ucid);
+		this.emit('state:connleave:pre', pkt.ucid);
 		
 		if ((self.conns[pkt.ucid].plid > 0) && (self.plyrs[self.conns[pkt.ucid].plid]))
 			delete self.plyrs[self.conns[pkt.ucid].plid];
 
 		delete self.conns[pkt.ucid];
 
-		this.client.emit('state:connleave', pkt.ucid);
+		this.emit('state:connleave', pkt.ucid);
 	},
 	'onIS_CPR': function(pkt)
 	{
-		var self = this.client.state;
+		var self = this.state;
 		// connection rename
 
 		if (!self.conns[pkt.ucid])
@@ -455,13 +455,13 @@ ClientState.prototype = {
 		self.conns[pkt.ucid].pname = pkt.pname;
 		self.conns[pkt.ucid].plate = pkt.plate;
 
-		this.client.emit('state:connren', pkt.ucid);
+		this.emit('state:connren', pkt.ucid);
 	},
 
 	// player specific hooks
 	'onIS_NPL': function(pkt)
 	{
-		var self = this.client.state;
+		var self = this.state;
 		var p = null;
 		var n = false;
 		
@@ -484,13 +484,13 @@ ClientState.prototype = {
 			self.conns[p.ucid].plid = p.plid;
 
 		if (n)
-			this.client.emit('state:plyrnew', pkt.plid);
+			this.emit('state:plyrnew', pkt.plid);
 		else
-			this.client.emit('state:plyrupdate', [ pkt.plid ]);
+			this.emit('state:plyrupdate', [ pkt.plid ]);
 	},
 	'onIS_PIT': function(pkt)
 	{
-		var self = this.client.state;
+		var self = this.state;
 		// player pit stop starts (not tele-pit)
 
 		if (!self.plyrs[pkt.plid])
@@ -502,11 +502,11 @@ ClientState.prototype = {
 		self.plyrs[pkt.plid].lapsdone = pkt.lapsdone;
 
 		// emit our custom event
-		this.client.emit('state:plyrupdate', [ pkt.plid ]);
+		this.emit('state:plyrupdate', [ pkt.plid ]);
 	},
 	'onIS_PSF': function(pkt)
 	{
-		var self = this.client.state;
+		var self = this.state;
 		// player pit stop finished (not tele-pit)
 
 		if (!self.plyrs[pkt.plid])
@@ -520,11 +520,11 @@ ClientState.prototype = {
 		});
 
 		// emit our custom event
-		this.client.emit('state:plyrupdate', [ pkt.plid ]);
+		this.emit('state:plyrupdate', [ pkt.plid ]);
 	},
 	'onIS_PLP': function(pkt)
 	{
-		var self = this.client.state;
+		var self = this.state;
 		// player tele-pits
 
 		if (!self.plyrs[pkt.plid])
@@ -534,21 +534,21 @@ ClientState.prototype = {
 		self.plyrs[pkt.plid].position_original = 0;
 
 		// emit our custom event
-		this.client.emit('state:plyrupdate', [ pkt.plid ]);
+		this.emit('state:plyrupdate', [ pkt.plid ]);
 	},
 	'onIS_PLL': function(pkt)
 	{
-		var self = this.client.state;
+		var self = this.state;
 
 		// player leaves
 		if (!self.plyrs[pkt.plid])
 		{
 			// out of sync, lets get sync
-			this.client.emit('state:oos');
+			this.emit('state:oos');
 			return; 
 		}
 
-		this.client.emit('state:plyrleave:pre', pkt.ucid);
+		this.emit('state:plyrleave:pre', pkt.ucid);
 
 		var ucid = self.plyrs[pkt.plid].ucid;
 		delete self.plyrs[pkt.plid];
@@ -556,18 +556,18 @@ ClientState.prototype = {
 		if ((ucid > 0) && (self.conns[ucid]))
 			self.conns[ucid].plid = 0; // out of sync if this doesn't happen
 
-		this.client.emit('state:plyrleave', pkt.plid);
+		this.emit('state:plyrleave', pkt.plid);
 	},
 	'onIS_TOC': function(pkt)
 	{
-		var self = this.client.state;
+		var self = this.state;
 
 		// player takes over vehicle (connection->player swapping)
 		if ((!self.plyrs[pkt.plid]) || (self.plyrs[pkt.plid].ucid != pkt.olducid))
 		{
 			// out of sync, lets get sync
 			this.log.crit('plyrs out of sync');
-			this.client.emit('state:oos');
+			this.emit('state:oos');
 			return;
 		}
 
@@ -575,11 +575,11 @@ ClientState.prototype = {
 		self.conns[pkt.newucid].plid = pkt.plid;
 		self.conns[pkt.olducid].plid = 0;
 
-		this.client.emit('state:plyrswap', pkt.plid);
+		this.emit('state:plyrswap', pkt.plid);
 	},
 	'onIS_FIN': function(pkt)
 	{
-		var self = this.client.state;
+		var self = this.state;
 		// player finish notification
 		// not final result
 
@@ -591,16 +591,16 @@ ClientState.prototype = {
 		self.plyrs[pkt.plid].finalresult = false;
 
 		// emit our custom event
-		this.client.emit('state:plyrupdate', [ pkt.plid ]);
+		this.emit('state:plyrupdate', [ pkt.plid ]);
 	},
 	'onIS_LAPSPX': function(pkt)
 	{
-		var self = this.client.state;
+		var self = this.state;
 
 		if (!self.plyrs[pkt.plid])
 		{
 			// out of sync, lets get sync
-			this.client.emit('state:oos');
+			this.emit('state:oos');
 			return; 
 		}
 
@@ -619,15 +619,15 @@ ClientState.prototype = {
 				// new best lap
 				self.best.time = pkt.ltime; 
 				self.best.plid = pkt.plid;
-				this.client.emit('state:best');
+				this.emit('state:best');
 			}
 		}
 
-		this.client.emit('state:plyrupdate', [ pkt.plid ]);
+		this.emit('state:plyrupdate', [ pkt.plid ]);
 	},
 	'onIS_RES': function(pkt)
 	{
-		var self = this.client.state;
+		var self = this.state;
 		// player finish result
 		// final result
 
@@ -639,11 +639,11 @@ ClientState.prototype = {
 		self.plyrs[pkt.plid].finalresult = true;
 
 		// emit our custom event
-		this.client.emit('state:plyrupdate', [ pkt.plid ]);
+		this.emit('state:plyrupdate', [ pkt.plid ]);
 	},
 	'onIS_MCI': function(pkt)
 	{
-		var self = this.client.state;
+		var self = this.state;
 
 		var updated = [];
 
@@ -655,7 +655,7 @@ ClientState.prototype = {
 			if (!self.plyrs[p.plid])
 			{
 				// out of sync, lets get sync
-				this.client.emit('state:oos');
+				this.emit('state:oos');
 				continue; 
 			}
 
@@ -668,12 +668,12 @@ ClientState.prototype = {
 		}
 
 		// emit our custom event
-		this.client.emit('state:plyrupdate', updated);
+		this.emit('state:plyrupdate', updated);
 	},
 	// Reordered track
 	'onIS_REO': function(pkt)
 	{
-		var self = this.client.state;
+		var self = this.state;
 
 		self.nump = pkt.nump;
 
@@ -688,7 +688,7 @@ ClientState.prototype = {
 			if (!self.plyrs[plid])
 			{
 				// out of sync, lets get sync
-				this.client.emit('state:oos');
+				this.emit('state:oos');
 				continue; 
 			}
 
@@ -745,34 +745,37 @@ ClientState.prototype = {
 	}
 };
 
-exports.init = function(options)
+exports.associate = function(options)
 {
 	this.log.info('Registering state plugin');
 
-	this.client.isiFlags |= this.insim.ISF_MCI;
+	this.options.isiflags |= this.insim.ISF_MCI;
 
-	this.client.registerHook('preconnect', function()
+	this.on('preconnect', function()
 	{
 		// setup state
-		this.client.state = new ClientState;
+		this.state = new ClientState;
 
 		// setup hooks
-		this.client.state.registerHooks(this.client);
+		this.state.registerHooks(this);
 
-		this.client.emit('state:ready');
+		this.emit('state:ready');
 	});
 
-	this.client.registerHook('disconnect', function()
+	this.on('disconnect', function()
 	{
 		// we're going to be lazy and tear down the whole state on a 
 		// disconnection, so we'll need to completely remove all the hooks first
 
-		this.client.emit('state:notready');
+		this.emit('state:notready');
 
-		// clear hooks
-		this.client.state.unregisterHooks(this.client);
+		if (this.state)
+		{
+			// clear hooks
+			this.state.unregisterHooks(this);
+		}
 
 		// clear any known state
-		this.client.state = undefined;
+		this.state = undefined;
 	});
 }

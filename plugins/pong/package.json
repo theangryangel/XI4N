@@ -1,9 +1,0 @@
-{
-	"name": "xi4n-pong",
-	"version": "0.0.1",
-	"main": "./pong.js",
-	"engine": {
-		"node": ">=0.4"
-	}
-}
-

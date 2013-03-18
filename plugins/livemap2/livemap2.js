@@ -4,14 +4,14 @@ var livemap = {
 	{
 		var list = [];
 
-		for (var i in this.clients)
+		for (var i in thiss)
 			list.push({ 
 				'id': i, 
-				'hostname': this.clients[i].hname, 
-				'track': this.clients[i].track, 
-				'layout': this.clients[i].lname,
-				'laps': this.clients[i].racelaps,
-				'qual': this.clients[i].qualmins
+				'hostname': thiss[i].hname, 
+				'track': thiss[i].track, 
+				'layout': thiss[i].lname,
+				'laps': thiss[i].racelaps,
+				'qual': thiss[i].qualmins
 			});
 
 		return list;
@@ -106,99 +106,99 @@ exports.construct = function(options)
 	});
 }
 
-exports.init = function()
+exports.associate = function()
 {
 	this.log.info('Registering LiveMap2 plugin');
 
-	this.client.isiFlags |= this.insim.ISF_MCI;
+	this.options.isiflags |= this.insim.ISF_MCI;
 
 	// setup state update hooks
 	// these all depend on state.js
-	this.client.on('state:ready', function()
+	this.on('state:ready', function()
 	{
-		livemap.clients[this.client.id] = this.client.state;
+		livemap.clients[this.id] = this.state;
 	});
 
-	this.client.on('state:notready', function()
+	this.on('state:notready', function()
 	{
-		delete livemap.clients[this.client.id] = this.client.state;
+		delete livemap.clients[this.id] = this.state;
 	});
 
-	this.client.on('state:server', function(joined)
+	this.on('state:server', function(joined)
 	{
-		// notify any sockets of this.client's arrival/departure
+		// notify any sockets of this's arrival/departure
 		io.sockets.emit('maps', livemap.getClients());
 	});
 
-	this.client.on('IS_RST', function(pkt)
+	this.on('IS_RST', function(pkt)
 	{
-		io.sockets.in(this.client.id).emit('restart');
+		io.sockets.in(this.id).emit('restart');
 	});
 
-	this.client.on('state:track', function()
+	this.on('state:track', function()
 	{
-		io.sockets.in(this.client.id).emit('track', {
-			'id': this.client.id,
-			'hostname': this.client.state.hname, 
-			'track': this.client.state.track,
-			'layout': this.client.state.lname,
-			'laps': this.client.state.racelaps,
-			'qualmins': this.client.state.qualmins
+		io.sockets.in(this.id).emit('track', {
+			'id': this.id,
+			'hostname': this.state.hname, 
+			'track': this.state.track,
+			'layout': this.state.lname,
+			'laps': this.state.racelaps,
+			'qualmins': this.state.qualmins
 		});
 
 		io.sockets.emit('maps', livemap.getClients());
 	});
 
-	this.client.on('state:layout', function()
+	this.on('state:layout', function()
 	{
-		io.sockets.in(this.client.id).emit('track', {
-			'id': this.client.id,
-			'hostname': this.client.state.hname, 
-			'track': this.client.state.track,
-			'layout': this.client.state.lname,
-			'laps': this.client.state.racelaps,
-			'qualmins': this.client.state.qualmins
+		io.sockets.in(this.id).emit('track', {
+			'id': this.id,
+			'hostname': this.state.hname, 
+			'track': this.state.track,
+			'layout': this.state.lname,
+			'laps': this.state.racelaps,
+			'qualmins': this.state.qualmins
 		});
 
 		io.sockets.emit('maps', livemap.getClients());
 	});
 
-	this.client.on('state:plyrnew', function(plid)
+	this.on('state:plyrnew', function(plid)
 	{
-		var p = this.client.state.getPlyrByPlid(plid);
+		var p = this.state.getPlyrByPlid(plid);
 
 		if (!p)
 			return; // some how got a plid that we don't know about in the state
 
-		if (!livemap.clients[this.client.id])
+		if (!livemap.clients[this.id])
 			return; // a state we don't know about
 
 		var c = plyrCompact(p);
-		io.sockets.in(this.client.id).emit('plyrnew', c);
+		io.sockets.in(this.id).emit('plyrnew', c);
 	});
 
-	this.client.on('state:plyrleave', function(plid)
+	this.on('state:plyrleave', function(plid)
 	{
-		io.sockets.in(this.client.id).emit('plyrleave', plid);
+		io.sockets.in(this.id).emit('plyrleave', plid);
 	});
 
-	this.client.on('state:plyrupdate', function(plids)
+	this.on('state:plyrupdate', function(plids)
 	{
 		var update = [];
 
 		for (var i in plids)
 		{
-			var p = this.client.state.getPlyrByPlid(plids[i]);
+			var p = this.state.getPlyrByPlid(plids[i]);
 			if (!p)
 				continue;
 
 			update.push(plyrCompact(p));
 		}
 
-		io.sockets.in(this.client.id).emit('plyrsupdate', update);
+		io.sockets.in(this.id).emit('plyrsupdate', update);
 	});
 
-	this.client.on('IS_MSO', function(pkt)
+	this.on('IS_MSO', function(pkt)
 	{
 		// system or user msgs only
 		if (pkt.usertype <= this.insim.MSO_USER)
@@ -208,7 +208,7 @@ exports.init = function()
 				'usertype': pkt.usertype,
 				'msg': pkt.msg.substr(pkt.msg.textstart)
 			};
-			io.sockets.in(this.client.id).emit('chat', line);
+			io.sockets.in(this.id).emit('chat', line);
 		}
 	});
 }

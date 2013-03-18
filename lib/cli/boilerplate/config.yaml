@@ -1,0 +1,19 @@
+xi4n: ">=0.1.0"
+plugins: 
+    - alias: state
+      path: state
+      options: 
+connections:
+    - talk: insim
+      insim:
+        over: tcp
+        host: localhost
+        port: 29999
+      use:
+        - state
+      log:
+        - level: error
+          type: console
+        - level: info
+          type: file
+          filename: error.log

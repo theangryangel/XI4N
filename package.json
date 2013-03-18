@@ -1,6 +1,6 @@
 {
 	"name": "xi4n",
-	"version": "0.0.5-unstable",
+	"version": "0.1.0-unstable",
 	"author": "the_angry_angel <karl@theangryangel.co.uk>",
 	"contributors": [ 
 		{
@@ -13,22 +13,26 @@
 		"url": "https://github.com/theangryangel/XI4N"
 	},
 	"bugs": "https://github.com/theangryangel/XI4N/issues",
-	"preferGlobal": "true",
 	"bin": {
 		"xi4n": "./bin/xi4n"
 	},
-	"main": "./library",
+	"main": "./index",
 	"keywords": [
 		"cli",
 		"insim",
+		"outsim",
+		"outgauge",
 		"client"
 	],
 	"dependencies": {
 		"bufferlist": "*",
-		"jspack": "*",
+		"jspack-arraybuffer": "https://github.com/theangryangel/jspack-arraybuffer/tarball/master",
+		"js-yaml": "*",
+		"winston": "*",
 		"commander": "*",
-		"semver": "*",
-		"glob": "*"
+		"underscore": "*",
+		"fs-extra": "*",
+		"express": "*"
 	},
 	"bundleDependencies": [
 	],
@@ -37,4 +41,3 @@
 		"node": ">=0.8.0"
 	}
 }
-

@@ -1,0 +1,23 @@
+xi4n: ">=0.0.2"
+plugins: 
+    - alias: livemap
+      path: livemap
+      options: 
+connections:
+    - talk: insim
+      insim:
+        over: tcp
+        host: localhost
+        port: 29999
+        udpport: 12345
+        admin:
+        prefix:
+      use:
+        - pong
+        - livemap
+      log:
+        - level: error
+          type: console
+        - level: info
+          type: file
+          filename: error.log

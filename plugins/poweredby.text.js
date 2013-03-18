@@ -1,10 +1,10 @@
 "use strict";
 
-exports.init = function(options)
+exports.associate = function(options)
 {
 	this.log.info('Registering poweredby plugin');
 
-	this.client.registerHook('IS_NCN', function(pkt)
+	this.on('IS_NCN', function(pkt)
 	{
 		if (pkt.ucid <= 0)
 			return;
@@ -13,6 +13,6 @@ exports.init = function(options)
 		welcome.ucid = pkt.ucid;
 		welcome.text = 'This server is powered by ' + this.product.full;
 
-		this.client.send(welcome);
+		this.send(welcome);
 	});
 }

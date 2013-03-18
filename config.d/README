@@ -1,7 +1,0 @@
-Configuration (*.json) files in this directory are merged into config.json.
-
-The will be merged in the order that the OS returns them, in almost every case
-this is ordered by name. This allows you to reorder them as you see fit by
-naming them in this convention:
-  * 00_loaded_first.json
-  * 01_loaded_second.json

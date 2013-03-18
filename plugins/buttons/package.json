@@ -1,9 +1,0 @@
-{
-	"name": "xi4n-buttons",
-	"version": "0.0.1",
-	"main": "./buttons.js",
-	"engine": {
-		"node": ">=0.4"
-	}
-}
-
