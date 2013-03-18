@@ -34,8 +34,10 @@
 		"fs-extra": "*",
 		"express": "*"
 	},
-	"bundleDependencies": [
-	],
+	"devDependencies": {
+		"nico": "*",
+		"jake": "*"
+	},
 	"license": "GPL",
 	"engine": {
 		"node": ">=0.8.0"
