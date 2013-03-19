@@ -37,6 +37,8 @@ exports.associate = function(options)
 		var p = new this.insim.IS_SMALL;
 		p.subt = this.insim.SMALL_SSG;
 		p.uval = 10;
+		console.log('sending IS_SMALL');
+		console.log(p);
 		this.send(p);
 	});
 

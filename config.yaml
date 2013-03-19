@@ -3,6 +3,10 @@ plugins:
     - alias: compat
       path: compat
       options: 
+    - alias: gauges
+      path: gauges
+      options: 
+        http-port: 8080
 connections:
     - talk: insim
       insim:
@@ -14,6 +18,7 @@ connections:
         prefix:
       use:
         - compat
+        - gauges
       log:
         - level: debug
           type: console
