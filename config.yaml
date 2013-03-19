@@ -1,4 +1,4 @@
-xi4n: ">=0.0.2"
+xi4n: ">=0.1.0-unstable"
 plugins: 
     - alias: compat
       path: compat
