@@ -1,23 +1,25 @@
 xi4n: ">=0.0.2"
 plugins: 
-    - alias: livemap
-      path: livemap
+    - alias: compat
+      path: compat
       options: 
 connections:
     - talk: insim
       insim:
         over: tcp
-        host: localhost
+        host: 127.0.0.1
         port: 29999
         udpport: 12345
         admin:
         prefix:
       use:
-        - pong
-        - livemap
+        - compat
       log:
-        - level: error
+        - level: debug
           type: console
-        - level: info
+          timestamp: true
+        - level: debug
           type: file
+          timestamp: true
           filename: error.log
+          json: false
