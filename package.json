@@ -33,7 +33,8 @@
 		"underscore": "*",
 		"fs-extra": "*",
 		"semver": "*",
-		"express": "*"
+		"express": "*",
+		"node-uuid": "*"
 	},
 	"devDependencies": {
 		"jake": "*"

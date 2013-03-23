@@ -759,8 +759,6 @@ exports.associate = function(options)
 		// setup hooks
 		this.state.registerHooks(this);
 		this.emit('state:ready');
-
-		console.log('setting up state');
 	});
 
 	this.on('disconnect', function()
