@@ -733,7 +733,7 @@ ClientState.prototype = {
 
 		// register all hooks
 		for (var i in self.hooks)
-			client.registerHook(i, self[self.hooks[i]]);
+			client.on(i, self[self.hooks[i]]);
 	},
 	'unregisterHooks': function(client)
 	{
@@ -741,7 +741,7 @@ ClientState.prototype = {
 
 		// unregister all hooks
 		for (var i in self.hooks)
-			client.unregisterHook(i, self[self.hooks[i]]);
+			client.off(i, self[self.hooks[i]]);
 	}
 };
 
@@ -758,8 +758,9 @@ exports.associate = function(options)
 
 		// setup hooks
 		this.state.registerHooks(this);
-
 		this.emit('state:ready');
+
+		console.log('setting up state');
 	});
 
 	this.on('disconnect', function()
@@ -769,13 +770,8 @@ exports.associate = function(options)
 
 		this.emit('state:notready');
 
-		if (this.state)
-		{
-			// clear hooks
-			this.state.unregisterHooks(this);
-		}
-
-		// clear any known state
-		this.state = undefined;
+		this.state.unregisterHooks(this);
+		delete this.state;
+	
 	});
 }

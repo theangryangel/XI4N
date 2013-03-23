@@ -4,14 +4,14 @@ var livemap = {
 	{
 		var list = [];
 
-		for (var i in thiss)
+		for (var i in this.clients)
 			list.push({ 
 				'id': i, 
-				'hostname': thiss[i].hname, 
-				'track': thiss[i].track, 
-				'layout': thiss[i].lname,
-				'laps': thiss[i].racelaps,
-				'qual': thiss[i].qualmins
+				'hostname': this.clients[i].hname, 
+				'track': this.clients[i].track, 
+				'layout': this.clients[i].lname,
+				'laps': this.clients[i].racelaps,
+				'qual': this.clients[i].qualmins
 			});
 
 		return list;
@@ -116,18 +116,23 @@ exports.associate = function()
 	// these all depend on state.js
 	this.on('state:ready', function()
 	{
+		console.log('got ready');
+		console.log(this.id);
 		livemap.clients[this.id] = this.state;
+		console.log(this.state);
 	});
 
 	this.on('state:notready', function()
 	{
-		delete livemap.clients[this.id] = this.state;
+		delete livemap.clients[this.id];
 	});
 
 	this.on('state:server', function(joined)
 	{
+		console.log('got server');
 		// notify any sockets of this's arrival/departure
 		io.sockets.emit('maps', livemap.getClients());
+		console.log(this.state);
 	});
 
 	this.on('IS_RST', function(pkt)
@@ -137,6 +142,7 @@ exports.associate = function()
 
 	this.on('state:track', function()
 	{
+		console.log('got track');
 		io.sockets.in(this.id).emit('track', {
 			'id': this.id,
 			'hostname': this.state.hname, 

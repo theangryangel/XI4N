@@ -8,7 +8,8 @@ lib-cov
 *.gz
 *.log
 *.swp
-config.d/*.json
+*.bak
+config.yaml
 .DS_STORE
 Thumbs.db
 Desktop.ini
