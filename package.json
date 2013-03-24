@@ -36,9 +36,6 @@
 		"express": "*",
 		"node-uuid": "*"
 	},
-	"devDependencies": {
-		"jake": "*"
-	},
 	"license": "GPL",
 	"engine": {
 		"node": ">=0.8.0"
