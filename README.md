@@ -4,8 +4,9 @@
   * Can be used as library or as a standalone product
   * Supports InSim, OutSim, Outgauge and LFSW Relay (some may be more
 	experimental than others)
-  * Supports multiple TCP InSim connections
+  * Supports multiple connections
   * Allows for use of any existing node package in your plugin
+  * Comes distributed with plugins for common behaviours
 
 ## ACHTUNG!
   * master branch is currently under going re-write. All existing documentation
