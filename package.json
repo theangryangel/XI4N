@@ -34,6 +34,7 @@
 		"fs-extra": "latest",
 		"semver": "1.x.x",
 		"express": "3.x.x",
+		"socket.io": "latest",
 		"node-uuid": ">=1.4.0"
 	},
 	"license": "GPL",
