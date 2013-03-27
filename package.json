@@ -25,16 +25,16 @@
 		"client"
 	],
 	"dependencies": {
-		"bufferlist": "*",
+		"bufferlist": "latest",
 		"jspack-buffer": "https://github.com/theangryangel/jspack-buffer/tarball/master",
-		"js-yaml": "*",
-		"winston": "*",
-		"commander": "*",
-		"underscore": "*",
-		"fs-extra": "*",
-		"semver": "*",
-		"express": "*",
-		"node-uuid": "*"
+		"js-yaml": "latest",
+		"winston": ">=0.6.2",
+		"commander": "1.x.x",
+		"underscore": "latest",
+		"fs-extra": "latest",
+		"semver": "1.x.x",
+		"express": "3.x.x",
+		"node-uuid": ">=1.4.0"
 	},
 	"license": "GPL",
 	"engine": {
