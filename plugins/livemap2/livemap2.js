@@ -38,31 +38,34 @@ var plyrCompact = function(p)
 	};
 }
 
-// setup express and socket.io
+// setup app and socket.io
 var util = require('util'),
 	path = require('path'),
-	express = require('express').createServer(),
-	io = require('socket.io').listen(express);
+	express = require('express'),
+	app = express(),
+	http = require('http'),
+	server = http.createServer(app),
+	io = require('socket.io').listen(server);
 
 exports.construct = function(options)
 {
 	io.set('log level', 1);
 
 	// disable the layout
-	express.set("view options", { layout: false });
+	app.set("view options", { layout: false });
 
 	// listen on the default port
-	express.listen(options['http-port'] || 8080);
+	server.listen(options['http-port'] || 8080);
 
 	// setup /static to map to ./static
-	express.use('/static', require('express').static(__dirname + '/static'));
-	express.use('/static/pth', require('express').static(path.join(__dirname, '../../data/pth/')));
+	app.use('/static', express.static(__dirname + '/static'));
+	app.use('/static/pth', express.static(path.join(__dirname, '../../data/pth/')));
 
 	// setup / to map to ./views
-	express.use(require('express').static(__dirname + '/views'));
+	app.use(express.static(__dirname + '/views'));
 
 	// render index.html as /
-	express.get('/', function (req, res)
+	app.get('/', function (req, res)
 	{
 		res.render('index.html');
 	});
