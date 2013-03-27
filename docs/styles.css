@@ -13,6 +13,7 @@
 body {
 	color: #000;
 	min-width: 768px;
+	font-size: 16px;
 }
 h1 {
 	font-weight: 600;
@@ -27,6 +28,12 @@ h3 {
 	font-weight: 600;
 	font-size: 18px;
 	line-height: 40px;
+	margin-top: 10px;
+}
+h4 {
+	font-weight: 600;
+	font-size: 16px;
+	line-height: 20px;
 	margin-top: 10px;
 }
 #mainHeader {
@@ -45,7 +52,6 @@ h3 {
 }
 #wrapper nav {
 	width: 245px;
-	padding-right: 20px;
 	position: fixed;
 	height: 100%;
 	overflow-y: scroll;
@@ -56,6 +62,7 @@ h3 {
 }
 #wrapper nav dl {
 	color: #767c8d;
+	padding-bottom: 20px;
 }
 #wrapper nav dl dt {
 	list-style: none;
