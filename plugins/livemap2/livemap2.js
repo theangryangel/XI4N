@@ -59,7 +59,7 @@ var plugin = function(options)
 
 	this.app = express();
 	this.server = http.createServer(this.app);
-	this.io = socketio.listen(server);
+	this.io = socketio.listen(this.server);
 
 	this.io.set('log level', 1);
 
@@ -67,7 +67,7 @@ var plugin = function(options)
 	this.app.set("view options", { layout: false });
 
 	// listen on the default port
-	this.server.listen(this.options.['http-port']);
+	this.server.listen(this.options['http-port']);
 
 	// setup /static to map to ./static
 	this.app.use('/static', express.static(__dirname + '/static'));
@@ -152,13 +152,13 @@ plugin.prototype.associate = function(client)
 
 	client.on('state:track', function()
 	{
-		self.io.sockets.in(self.id).emit('track', {
-			'id': self.id,
-			'hostname': self.state.hname, 
-			'track': self.state.track,
-			'layout': self.state.lname,
-			'laps': self.state.racelaps,
-			'qualmins': self.state.qualmins
+		self.io.sockets.in(this.id).emit('track', {
+			'id': this.id,
+			'hostname': this.state.hname, 
+			'track': this.state.track,
+			'layout': this.state.lname,
+			'laps': this.state.racelaps,
+			'qualmins': this.state.qualmins
 		});
 
 		self.io.sockets.emit('maps', self.livemap.getClients());
@@ -166,13 +166,13 @@ plugin.prototype.associate = function(client)
 
 	client.on('state:layout', function()
 	{
-		self.io.sockets.in(self.id).emit('track', {
-			'id': self.id,
-			'hostname': self.state.hname, 
-			'track': self.state.track,
-			'layout': self.state.lname,
-			'laps': self.state.racelaps,
-			'qualmins': self.state.qualmins
+		self.io.sockets.in(this.id).emit('track', {
+			'id': this.id,
+			'hostname': this.state.hname, 
+			'track': this.state.track,
+			'layout': this.state.lname,
+			'laps': this.state.racelaps,
+			'qualmins': this.state.qualmins
 		});
 
 		self.io.sockets.emit('maps', self.livemap.getClients());
@@ -180,21 +180,21 @@ plugin.prototype.associate = function(client)
 
 	client.on('state:plyrnew', function(plid)
 	{
-		var p = self.state.getPlyrByPlid(plid);
+		var p = this.state.getPlyrByPlid(plid);
 
 		if (!p)
 			return; // some how got a plid that we don't know about in the state
 
-		if (!self.livemap.clients[self.id])
+		if (!self.livemap.clients[this.id])
 			return; // a state we don't know about
 
 		var c = plyrCompact(p);
-		self.io.sockets.in(self.id).emit('plyrnew', c);
+		self.io.sockets.in(this.id).emit('plyrnew', c);
 	});
 
 	client.on('state:plyrleave', function(plid)
 	{
-		self.io.sockets.in(self.id).emit('plyrleave', plid);
+		self.io.sockets.in(this.id).emit('plyrleave', plid);
 	});
 
 	client.on('state:plyrupdate', function(plids)
@@ -203,27 +203,27 @@ plugin.prototype.associate = function(client)
 
 		for (var i in plids)
 		{
-			var p = self.state.getPlyrByPlid(plids[i]);
+			var p = this.state.getPlyrByPlid(plids[i]);
 			if (!p)
 				continue;
 
 			update.push(plyrCompact(p));
 		}
 
-		self.io.sockets.in(self.id).emit('plyrsupdate', update);
+		self.io.sockets.in(this.id).emit('plyrsupdate', update);
 	});
 
 	client.on('IS_MSO', function(pkt)
 	{
 		// system or user msgs only
-		if (pkt.usertype <= self.insim.MSO_USER)
+		if (pkt.usertype <= this.insim.MSO_USER)
 		{
 			var line = {
 				'plid': pkt.plid,
 				'usertype': pkt.usertype,
 				'msg': pkt.msg.substr(pkt.msg.textstart)
 			};
-			self.io.sockets.in(self.id).emit('chat', line);
+			self.io.sockets.in(this.id).emit('chat', line);
 		}
 	});
 }
