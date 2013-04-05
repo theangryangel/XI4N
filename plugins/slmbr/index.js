@@ -1,6 +1,6 @@
 'use strict';
 
-var db = require('dirty')('user.db');
+var dirty = require('dirty');
 
 var model = {
 	fetch: function(database, userid)
@@ -25,12 +25,18 @@ var model = {
 
 var plugin = function(options)
 {
+	this.options = _.defaults(options, {
+		'db': 'user.db'
+	});
+
+	this.db = dirty(this.options.db);
 }
 
 plugin.prototype.associate = function(client)
 {
-	client.log.info('Registering slmbr plugin');
+	var self = this;
 
+	client.log.info('Registering slmbr plugin');
 	client.options.isiflags |= client.insim.ISF_MCI;
 
 	client.on('state:connnew', function(ucid)
@@ -43,7 +49,7 @@ plugin.prototype.associate = function(client)
 		if (!c)
 			return;
 
-		var m = model.fetch(db, c.uname);
+		var m = model.fetch(self.db, c.uname);
 
 		var messages = [
 			'^3Welcome to slmbr.',
@@ -75,9 +81,9 @@ plugin.prototype.associate = function(client)
 		if (!c)
 			return;
 
-		var m = model.fetch(db, c.uname);
+		var m = model.fetch(self.db, c.uname);
 		m.last = new Date().getTime();
-		model.save(db, c.uname, m);
+		model.save(self.db, c.uname, m);
 	});
 
 	client.on('state:plyrleave', function(plid)
@@ -91,7 +97,7 @@ plugin.prototype.associate = function(client)
 		if (!c)
 			return;
 
-		var m = model.fetch(db, c.uname);
+		var m = model.fetch(self.db, c.uname);
 
 		var messages = [
 			'^3Thanks for slmbr\'ing.',
@@ -122,7 +128,7 @@ plugin.prototype.associate = function(client)
 				continue;
 
 			var time = new Date().getTime();
-			var m = model.fetch(db, c.uname);
+			var m = model.fetch(self.db, c.uname);
 
 			if (m.position.x == null)
 			{
@@ -131,7 +137,7 @@ plugin.prototype.associate = function(client)
 				m.position.z = p.z;
 				m.last = time;
 
-				model.save(db, c.uname, m);
+				model.save(self.db, c.uname, m);
 			}
 
 			if ((time - m.last >= 10000) && (m.position.x != null))
@@ -171,7 +177,7 @@ plugin.prototype.associate = function(client)
 				m.position.y = p.y;
 				m.position.z = p.z;
 
-				model.save(db, c.uname, m);
+				model.save(self.db, c.uname, m);
 			}
 		}
 	});
@@ -190,7 +196,7 @@ plugin.prototype.associate = function(client)
 		if (!c)
 			return;
 
-		var m = model.fetch(db, c.uname);
+		var m = model.fetch(self.db, c.uname);
 
 		var welcome = new this.insim.IS_MTC;
 		welcome.ucid = pkt.ucid;
