@@ -1,3 +1,5 @@
+'use strict';
+
 var db = require('dirty')('user.db');
 
 var model = {
@@ -21,13 +23,17 @@ var model = {
 	}
 };
 
-exports.init = function()
+var plugin = function(options)
 {
-	this.log.info('Registering slmbr plugin');
+}
 
-	this.options.isiflags |= this.insim.ISF_MCI;
+plugin.prototype.associate = function(client)
+{
+	client.log.info('Registering slmbr plugin');
 
-	this.on('state:connnew', function(ucid)
+	client.options.isiflags |= client.insim.ISF_MCI;
+
+	client.on('state:connnew', function(ucid)
 	{
 		if (ucid <= 0)
 			return;
@@ -57,7 +63,7 @@ exports.init = function()
 		}
 	});
 
-	this.on('state:plyrnew', function(plid)
+	client.on('state:plyrnew', function(plid)
 	{
 		var p = this.state.getPlyrByPlid(plid);
 
@@ -74,7 +80,7 @@ exports.init = function()
 		model.save(db, c.uname, m);
 	});
 
-	this.on('state:plyrleave', function(plid)
+	client.on('state:plyrleave', function(plid)
 	{
 		var p = this.state.getPlyrByPlid(plid);
 		if (!p)
@@ -102,7 +108,7 @@ exports.init = function()
 		}
 	});
 
-	this.on('state:plyrupdate', function(plids)
+	client.on('state:plyrupdate', function(plids)
 	{
 		for (var i in plids)
 		{
@@ -170,7 +176,7 @@ exports.init = function()
 		}
 	});
 
-	this.on('IS_MSO', function(pkt)
+	client.on('IS_MSO', function(pkt)
 	{
 		if (pkt.usertype != this.insim.MSO_USER)
 			return;
@@ -194,3 +200,4 @@ exports.init = function()
 	});
 }
 
+module.exports = plugin;

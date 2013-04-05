@@ -136,50 +136,69 @@ var PlyrState = function(pkt)
 
 utils.inherits(PlyrState, StateBase);
 
-var ClientState = function() {
-	var self = this;
-
-	self.lfs = {
-		'version': '', // lfs version
-		'product': '', // lfs product name (Demo, S1, S2)
-		'insimver': 5 // insim version
-	};
-
-	self.host = false; // is host?
-	self.hname = ''; // hostname
-
-	self.replayspeed = 1;
-	self.flags = 0; // state flags
-	self.ingamecam = 0;
-	self.viewplid = 0; // currently viewing this plid
-
-	self.raceinprog = 0; // 0 = no race, 1 = race, 2 = qualifying
-	self.qualmins = 0; // number of qualifying mins
-	self.racelaps = 0; // laps
-
-	self.track = ''; // short trackname
-	self.weather = ''; // 0-2
-	self.wind = ''; // 0-2, none-weak-strong
-
-	self.axstart = 0; // ax start node
-	self.numcp = 0; // number of cps
-	self.numo = 0; // number of objects
-	self.lname = ''; // layout name, if any
-	self.nump = 0; // number of players
-
-	self.conns = [];
-	self.plyrs = [];
-
-	self._initBest();
-
-	self.lastOOS = (new Date).getTime()-10000;
-};
+var ClientState = function(options)
+{
+	this.reset();
+}
 
 ClientState.prototype = {
-	 'lfs': {
-		'version': '', // lfs version
-		'product': '', // lfs product name (Demo, S1, S2)
-		'insimver': 5 // insim version
+	'associate': function(client)
+	{
+		var self = this;
+
+		client.log.info('Registering state plugin');
+		client.options.isiflags |= client.insim.ISF_MCI;
+
+		self.registerHooks(client);
+		client.state = self;
+
+		client.on('preconnect', function()
+		{
+			this.emit('state:ready');
+		});
+
+		client.on('disconnect', function()
+		{
+			this.emit('state:notready');
+			self.reset();
+		});
+	},
+	'reset': function()
+	{
+		this.lfs = {
+			'version': '', // lfs version
+			'product': '', // lfs product name (Demo, S1, S2)
+			'insimver': 5 // insim version
+		};
+
+		this.host = false; // is host?
+		this.hname = ''; // hostname
+
+		this.replayspeed = 1;
+		this.flags = 0; // state flags
+		this.ingamecam = 0;
+		this.viewplid = 0; // currently viewing this plid
+
+		this.raceinprog = 0; // 0 = no race, 1 = race, 2 = qualifying
+		this.qualmins = 0; // number of qualifying mins
+		this.racelaps = 0; // laps
+
+		this.track = ''; // short trackname
+		this.weather = ''; // 0-2
+		this.wind = ''; // 0-2, none-weak-strong
+
+		this.axstart = 0; // ax start node
+		this.numcp = 0; // number of cps
+		this.numo = 0; // number of objects
+		this.lname = ''; // layout name, if any
+		this.nump = 0; // number of players
+
+		this.conns = [];
+		this.plyrs = [];
+
+		this._initBest();
+
+		this.lastOOS = (new Date).getTime()-10000;
 	},
 	// helper functions
 	'_initBest': function()
@@ -745,31 +764,4 @@ ClientState.prototype = {
 	}
 };
 
-exports.associate = function(options)
-{
-	this.log.info('Registering state plugin');
-
-	this.options.isiflags |= this.insim.ISF_MCI;
-
-	this.on('preconnect', function()
-	{
-		// setup state
-		this.state = new ClientState;
-
-		// setup hooks
-		this.state.registerHooks(this);
-		this.emit('state:ready');
-	});
-
-	this.on('disconnect', function()
-	{
-		// we're going to be lazy and tear down the whole state on a 
-		// disconnection, so we'll need to completely remove all the hooks first
-
-		this.emit('state:notready');
-
-		this.state.unregisterHooks(this);
-		delete this.state;
-	
-	});
-}
+module.exports = ClientState;

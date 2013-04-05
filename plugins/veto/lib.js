@@ -1,8 +1,16 @@
-exports.associate = function()
-{
-	this.log.info('Registering Veto Plugin');
+'use strict';
 
-	this.on('IS_VTN', function(pkt)
+var _ = require('underscore');
+
+var plugin = function(options)
+{
+}
+
+plugin.prototype.associate = function(client)
+{
+	client.log.info('Registering Veto Plugin');
+
+	client.on('IS_VTN', function(pkt)
 	{
 		if (pkt.action == this.insim.VOTE_NONE)
 			return;
@@ -16,3 +24,5 @@ exports.associate = function()
 		this.send(cancel);
 	});
 }
+
+module.exports = plugin;

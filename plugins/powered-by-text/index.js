@@ -1,10 +1,14 @@
 "use strict";
 
-exports.associate = function(options)
+var plugin = function(options)
 {
-	this.log.info('Registering poweredby plugin');
+}
 
-	this.on('IS_NCN', function(pkt)
+plugin.prototype.associate = function(client)
+{
+	client.log.info('Registering poweredby plugin');
+
+	client.on('IS_NCN', function(pkt)
 	{
 		if (pkt.ucid <= 0)
 			return;
@@ -16,3 +20,5 @@ exports.associate = function(options)
 		this.send(welcome);
 	});
 }
+
+module.exports = plugin;

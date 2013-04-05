@@ -1,3 +1,5 @@
+'use strict';
+
 var _ = require('underscore');
 
 var defaults = {
@@ -8,7 +10,6 @@ var defaults = {
 	// timeout
 	countdown: 90
 };
-
 
 var plugin = function(options)
 {
@@ -25,7 +26,6 @@ plugin.prototype.associate = function(client)
 	{
 		self.count++;
 	});
-
 
 	client.on('IS_RES', function(packet)
 	{

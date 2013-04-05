@@ -49,7 +49,7 @@ var weightCars = {
 	'FZR': 30
 };
 			
-var tvDirector = function()
+var tvDirector = function(options)
 {
 	var self = this;
 
@@ -72,15 +72,15 @@ var tvDirector = function()
 	self.cooldown = 5000;
 	self.huntcooldown = 15000;
 
-	self.init = function()
+	self.associate = function()
 	{
-		this.isiFlags |= this.insim.ISF_MCI | this.insim.ISF_CON | this.insim.ISF_HLV | this.insim.ISF_LOCAL;
+		client.options.isiflags |= client.insim.ISF_MCI | client.insim.ISF_CON | client.insim.ISF_HLV | client.insim.ISF_LOCAL;
 
-		this.log.info('Registering TV');
+		client.log.info('Registering TV');
 
-		self.logger = this.log;
-		self.client = this;
-		self.insim = this.insim;
+		self.logger = client.log;
+		self.client = client;
+		self.insim = client.insim;
 
 		self.track = null;
 
@@ -88,14 +88,14 @@ var tvDirector = function()
 		self.timers.hunt = setInterval(self.hunt, self.huntcooldown);
 
 		//this.on('state:best', self.onFastest);
-		this.on('state:track', self.onTrack);
-		this.on('state:race', self.onStart);
-		this.on('IS_PLA', self.onPitLane);
-		this.on('IS_CON', self.onContact);
-		this.on('IS_FLG', self.onFlag);
-		this.on('IS_HLV', self.onInvalidLap);
-		this.on('IS_FIN', self.onFinish);
-		this.on('IS_RES', self.onFinalStanding);
+		client.on('state:track', self.onTrack);
+		client.on('state:race', self.onStart);
+		client.on('IS_PLA', self.onPitLane);
+		client.on('IS_CON', self.onContact);
+		client.on('IS_FLG', self.onFlag);
+		client.on('IS_HLV', self.onInvalidLap);
+		client.on('IS_FIN', self.onFinish);
+		client.on('IS_RES', self.onFinalStanding);
 	}
 	
 	self.term = function()
@@ -430,7 +430,4 @@ var tvDirector = function()
 	self.updateLast();
 };
 
-var director = new tvDirector;
-
-exports.associate = director.init;
-exports.term = director.term;
+module.exports = tvDirector;

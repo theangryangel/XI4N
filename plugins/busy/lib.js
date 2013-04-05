@@ -1,45 +1,47 @@
 /**
  * Very, very dumb anti-idler plugin
  */
-exports.associate = function()
+
+var plugin = function(options)
 {
-	this.log.info('Registering Busy (anti-idler) Plugin');
-
-	this.options.isiflags |= this.insim.ISF_MCI;
-
-	// Per-client state
-	// TODO - Need an API for this to stop things getting overwritten by another
-	// plugin?
-	this.idlers = {
+	self.idlers = {
 		'race': 0,
 		'changed': new Date().getTime(),
 		'warnings': []
 	};
+}
 
-	this.on('IS_STA', function(pkt)
+plugin.prototype.associate = function(client)
+{
+	var self = this;
+
+	client.log.info('Registering Busy (anti-idler) Plugin');
+	client.options.isiflags |= client.insim.ISF_MCI;
+
+	client.on('IS_STA', function(pkt)
 	{
-		if (this.idlers.race != pkt.raceinprog)
+		if (self.idlers.race != pkt.raceinprog)
 		{
-			this.idlers.race = pkt.raceinprog;
+			self.idlers.race = pkt.raceinprog;
 
 			// race started + X seconds to negate countdown
-			this.idlers.changed = (new Date().getTime()) + 20000;
+			self.idlers.changed = (new Date().getTime()) + 20000;
 		}
 	});
 
-	this.on('state:plyrnew', function(plid)
+	client.on('state:plyrnew', function(plid)
 	{
-		this.idlers.warnings[plid] = 0;
+		self.idlers.warnings[plid] = 0;
 	});
 
-	this.on('state:plyrupdate', function(plids)
+	client.on('state:plyrupdate', function(plids)
 	{
-		if (!this.idlers.race)
+		if (!self.idlers.race)
 			return;
 
 		var now = new Date().getTime();
 
-		if (this.idlers.changed >= now)
+		if (self.idlers.changed >= now)
 			return;
 
 		for (var i in plids)
@@ -55,13 +57,13 @@ exports.associate = function()
 
 			if (p.speed > 10)
 			{
-				this.idlers.warnings[plids[i]] = 0;
+				self.idlers.warnings[plids[i]] = 0;
 				continue;
 			}
 
-			this.idlers.warnings[plids[i]]++;
+			self.idlers.warnings[plids[i]]++;
 
-			if (this.idlers.warnings[plids[i]] == 10)
+			if (self.idlers.warnings[plids[i]] == 10)
 			{
 				var warn = new this.insim.IS_MTC;
 				warn.ucid = p.ucid;
@@ -69,7 +71,7 @@ exports.associate = function()
 				this.send(warn);
 			}
 			
-			if (this.idlers.warnings[plids[i]] > 20)
+			if (self.idlers.warnings[plids[i]] > 20)
 			{
 				// spectate the racer for idling
 				var spec = new this.insim.IS_MST;
@@ -80,9 +82,11 @@ exports.associate = function()
 		}
 	});
 
-	this.on('state:plyrleave', function(plid)
+	client.on('state:plyrleave', function(plid)
 	{
-		if (this.idlers.warnings[plid])
-			delete this.idlers.warnings[plid];
+		if (self.idlers.warnings[plid])
+			delete self.idlers.warnings[plid];
 	});
 }
+
+module.exports = plugin;
