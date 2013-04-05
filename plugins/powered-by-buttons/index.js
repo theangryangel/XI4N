@@ -22,8 +22,7 @@ plugin.prototype.associate = function(client)
 		welcome.t = 170;
 		welcome.w = (welcome.text.length - 2) * 1.9;
 		welcome.h = 10;
-
-		var clickid = this.buttons.add(welcome, null);
+		welcome.clickid = 1;
 
 		setTimeout(function(ctx, ucid, clickid)
 		{
@@ -31,10 +30,10 @@ plugin.prototype.associate = function(client)
 			{
 				var p = new ctx.insim.IS_BFN;
 				p.ucid = ucid;
-				p.clickid = clickid;
+				p.clickid = 1;
 				p.subt = ctx.insim.BFN_DEL_BTN;
 
-				ctx.client.send(p);
+				ctx.send(p);
 			};
 		}(this, pkt.ucid, clickid), 5000);
 	});
