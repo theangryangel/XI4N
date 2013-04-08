@@ -14,14 +14,42 @@
 				<div class="container-fluid" ng-controller="MenuCtrl">
 					<a class="brand" href="/">xi4n config tool</a>
 					<div class="nav-collapse collapse">
-			            <ul class="nav">
-            				<li><a href="/">Home</a></li>
-			            </ul>
-						<a class="btn" ng-click="plugin()" ng-disabled="!ready()"><i
-								class="icon-plus-sign"></i> Add a New Connection</a>
-						<a href="/plugin/new/" class="btn" ng-click="plugin()" ng-disabled="!ready()"><i
-								class="icon-plus-sign"></i> Add a New Plugin</a>
+						<ul class="nav">
+							<li>
+							<form class="navbar-form">
+								<div class="input-prepend" style="margin-bottom: 0;">
+									<span class="add-on"> Version: </span>
+									<input type="text" class="input-medium"
+									placeholder="*" ng-model="data.config.xi4n">
+								</div>
+							</form>
+							</li>
+						</ul>
+
 						<span class="pull-right">
+
+							<div class="btn-group">
+								<a class="btn dropdown-toggle" ng-click="plugin()" ng-disabled="!ready()"><i
+										class="icon-plus-sign"></i> Add a New Connection
+									<span class="caret"></span></a>
+								<ul class="dropdown-menu">
+									<li><a href="#">LFSWorld Relay</a></li>
+									<li><a href="insim">Insim</a></li>
+									<li><a href="outsim">Outsim</a></li>
+									<li><a href="outgauge">Outgauge</a></li>
+								</ul>
+							</div>
+							<div class="btn-group">
+								<a class="btn dropdown-toggle" ng-disabled="!ready()"><i
+										class="icon-plus-sign"></i> Add a New Plugin
+									<span class="caret"></span></a>
+								<ul class="dropdown-menu">
+									<li ng-repeat="plugin in data.plugins">
+									<a>{{plugin}}</a>
+									</li>
+								</ul>
+							</div>
+
 							<a class="btn" ng-click="load()"><i
 									class="icon-refresh"></i> Load / Reset</a>
 							<a class="btn btn-success" ng-click="save()" ng-disabled="!ready()">Save</a>
@@ -33,5 +61,6 @@
 		</div>
 
 		<div class="container-fluid" style="margin-top: 60px" ng-view>
+		</div>
 	</body>
 </html>
