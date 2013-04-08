@@ -85,6 +85,30 @@ program.command('docs')
 		xi4n.cli.docs();
 	});
 
+program.command('config')
+	.description('-> starts a web-based configuration tool/editor')
+	.action(function()
+	{
+		var target = program.args.shift();
+		if (typeof target != 'string')
+			target = '.';
+
+		target = path.resolve(target);
+
+		if (!fs.existsSync(target))
+		{
+			console.error();
+			console.error(' error: path \'%s\' does not exist', target);
+			console.error();
+			process.exit(1);
+
+			return;
+		}
+
+		xi4n.cli.config(target);
+	});
+
+
 // for those who aren't familiar with flags, just incase they try it
 program.command('help')
 	.description('-> output usage information')

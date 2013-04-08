@@ -1,0 +1,37 @@
+<!doctype html>
+<html ng-app="config">
+	<head>
+		<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.0.6/angular.min.js"></script>
+		<script src="/js/ui-bootstrap-custom-tpls-0.3.0-SNAPSHOT.min.js" type="text/javascript" charset="utf-8"></script>
+		<script src="/js/ui-bootstrap-custom-tpls-0.3.0-SNAPSHOT.min.js" type="text/javascript" charset="utf-8"></script>
+		<script src="/js/app.js"></script>
+		<link rel="stylesheet" href="/css/bootstrap.min.css" type="text/css" media="all" />
+	</head>
+	<body>
+
+		<div class="navbar navbar-inverse navbar-fixed-top">
+			<div class="navbar-inner">
+				<div class="container-fluid" ng-controller="MenuCtrl">
+					<a class="brand" href="/">xi4n config tool</a>
+					<div class="nav-collapse collapse">
+			            <ul class="nav">
+            				<li><a href="/">Home</a></li>
+			            </ul>
+						<a class="btn" ng-click="plugin()" ng-disabled="!ready()"><i
+								class="icon-plus-sign"></i> Add a New Connection</a>
+						<a href="/plugin/new/" class="btn" ng-click="plugin()" ng-disabled="!ready()"><i
+								class="icon-plus-sign"></i> Add a New Plugin</a>
+						<span class="pull-right">
+							<a class="btn" ng-click="load()"><i
+									class="icon-refresh"></i> Load / Reset</a>
+							<a class="btn btn-success" ng-click="save()" ng-disabled="!ready()">Save</a>
+							<a class="btn btn-danger" ng-click="quit()">Quit</a>
+						</span>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="container-fluid" style="margin-top: 60px" ng-view>
+	</body>
+</html>
