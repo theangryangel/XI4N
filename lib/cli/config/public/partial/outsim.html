@@ -1,0 +1,28 @@
+<div class="modal-header">
+	<h1>Create/Edit Outsim Connection</h1>
+</div>
+<div class="modal-body">
+	<div class="form-horizontal">
+
+		<div class="control-group">
+			<label class="control-label" for="port">Port</label>
+			<div class="controls">
+				<input type="text" id="port" placeholder="port"
+				ng-model="result.outsim.port">
+			</div>
+		</div>
+
+		<div class="control-group">
+			<label class="control-label" for="plugins">Plugin instances</label>
+			<div class="controls">
+
+				<select size="10" id="plugins" multiple ng-multiple="true"
+					ng-model="result.use" ng-options="p for p in plugins()"></select>
+			</div>
+		</div>
+
+	</div>
+</div>
+<div class="modal-footer">
+	<button ng-click="result.talk = 'outsim'; close(result)" class="btn btn-primary">Close</button>
+</div>

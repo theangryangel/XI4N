@@ -1,0 +1,82 @@
+<div class="modal-header">
+	<h1>Create/Edit InSim Connection</h1>
+</div>
+<div class="modal-body">
+	<div class="form-horizontal">
+
+		<div class="control-group">
+			<label class="control-label" for="host">Host</label>
+			<div class="controls">
+				<input type="text" id="host" placeholder="host"
+				ng-model="result.insim.host">
+
+				<span class="help-block">
+					Host you're connecting to. For most people this will be
+					127.0.0.1
+				</span>
+			</div>
+		</div>
+
+		<div class="control-group">
+			<label class="control-label" for="port">Port</label>
+			<div class="controls">
+				<input type="text" id="port" placeholder="port"
+				ng-model="result.insim.port">
+
+				<span class="help-block">
+					Port number that InSim is running on
+				</span>
+			</div>
+		</div>
+
+		<div class="control-group">
+			<label class="control-label" for="udpport">UDP Port</label>
+			<div class="controls">
+				<input type="text" id="udpport" placeholder="udpport"
+				ng-model="result.insim.udpport">
+
+				<span class="help-block">
+					If you have a plugin that uses Outgauge or Outsim in
+					conjunction with InSim, you need to set this port
+				</span>
+			</div>
+		</div>
+
+		<div class="control-group">
+			<label class="control-label" for="admin">Admin password</label>
+			<div class="controls">
+				<input type="text" id="admin" placeholder="admin"
+				ng-model="result.insim.admin">
+			</div>
+		</div>
+
+		<div class="control-group">
+			<label class="control-label" for="prefix">Prefix</label>
+			<div class="controls">
+				<input type="text" id="prefix" placeholder="prefix"
+				ng-model="result.insim.prefix">
+
+				<span class="help-block">
+					Special host message prefix character
+				</span>
+			</div>
+		</div>
+
+		<div class="control-group">
+			<label class="control-label" for="plugins">Plugin instances</label>
+			<div class="controls">
+
+				<select size="10" id="plugins" multiple ng-multiple="true"
+					ng-model="result.use" ng-options="p for p in plugins()"></select>
+
+				<span class="help-block">
+					Plugins you want to run against this connection
+				</span>
+			</div>
+		</div>
+
+	</div>
+</div>
+<div class="modal-footer">
+	<button ng-click="result.talk = 'insim'; close(result)" class="btn btn-primary" >Close</button>
+</div>

@@ -1,0 +1,61 @@
+<div class="modal-header">
+	<h1>Create/Edit Relay Connection</h1>
+</div>
+<div class="modal-body">
+	<div class="form-horizontal">
+
+		<div class="control-group">
+			<label class="control-label" for="host">Host</label>
+			<div class="controls">
+				<input type="text" id="host" placeholder="host"
+				ng-model="result.relay.host">
+
+				<span class="help-block">
+					Host you want to connect to
+				</span>
+			</div>
+		</div>
+
+		<div class="control-group">
+			<label class="control-label" for="admin">Admin password</label>
+			<div class="controls">
+				<input type="text" id="admin" placeholder="admin"
+				ng-model="result.relay.admin">
+
+				<span class="help-block">
+					If you want to do administrative stuff, you need to fill
+					this out
+				</span>
+			</div>
+		</div>
+
+		<div class="control-group">
+			<label class="control-label" for="spectate">Spectator password</label>
+			<div class="controls">
+				<input type="text" id="spectate" placeholder="spectate"
+				ng-model="result.relay.spectate">
+
+				<span class="help-block">
+					Host may require a spectators password, if so fill this in
+				</span>
+			</div>
+		</div>
+
+		<div class="control-group">
+			<label class="control-label" for="plugins">Plugin instances</label>
+			<div class="controls">
+
+				<select size="10" id="plugins" multiple ng-multiple="true"
+					ng-model="result.use" ng-options="p for p in plugins()"></select>
+
+				<span class="help-block">
+					Plugin instances you want to run against this connection
+				</span>
+			</div>
+		</div>
+
+	</div>
+</div>
+<div class="modal-footer">
+	<button ng-click="result.talk = 'relay'; close(result)" class="btn btn-primary" >Close</button>
+</div>

@@ -33,10 +33,11 @@
 										class="icon-plus-sign"></i> Add a New Connection
 									<span class="caret"></span></a>
 								<ul class="dropdown-menu">
-									<li><a href="#">LFSWorld Relay</a></li>
-									<li><a href="insim">Insim</a></li>
-									<li><a href="outsim">Outsim</a></li>
-									<li><a href="outgauge">Outgauge</a></li>
+									<li><a ng-click="openDialog('/partial/relay.html')">LFSWorld Relay</a></li>
+									<li><a ng-click="openDialog('/partial/insim.html')">Insim</a></li>
+									<li><a ng-click="openDialog('/partial/outsim.html')">Outsim</a></li>
+									<li><a
+										ng-click="openDialog('/partial/outgauge.html')">Outgauge</a></li>
 								</ul>
 							</div>
 							<div class="btn-group">
