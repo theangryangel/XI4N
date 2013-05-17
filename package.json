@@ -1,6 +1,6 @@
 {
 	"name": "xi4n",
-	"version": "0.1.0",
+	"version": "0.1.0-unstable",
 	"author": "the_angry_angel <karl@theangryangel.co.uk>",
 	"contributors": [ 
 		{
@@ -14,7 +14,7 @@
 	},
 	"bugs": "https://github.com/theangryangel/XI4N/issues",
 	"bin": {
-		"xi4n": "./bin/xi4n"
+		"xi4n": "./bin/xi4n.js"
 	},
 	"main": "./index",
 	"keywords": [
@@ -28,7 +28,7 @@
 		"bufferlist": "latest",
 		"jspack-buffer": "https://github.com/theangryangel/jspack-buffer/tarball/master",
 		"js-yaml": "latest",
-		"winston": ">=0.6.2",
+		"winston": "latest",
 		"commander": "1.x.x",
 		"underscore": "latest",
 		"fs-extra": "latest",
