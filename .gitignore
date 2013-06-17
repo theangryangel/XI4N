@@ -9,7 +9,7 @@ lib-cov
 *.log
 *.swp
 *.bak
-config.yaml
+/config.yaml
 .DS_STORE
 Thumbs.db
 Desktop.ini
@@ -17,3 +17,4 @@ node_modules
 hillclimb.db
 user.db
 docs/output/
+build/
