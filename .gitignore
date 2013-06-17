@@ -17,4 +17,3 @@ node_modules
 hillclimb.db
 user.db
 docs/output/
-build/
