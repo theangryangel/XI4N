@@ -46,7 +46,7 @@
 									<span class="caret"></span></a>
 								<ul class="dropdown-menu">
 									<li ng-repeat="plugin in data.plugins">
-									<a>{{plugin}}</a>
+										<a ng-click="addPlugin(plugin)">{{plugin}}</a>
 									</li>
 								</ul>
 							</div>
