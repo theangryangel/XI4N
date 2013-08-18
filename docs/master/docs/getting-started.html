@@ -1,0 +1,123 @@
+
+
+<!doctype html>
+<html>
+<head>
+    <title></title>
+    <link href="../assets/css/styles.css" rel="stylesheet">
+    <script src="../assets/js/intro.min.js" type="text/javascript" charset="utf-8"></script>
+</head>
+<body>
+<div id="wrapper">
+	<nav>	
+		<dl>
+            <dt><a href="../index.html">xi4n - 0.1.0-unstable</a></dt>
+            <dd><a href="../index.html">What?</a></dd>
+            <dt><a href="../docs/getting-started.html">Getting started</a></dt>
+                <dd><a href="../docs/getting-started.html#getting-started-tlwr">Too Lazy; Won't Read?</a></dd>
+                <dd><a href="../docs/getting-started.html#getting-started-first">Stuff you need first</a></dd>
+				<dd><a href="../docs/getting-started.html#getting-started-install">Installing</a></dd>
+				<dd><a href="../docs/getting-started.html#getting-started-create-config">Creating a
+				configuration</a></dd>
+				<dd><a href="../docs/getting-started.html#getting-started-run-config">Running the configuration</a></dd>
+				<dd><a href="../docs/getting-started.html#getting-started-now-what">Where to go next?</a></dd>
+				<dd><a href="../docs/getting-started.html#getting-started-upgrading">Upgrading to newer
+				versions</a></dd>
+			<dt><a href="../docs/plugins.html#plugins">Plugins? Plugins!</a></dt>
+				<dd><a href="../docs/plugins.html#plugins-what">What?</a></dd>
+				<dd><a href="../docs/plugins.html#plugins-included">Included plugins</a></dd>
+				<dd><a href="../docs/plugins.html#plugins-writing">Writing plugins</a></dd>
+			<dt><a href="../docs/config.html#config">Configuration File Anatomy</a></dt>
+				<dd><a href="../docs/config.html#config-yaml">YAML?</a></dd>
+				<dd><a href="../docs/config.html#config-tour">Tour</a></dd>
+				<dd><a href="../docs/config.html#config-reference">Reference</a></dd>
+			<dt><a href="../docs/library.html#library">Library usage</a></dt>
+				<dd><a href="../docs/library.html#library-api">API</a></dd>
+		</dl>
+	</nav>
+
+    <div id="contentWrapper">
+        	<article id="getting-started">
+            <h1>Getting started</h1>
+            <h2 id="getting-started-tlwr">Too Lazy; Won't Read? <small>gifs with sound!1one</small></h2>
+            <p>Too lazy to read? We've got a setup video for 0.1.0.</p>
+            <p><strong>TODO</strong></p>
+
+			<h2 id="getting-started-first">Stuff you need first</h2>
+			<ul>
+				<li>A working LFS dedicated server, or LFS client installation</li>
+				<li>A working <a href="http://nodejs.org/">nodejs</a> installation</li>
+				<li>A text editor</li>
+				<li>And finally, if you wish to write plugins, familiarity with Javascript and its idiocracies</li>
+			</ul>
+			<h2 id="getting-started-install">Installing</h2>
+			<ol>
+				<li>Ensure that you've met the <a href="#getting-started-first">prerequisites</a></li>
+				<li>From a command line interface run (on Windows that's cmd, on
+				OSX Terminal, and on Linux you probably already know): <pre
+				data-type="bash"><code>npm install xi4n -g</code></pre></li>
+				<li>If everything went successfully, you will now be able to run
+				<pre><code>xi4n --help</code></pre> from a command line interface</li>
+				<li>Congratulate yourself on a job well done</li>
+			</ol>
+			<h2 id="getting-started-create-config">Creating a configuration</h2>
+			<p>The configuration is important. Without a configuration xi4n sits
+			there and does nothing. With a configuration you can tell xi4n what
+			to do and where to do it.</p>
+			<ol>
+				<li>The first step is to create a configuration and plugin
+				directory. This is where your custom configuration and
+				plugins will live. Run
+				<pre><code>xi4n init test</code></pre></li>
+				<li>You should now see a directory called test Head in there and
+				you should find config.yaml, a plugins directory and a README
+				file.
+				</li>
+			</ol>
+			<p>Go and checkout config.yaml and the plugins directory. The
+			default configuration connects to your local system, on port 29999,
+			with no admin password. If this doesn't match what you're intending
+			to do, go and edit the file as appropriate.</p>
+			<h2 id="getting-started-run-config">Running the configuration</h2>
+			<ol>
+				<li>First we need to start an instance of LFS and enable InSim
+				<ul>
+					<li>For a server the easiest thing to do is to edit your server's .cfg file and set the /insim port and /admin password. Ensure that the line are not commented out. 29999 is the default InSim port. You MUST set the admin password as well</li>
+					<li>For a client you can either add /insim=29999 as a
+					argument to the LFS shortcut/executable or open a chat prompt when running LFS, and type "/insim=29999". 29999 is the default port for InSim, but you may type anything greater than 1024 and less than 65335, and as long as it's not in use it should be fine</li>
+				</ul>
+				</li>
+				<li>Now start xi4n
+				<pre><code>xi4n start test</code></pre> (If
+				you're already in the directory of your xi4n config, you can
+				skip the directory name, or if you're far away from it you can
+				specify the absolute path! In this instance 'test' is the
+				directory.)</li>
+				<li>Enjoy your xi4n instance. If you want to quit out xi4n prematurely press ctrl+c to close it</li>
+			</ol>
+			<h2 id="getting-started-now-what">Where to go next?</h2>
+			<p>Out of the box, the default configuration does very little. It's
+			entirely upto you what you do. If you're planning on writing your
+			own plugins checkout the docs on <a href="#plugins-writing">writing plugins</a>
+			below.</p>
+			<p>If you just want to use a plugin, you probably want to read up on
+			the <a href="#config">configuration file</a> and the <a
+				href="#plugins-included">included plugins</a>.</p>
+
+			<h2 id="getting-started-upgrading">Upgrading to newer versions
+			<small>We try not to break stuff, but sometimes it has to happen for
+			progress</small></h2>
+			<p>Prior to 0.1.0 xi4n was architecturally very different. If you're
+			running an older version I highly recommend creating a new
+			configuration and porting across your settings.</p>
+			<p>Upgrading between versions >=0.1.0 should be a lot easier, simply
+			just a case of running the following in a command line interface,
+			and restarting xi4n.</p>
+			<pre data-type="bash"><code>npm upgrade xi4n -g</code></pre>
+			</article>
+
+
+	</div>
+</body>
+</html>
+<!-- vim: set ts=4 sw=4 tw=80 expandtab :-->

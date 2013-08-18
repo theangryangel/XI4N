@@ -1,0 +1,149 @@
+
+
+<!doctype html>
+<html>
+<head>
+    <title></title>
+    <link href="../assets/css/styles.css" rel="stylesheet">
+    <script src="../assets/js/intro.min.js" type="text/javascript" charset="utf-8"></script>
+</head>
+<body>
+<div id="wrapper">
+	<nav>	
+		<dl>
+            <dt><a href="../index.html">xi4n - 0.1.0-unstable</a></dt>
+            <dd><a href="../index.html">What?</a></dd>
+            <dt><a href="../docs/getting-started.html">Getting started</a></dt>
+                <dd><a href="../docs/getting-started.html#getting-started-tlwr">Too Lazy; Won't Read?</a></dd>
+                <dd><a href="../docs/getting-started.html#getting-started-first">Stuff you need first</a></dd>
+				<dd><a href="../docs/getting-started.html#getting-started-install">Installing</a></dd>
+				<dd><a href="../docs/getting-started.html#getting-started-create-config">Creating a
+				configuration</a></dd>
+				<dd><a href="../docs/getting-started.html#getting-started-run-config">Running the configuration</a></dd>
+				<dd><a href="../docs/getting-started.html#getting-started-now-what">Where to go next?</a></dd>
+				<dd><a href="../docs/getting-started.html#getting-started-upgrading">Upgrading to newer
+				versions</a></dd>
+			<dt><a href="../docs/plugins.html#plugins">Plugins? Plugins!</a></dt>
+				<dd><a href="../docs/plugins.html#plugins-what">What?</a></dd>
+				<dd><a href="../docs/plugins.html#plugins-included">Included plugins</a></dd>
+				<dd><a href="../docs/plugins.html#plugins-writing">Writing plugins</a></dd>
+			<dt><a href="../docs/config.html#config">Configuration File Anatomy</a></dt>
+				<dd><a href="../docs/config.html#config-yaml">YAML?</a></dd>
+				<dd><a href="../docs/config.html#config-tour">Tour</a></dd>
+				<dd><a href="../docs/config.html#config-reference">Reference</a></dd>
+			<dt><a href="../docs/library.html#library">Library usage</a></dt>
+				<dd><a href="../docs/library.html#library-api">API</a></dd>
+		</dl>
+	</nav>
+
+    <div id="contentWrapper">
+                   <article id="library">
+                <h1>Library usage <small>xi4n can be used as a library, not just
+                        as a platform!</small></h1>
+                <p>Sometimes using xi4n as a platform isn't ideal, it can be limiting
+                and restrictive in some instances.</p>
+                <p>Simply specify xi4n as a dependency in your package.json and
+                npm install as you would normally, then in your code
+                require('xi4n');</p>
+                <h2 id="library-api">API</h2>
+                <p>If you're planning on using xi4n as a library, honestly I
+                highly recommend reading the source of the xi4n code. xi4n
+                itself is using the same modules that you can require(), thus
+                it's always going to be the most up to date repository of
+                information.</p>
+                <p>Now with that out of the way, require'ing xi4n will result in
+                the following;</p>
+                <pre data-type="javascript"><code>var xi4n = require('xi4n');
+// <a href="#library-protocols">xi4n.protocols</a>
+// <a href="#library-strings">xi4n.strings</a>
+// <a href="#library-product">xi4n.product</a>
+// <a href="#library-data">xi4n.data</a></code></pre>
+
+                <h3 id="library-protocols">xi4n.protocols</h3>
+                <h4>xi4n.protocol.insim <small>xi4n.protocol.insim(options, log)</small></h4>
+                <p>Creates an instance of an insim client.</p>
+
+                <h4>xi4n.protocol.outsim <small>xi4n.protocol.outsim(options, log)</small></h4>
+                <p>Creates an instance of an outsim client.</p>
+
+                <h4>xi4n.protocol.outgauge <small>xi4n.protocol.outgauge(options, log)</small></h4>
+                <p>Creates an instance of an outgauge client.</p>
+
+                <h4>xi4n.protocol.relay <small>xi4n.protocol.relay(options, log)</small></h4>
+                <p>Creates an instance of an relay client.</p>
+
+                <h3 id="library-strings">xi4n.strings</h3>
+                <h4>xi4n.strings</h4>
+
+                <h3 id="library-product">xi4n.product</h3>
+                <h4>xi4n.product.version</h4>
+                <p>Returns the semver (semantic version) of xi4n.</p>
+
+                <h4>xi4n.product.full</h4>
+                <p>Returns the full name (name-version) of xi4n.</p>
+
+                <h3 id="library-data">xi4n.data</h3>
+                <h4>xi4n.data.pth.get <small>xi4n.data.pth.get(trackname)</small></h4>
+                <p>Returns a JSON encoded pth file.</p>
+
+                <h4>xi4n.data.track.all <small>xi4n.data.track.all</small></h4>
+                <p>Returns a JSON array of all tracks. Each array item is in the
+                following format;</p>
+                <pre><code>{ short: 'AS7', long: 'Aston North', km: 5.168,
+mi: 3.211, grid: 32, s1: false, s2: true, demo: false, 
+reversible: true }</code></pre>
+
+                <h4>xi4n.data.track.findBy
+                    <small>xi4n.data.track.findBy(criteria)</small></h4>
+                <p>Returns an array of all tracks that match the criteria.</p>
+                <p>The criteria is a callback function. For example to return
+                all tracks with a distance <= 2 miles;</p>
+                <pre><code>xi4n.data.track.findBy(function(i) { return i.mi <= 2; });</code></pre>
+
+                <h4>xi4n.data.track.countBy
+                    <small>xi4n.data.track.countBy(criteria)</small></h4>
+                <p>Returns a count of all tracks that match the criteria.</p>
+                <p>The criteria is a callback function. For example to return
+                a count of all tracks with a distance <= 2 miles;</p>
+                <pre><code>xi4n.data.track.countBy(function(i) { return i.mi <= 2; });</code></pre>
+
+                <h4>xi4n.data.track.randomOneBy
+                    <small>xi4n.data.track.randomOneBy(criteria)</small></h4>
+                <p>Returns 1 random item of all tracks that match the criteria.</p>
+                <p>The criteria is a callback function. For example to return
+                a single track from any track with a distance <= 2 miles;</p>
+                <pre><code>xi4n.data.track.randomOneBy(function(i) { return i.mi <= 2; });</code></pre>
+
+                <h4>xi4n.data.vehicle</h4>
+                <h4>xi4n.data.vehicle.all <small>xi4n.data.vehicle.all</small></h4>
+                <p>Returns a JSON array of all vehicles. Each array item is in the
+                following format;</p>
+                <pre><code>{ short: 'FZR', long: 'FZ50 GTR', layout: 'Race', drive: 'RWD', kw: 465, bhp: 490, kg: 110, lb: 2425, demo: false, s1: false, s2: true }</code></pre>
+
+                <h4>xi4n.data.vehicle.findBy
+                    <small>xi4n.data.vehicle.findBy(criteria)</small></h4>
+                <p>Returns an array of all vehicles that match the criteria.</p>
+                <p>The criteria is a callback function. For example to return
+                all vehicles with a bhp <= 55</p>
+                <pre><code>xi4n.data.vehicle.findBy(function(i) { return i.bhp <= 55; });</code></pre>
+
+                <h4>xi4n.data.vehicle.countBy
+                    <small>xi4n.data.vehicle.countBy(criteria)</small></h4>
+                <p>Returns a count of all vehicles that match the criteria.</p>
+                <p>The criteria is a callback function. For example to return
+                a count of all vehicles with a bhp <= 55;</p>
+                <pre><code>xi4n.data.vehicle.findBy(function(i) { return i.bhp <= 55; });</code></pre>
+
+                <h4>xi4n.data.vehicle.randomOneBy
+                    <small>xi4n.data.vehicle.randomOneBy(criteria)</small></h4>
+                <p>Returns 1 random item of all vehicles that match the criteria.</p>
+                <p>The criteria is a callback function. For example to return
+                a single vehicle from any vehicle with a bhp <= 55;</p>
+                <pre><code>xi4n.data.vehicle.findBy(function(i) { return i.bhp <= 55; });</code></pre>
+
+			</article>
+
+	</div>
+</body>
+</html>
+<!-- vim: set ts=4 sw=4 tw=80 expandtab :-->

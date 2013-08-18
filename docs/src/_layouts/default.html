@@ -1,0 +1,44 @@
+{% capture lvl %}{{ page.url | append:'index.html' | split:'/' | size }}{% endcapture %}
+{% capture relative %}{% for i in (3..lvl) %}../{% endfor %}{% endcapture %}
+<!doctype html>
+<html>
+<head>
+    <title>{{ site.title }}</title>
+    <link href="{{ relative }}assets/css/styles.css" rel="stylesheet">
+    <script src="{{ relative }}assets/js/intro.min.js" type="text/javascript" charset="utf-8"></script>
+</head>
+<body>
+<div id="wrapper">
+	<nav>	
+		<dl>
+            <dt><a href="{{ relative }}index.html">xi4n - {% xi4n_version %}</a></dt>
+            <dd><a href="{{ relative }}index.html">What?</a></dd>
+            <dt><a href="{{ relative }}docs/getting-started.html">Getting started</a></dt>
+                <dd><a href="{{ relative }}docs/getting-started.html#getting-started-tlwr">Too Lazy; Won't Read?</a></dd>
+                <dd><a href="{{ relative }}docs/getting-started.html#getting-started-first">Stuff you need first</a></dd>
+				<dd><a href="{{ relative }}docs/getting-started.html#getting-started-install">Installing</a></dd>
+				<dd><a href="{{ relative }}docs/getting-started.html#getting-started-create-config">Creating a
+				configuration</a></dd>
+				<dd><a href="{{ relative }}docs/getting-started.html#getting-started-run-config">Running the configuration</a></dd>
+				<dd><a href="{{ relative }}docs/getting-started.html#getting-started-now-what">Where to go next?</a></dd>
+				<dd><a href="{{ relative }}docs/getting-started.html#getting-started-upgrading">Upgrading to newer
+				versions</a></dd>
+			<dt><a href="{{ relative }}docs/plugins.html#plugins">Plugins? Plugins!</a></dt>
+				<dd><a href="{{ relative }}docs/plugins.html#plugins-what">What?</a></dd>
+				<dd><a href="{{ relative }}docs/plugins.html#plugins-included">Included plugins</a></dd>
+				<dd><a href="{{ relative }}docs/plugins.html#plugins-writing">Writing plugins</a></dd>
+			<dt><a href="{{ relative }}docs/config.html#config">Configuration File Anatomy</a></dt>
+				<dd><a href="{{ relative }}docs/config.html#config-yaml">YAML?</a></dd>
+				<dd><a href="{{ relative }}docs/config.html#config-tour">Tour</a></dd>
+				<dd><a href="{{ relative }}docs/config.html#config-reference">Reference</a></dd>
+			<dt><a href="{{ relative }}docs/library.html#library">Library usage</a></dt>
+				<dd><a href="{{ relative }}docs/library.html#library-api">API</a></dd>
+		</dl>
+	</nav>
+
+    <div id="contentWrapper">
+        {{ content }}
+	</div>
+</body>
+</html>
+<!-- vim: set ts=4 sw=4 tw=80 expandtab :-->
