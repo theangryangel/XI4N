@@ -30,7 +30,8 @@
 						<span class="pull-right">
 
 							<div class="btn-group">
-								<a class="btn dropdown-toggle" ng-click="plugin()" ng-disabled="!ready()"><i
+								<a class="btn dropdown-toggle"
+									ng-click="plugin()"><i
 										class="icon-plus-sign"></i> Add a New Connection
 									<span class="caret"></span></a>
 								<ul class="dropdown-menu">
@@ -42,19 +43,19 @@
 								</ul>
 							</div>
 							<div class="btn-group">
-								<a class="btn dropdown-toggle" ng-disabled="!ready()"><i
+								<a class="btn dropdown-toggle"><i
 										class="icon-plus-sign"></i> Add a New Plugin
 									<span class="caret"></span></a>
 								<ul class="dropdown-menu">
-									<li ng-repeat="plugin in data.plugins">
-										<a ng-click="addPlugin(plugin)">{{plugin}}</a>
-									</li>
+									<li ng-repeat="plugin in plugins">
+										<a ng-click="addPlugin(plugin)">{{plugin.path}}</a>
+										</li>
+									<li class="divider"></li>
+									<li><a ng-click="load()"> <i
+											class="icon-refresh"></i> Refresh</a></li>
 								</ul>
 							</div>
 
-							<a class="btn" ng-click="load()"><i
-									class="icon-refresh"></i> Load / Reset</a>
-							<a class="btn btn-success" ng-click="save()" ng-disabled="!ready()">Save</a>
 							<a class="btn btn-danger" ng-click="quit()">Quit</a>
 						</span>
 					</div>
