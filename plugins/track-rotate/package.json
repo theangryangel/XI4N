@@ -1,0 +1,9 @@
+{
+	"name": "track-rotate"
+	"version": "0.0.1",
+	"main": "./index.js",
+	"engine": {
+		"node": ">=0.4"
+	}
+}
+

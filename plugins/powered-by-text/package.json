@@ -1,0 +1,9 @@
+{
+	"name": "xi4n-powered-by-text"
+	"version": "0.0.1",
+	"main": "./index.js",
+	"engine": {
+		"node": ">=0.4"
+	}
+}
+

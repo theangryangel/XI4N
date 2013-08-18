@@ -1,0 +1,9 @@
+{
+	"name": "tv"
+	"version": "0.0.1",
+	"main": "./tv.js",
+	"engine": {
+		"node": ">=0.4"
+	}
+}
+
