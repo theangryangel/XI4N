@@ -1,0 +1,7 @@
+.gitignore
+.npmignore
+
+README.md
+config.yaml
+build/
+tests/
