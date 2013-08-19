@@ -21,7 +21,8 @@
 								<div class="input-prepend" style="margin-bottom: 0;">
 									<span class="add-on"> Version: </span>
 									<input type="text" class="input-medium"
-									placeholder="*" ng-model="version">
+									placeholder="*" ng-model="version"
+									ng-change="versionChange()" ng-model-onblur>
 								</div>
 							</form>
 							</li>
@@ -35,11 +36,10 @@
 										class="icon-plus-sign"></i> Add a New Connection
 									<span class="caret"></span></a>
 								<ul class="dropdown-menu">
-									<li><a ng-click="openDialog('/partial/relay.html')">LFSWorld Relay</a></li>
-									<li><a ng-click="openDialog('/partial/insim.html')">Insim</a></li>
-									<li><a ng-click="openDialog('/partial/outsim.html')">Outsim</a></li>
-									<li><a
-										ng-click="openDialog('/partial/outgauge.html')">Outgauge</a></li>
+									<li><a>LFSWorld Relay</a></li>
+									<li><a>Insim</a></li>
+									<li><a>Outsim</a></li>
+									<li><a>Outgauge</a></li>
 								</ul>
 							</div>
 							<div class="btn-group">
