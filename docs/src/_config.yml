@@ -2,4 +2,4 @@ site:
   name: xi4n Documentation
 markdown: redcarpet
 pygments: true
-destination: ../master
+destination: ../build
