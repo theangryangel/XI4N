@@ -1,6 +1,6 @@
 .gitignore
 .npmignore
-
+Makefile
 README.md
 config.yaml
 build/
