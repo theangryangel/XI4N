@@ -16,5 +16,7 @@ Desktop.ini
 node_modules
 hillclimb.db
 user.db
-docs/build/
+docs/_build/
+docs/_themes/
+_build/
 build/
