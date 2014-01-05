@@ -9,9 +9,9 @@ Designed to be used in conjunction with a tablet or smart phone.
 ================ ====
 Capability       Y/N
 ================ ====
-InSim            Y
-OutSim           N
-OutGauge         Y
+Insim            Y
+Outsim           N
+Outgauge         Y
 LFSW Relay       N
 Options          Y
 Multi-connection N

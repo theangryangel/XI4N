@@ -1,7 +1,7 @@
-InSIm
+Insim
 =====
 
-Supporting pure InSim connections over both TCP and UDP. It also supports outsim
+Supporting pure Insim connections over both TCP and UDP. It also supports outsim
 and outgauge packets when setup via insim (can be done by one or more plugins).
 
 Talk

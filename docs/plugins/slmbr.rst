@@ -1,14 +1,14 @@
 slmbr
 =====
 
-A joke InSim application, that rewards players for not moving.
+A joke Insim application, that rewards players for not moving.
 
 ================ ====
 Capability       Y/N
 ================ ====
-InSim            Y
-OutSim           N
-OutGauge         N
+Insim            Y
+Outsim           N
+Outgauge         N
 LFSW Relay       Y
 Options          Y
 Multi-connection Y

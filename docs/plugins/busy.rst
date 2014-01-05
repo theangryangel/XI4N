@@ -6,9 +6,9 @@ An anti-idler plugin.
 ================ ====
 Capability       Y/N
 ================ ====
-InSim            Y
-OutSim           N
-OutGauge         N
+Insim            Y
+Outsim           N
+Outgauge         N
 LFSW Relay       Y
 Options          N
 Multi-connection N

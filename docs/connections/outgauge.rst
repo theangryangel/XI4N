@@ -1,4 +1,4 @@
-OutGauge
+Outgauge
 ======
 
 Talk

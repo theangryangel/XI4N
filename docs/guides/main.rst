@@ -36,7 +36,7 @@ The idea is that each directory is self contained and allows you to separate out
 your configurations easily.
 
 However, don't think that this means that it's 1 configuration directory per
-InSim, OutSim, Outgauge or LFS World Relay connection. xi4n supports multiple
+Insim, Outsim, Outgauge or LFS World Relay connection. xi4n supports multiple
 connections at the same time, to multiple different servers, regardless of type.
 This means you can have 1 configuration file that connects to multiple LFS
 installations and share or pass data between them.
@@ -49,7 +49,7 @@ installations and share or pass data between them.
     * A file called ``config.yaml`` which contains the default configuration
     * A directory called ``plugins`` which by default will be empty. Your custom plugins will go in here.
 
-    By default ``config.yaml`` will connect to a LFS instance running InSim on port
+    By default ``config.yaml`` will connect to a LFS instance running Insim on port
     29999, on localhost with no admin password. It will load the state plugin which
     is a default plugin that whilst not required makes life easier for other
     plugins, and is frequently used.

@@ -2,8 +2,8 @@ LFS World Relay
 ===============
 
 The LFS World Relay is operated by the LFS developers, and allows one or more
-InSim applications to connect to a LFS dedicated host, without having to
-directly open InSim to the world.
+Insim applications to connect to a LFS dedicated host, without having to
+directly open Insim to the world.
 
 Talk
 ----

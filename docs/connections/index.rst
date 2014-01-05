@@ -16,14 +16,14 @@ Types of connection
 
 There are several types of connection that xi4n currently supports:
 
-* :doc:`insim`: Supporting pure InSim connections over both TCP and UDP. It also
+* :doc:`insim`: Supporting pure Insim connections over both TCP and UDP. It also
   supports outsim and outgauge packets when setup via insim.
 
-* :doc:`outsim`: Supporting pure OutSim connections over UDP.
+* :doc:`outsim`: Supporting pure Outsim connections over UDP.
 
-* :doc:`outgauge`: Supporting pure OutGauge connections over UDP.
+* :doc:`outgauge`: Supporting pure Outgauge connections over UDP.
 
-* :doc:`relay`: InSim connections, via the LFS World Relay, when direct InSim is
+* :doc:`relay`: Insim connections, via the LFS World Relay, when direct Insim is
   not permitted.
 
 Configuring a connection

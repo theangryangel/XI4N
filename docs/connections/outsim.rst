@@ -1,8 +1,8 @@
-OutSim
+Outsim
 ======
 
 .. WARNING::
-    OutSim support has not been extensively tested.
+    Outsim support has not been extensively tested.
     Please be aware of this BEFORE you hook up to any motion simulators/other
     devices.
 

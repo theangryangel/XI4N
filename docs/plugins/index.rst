@@ -2,7 +2,7 @@ Plugins
 =======
 
 Plugins extend xi4n's core functionality, which is effectively to do nothing
-except maintain a connection to your chosen InSim, OutSim, Outgauge or LFS World
+except maintain a connection to your chosen Insim, Outsim, Outgauge or LFS World
 Relay server.
 
 Luckily xi4n both ships with some pre-made plugins and also has the capability
@@ -36,7 +36,7 @@ To add a second plugin you'd do something like this:
 
 To active a plugin for a connection, you add the plugin's alias to the list of
 plugins against the connection. For example, to add both `your-plugin-name` and
-`your-plugin-name-2` to an InSim connection, talking to localhost, via TCP on
+`your-plugin-name-2` to an Insim connection, talking to localhost, via TCP on
 port 29999, and outputs errors to the console, you should have a configuration
 that looks something like this:
 
@@ -79,7 +79,7 @@ appropriate page to make sure that you configure each correctly.
 * :doc:`powered-by-text`: A small example plugin, that shows how to display text when someone connects to a server.
 * :doc:`powered-by-buttons`: A small example plugin, that shows how to display a button that auto-hides when someone connects to a server.
 * :doc:`state`: A "meta" plugin that maintains a definition of the current state of LFS including players, connections and server state (weather, track, etc.) - many plugins will probably depend on this, typically you will most likely be asked to add the plugin, but do nothing else with it.
-* :doc:`slmbr`: A joke InSim application, that rewards players for not moving.
+* :doc:`slmbr`: A joke Insim application, that rewards players for not moving.
 * :doc:`tv`: A Work In Progress automatic TV director.
 
 Other Plugins

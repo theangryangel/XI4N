@@ -6,9 +6,9 @@ A "meta" plugin that maintains a definition of the current state of LFS includin
 ================ ====
 Capability       Y/N
 ================ ====
-InSim            Y
-OutSim           N
-OutGauge         N
+Insim            Y
+Outsim           N
+Outgauge         N
 LFSW Relay       Y
 Options          N
 Multi-connection Y

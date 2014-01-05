@@ -7,9 +7,9 @@ of racers (in real time).
 ================ ====
 Capability       Y/N
 ================ ====
-InSim            Y
-OutSim           N
-OutGauge         N
+Insim            Y
+Outsim           N
+Outgauge         N
 LFSW Relay       Y
 Options          Y
 Multi-connection Y

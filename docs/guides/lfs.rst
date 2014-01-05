@@ -20,11 +20,11 @@ Installing & Running
     I won't go through the exact details, however there is a handy wiki page on
     `_LFS Manual - Hosting`.
 
-Configuring InSim
+Configuring Insim
 ^^^^^^^^^^^^^^^^^
 
 1. Open your dedicated server applicable cfg file, and set `/insim 29999`. Then
-   save. Make a note of your `/admin` value. InSim uses this password to
+   save. Make a note of your `/admin` value. Insim uses this password to
    connect.
 
 2. Restart your LFS dedicated server.
@@ -34,10 +34,10 @@ Configuring InSim
     configuration file denotes a **comment**. This means that line is ignored.
     If you want the line to be acted on by LFS it **must** only have one slash.
 
-Configuring OutSim
+Configuring Outsim
 ^^^^^^^^^^^^^^^^^^
 
-You can't for a dedicated server. OutSim is client side only.
+You can't for a dedicated server. Outsim is client side only.
 
 Configuring Outgauge
 ^^^^^^^^^^^^^^^^^^^^
@@ -71,12 +71,12 @@ That said, here are the basics:
 4. It should now ask you to unlock LFS. Do so using the account name and GAME
    password you setup on `LFS.net`_.
 
-Configuring InSim
+Configuring Insim
 ^^^^^^^^^^^^^^^^^
 
 1. With the game running you can press `t` to open a chat dialog box. 
 
-2. Type `/insim 29999`. This starts InSim on port 29999. If you receive a `bind
+2. Type `/insim 29999`. This starts Insim on port 29999. If you receive a `bind
    failed` error message you will need to use a different port. Remember this
    port number as you will need to config xi4n to use it later.
 
@@ -84,59 +84,59 @@ Configuring InSim
 
 .. HINT::
     You can actually call ``LFS.exe`` with various arguments, including the one
-    to start InSim. This allows you to create a custom shortcut that auto-starts
-    InSim everytime you start LFS. For example: ``LFS.exe /insim 29999``.
+    to start Insim. This allows you to create a custom shortcut that auto-starts
+    Insim everytime you start LFS. For example: ``LFS.exe /insim 29999``.
     You could even go a step further and create a script that starts LFS first
     then starts xi4n. You're on your own to figure that out, although it's not
     tricky.
 
-Configuring OutSim
+Configuring Outsim
 ^^^^^^^^^^^^^^^^^^
 
-OutSim can be started one of two ways. Either via InSim, which your InSim
+Outsim can be started one of two ways. Either via Insim, which your Insim
 program must know to do, or via `cfg.txt` which can be found in your LFS
 installation directory.
 
 .. HINT::
-    If you want to use InSim at the same time as OutSim, then you probably want
-    to setup OutSim via InSim rather than via `cfg.txt` as you will get both
+    If you want to use Insim at the same time as Outsim, then you probably want
+    to setup Outsim via Insim rather than via `cfg.txt` as you will get both
     sets of packets from a single connection, rather than on 2 different
     connections - which will make writing custom plugins much, much easier.
-    However, if you only want OutSim, then there is nothing wrong with using
+    However, if you only want Outsim, then there is nothing wrong with using
     either.
 
-To enable OutSim via `cfg.txt` edit it so that it has the following lines (you
+To enable Outsim via `cfg.txt` edit it so that it has the following lines (you
 may want to substitute a different port).
 
-``OutSim Mode 1        // 0=off 1=driving 2=driving+replay
-OutSim Delay 1       // Minimum delay between packets (100ths of a sec)
-OutSim IP 0.0.0.0    // IP address to send the UDP packet
-OutSim Port 29998    // IP port
-OutSim ID 0          // If not zero, adds an identifier to the packet``
+``Outsim Mode 1        // 0=off 1=driving 2=driving+replay
+Outsim Delay 1       // Minimum delay between packets (100ths of a sec)
+Outsim IP 0.0.0.0    // IP address to send the UDP packet
+Outsim Port 29998    // IP port
+Outsim ID 0          // If not zero, adds an identifier to the packet``
 
-Configuring OutGauge
+Configuring Outgauge
 ^^^^^^^^^^^^^^^^^^^^
 
-OutGauge can be started one of two ways. Either via InSim, which your InSim
+Outgauge can be started one of two ways. Either via Insim, which your Insim
 program must know to do, or via `cfg.txt` which can be found in your LFS
 installation directory.
 
 .. HINT::
-    If you want to use InSim at the same time as OutGauge, then you probably want
-    to setup OutGauge via InSim rather than via `cfg.txt` as you will get both
+    If you want to use Insim at the same time as Outgauge, then you probably want
+    to setup Outgauge via Insim rather than via `cfg.txt` as you will get both
     sets of packets from a single connection, rather than on 2 different
     connections - which will make writing custom plugins much, much easier.
-    However, if you only want OutGauge, then there is nothing wrong with using
+    However, if you only want Outgauge, then there is nothing wrong with using
     either.
 
-To enable OutSim via `cfg.txt` edit it so that it has the following lines (you
+To enable Outsim via `cfg.txt` edit it so that it has the following lines (you
 may want to substitute a different port).
 
-``OutGauge Mode 1        // 0-off 1-driving 2-driving+replay
-OutGauge Delay 1       // minimum delay between packets (100ths of a sec)
-OutGauge IP 0.0.0.0    // IP address to send the UDP packet
-OutGauge Port 0        // IP port
-OutGauge ID 0          // if not zero, adds an identifier to the packet``
+``Outgauge Mode 1        // 0-off 1-driving 2-driving+replay
+Outgauge Delay 1       // minimum delay between packets (100ths of a sec)
+Outgauge IP 0.0.0.0    // IP address to send the UDP packet
+Outgauge Port 0        // IP port
+Outgauge ID 0          // if not zero, adds an identifier to the packet``
 
 .. _LFS.net: http://www.lfs.net/
 .. _LFS.net Additional Downloads: http://www.lfs.net/?page=addons

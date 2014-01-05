@@ -9,7 +9,7 @@ how scoping & 'this' works. xi4n takes advantage of it.
 Lets start at the basics
 ------------------------
 
-What exactly is InSim/OutSim/Outgauge/LFSW Relay?
+What exactly is Insim/Outsim/Outgauge/LFSW Relay?
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 These are all protocols used to talk to Live For Speed (LFS) servers and clients. The
@@ -17,7 +17,7 @@ general gist is that when something happens in LFS a packet is sent from the
 server or client you're connected to and your application receives that packet
 of information and does something with it.
 
-In the instance of InSim and the LFSW Relay, you can also send data back to LFS.
+In the instance of Insim and the LFSW Relay, you can also send data back to LFS.
 
 Make sense?
 
@@ -42,11 +42,11 @@ How do I know what events to listen for?
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 xi4n emits events that match the LFS packet name. You can find all of these and
-description of what they do in your LFS installation, in docs/InSim.txt or on
+description of what they do in your LFS installation, in docs/Insim.txt or on
 the LFS wiki.
 
 So, taking a practical example, you want to know when one player hits another
-player. Looking in InSim.txt you'll see that IS_CON is the packet for a contact
+player. Looking in Insim.txt you'll see that IS_CON is the packet for a contact
 between players, so you listen for the event IS_CON. Simple, no?
 
 

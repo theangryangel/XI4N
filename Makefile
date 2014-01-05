@@ -1,6 +1,7 @@
 BUILD_DIR=./build
 OUTPUT_DIR=$(BUILD_DIR)/output
 BUILD_VERSION=$(shell grep version package.json | cut -d \" -f 4)
+GH_PAGES_SOURCES = docs package.json
 
 build: clean docs
 	mkdir -p $(OUTPUT_DIR)
@@ -16,4 +17,16 @@ clean:
 docs:
 	make -C docs html
 
-.PHONY: build clean docs
+gh-pages:
+	git checkout gh-pages
+	rm -rf build _sources _static _modules
+	git checkout master $(GH_PAGES_SOURCES)
+	git reset HEAD
+	make -C docs html
+	mv -fv docs/_build/html/* ./
+	rm -rf $(GH_PAGES_SOURCES)
+	git add -A
+	git commit -m "Generated gh-pages for `git log master -1 --pretty=short \
+		--abbrev-commit`" && git push origin gh-pages ; git checkout master
+
+.PHONY: build clean docs gh-pages
