@@ -8,17 +8,17 @@ To begin you'll need the following:
 
 
 * A working LFS dedicated server, or LFS client installation with Insim
-  configured on a known and available port
+  configured on a known and available port. See :doc:`lfs` for details.
 
-* A working nodejs and npm installation - you can get this from nodejs.org, or
-  if you're on an Operating System blessed with a package manager, most likely
-  from a common repository
+* A working Node.js and npm installation. See :doc:`node` for details.
 
-* A text editor of your choice
+* A text editor of your choice. 
 
 Once you've met the prerequisties it's pretty simple:
 
-1. If you don't have it, install Nodejs (seriously, that was in the prequisties)
+1. If you don't have it, install Node.js (seriously, that was in the prequisties,
+   3 lines above this one. It's sad I have to repeat myself. I didn't write this
+   for the good of my health).
 
 2. Open a command prompt and install xi4n by running ``npm install xi4n -g``
 
@@ -46,21 +46,41 @@ installations and share or pass data between them.
 
 2. This will have created a directory called ``test``. Open that directory and
    you should see at minimum:
-   * A file called ``config.yaml`` which contains the default configuration
-   * A directory called ``plugins`` which by default will be empty. Your custom
-     plugins will go in here.
+    * A file called ``config.yaml`` which contains the default configuration
+    * A directory called ``plugins`` which by default will be empty. Your custom plugins will go in here.
 
-By default ``config.yaml`` will connect to a LFS instance running InSim on port
-29999, on localhost with no admin password. It will load the state plugin which
-is a default plugin that whilst not required makes life easier for other
-plugins, and is frequently used.
+    By default ``config.yaml`` will connect to a LFS instance running InSim on port
+    29999, on localhost with no admin password. It will load the state plugin which
+    is a default plugin that whilst not required makes life easier for other
+    plugins, and is frequently used.
+
+.. HINT::
+    Take a look at :doc:`/plugins/index` and :doc:`/connections/index` for a
+    full list of plugins and connection types that are shipped with xi4n, and
+    their potential options.
+
+.. HINT:: 
+    You may also want to check out the :doc:`/ref/config` reference.
 
 Editing the default configuration
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 The configuration file is written in YAML (rhymes with camel), which is a human-readable
-data serialization format. Easier to edit than other file formats, but can be a
-bit touchy on getting the spacing right.
+data serialization format. 
+
+You can use your favourite text editor to edit the file.
+
+.. ATTENTION::
+    YAML is touchy about spaces and tabs. I'd suggest using spaces. It relies on
+    keeping everything inline.
+
+.. HINT::
+    There is a work in progress web based GUI editor for config.yaml. It's not
+    yet finished, but if you wish to help out, we are receptive to patches. If
+    you want to give it a test and provide feedback, run ``xi4n config
+    path/to/your/config``
+
+See :doc:`/ref/config` for a full breakdown a configuration.
 
 Running
 -------

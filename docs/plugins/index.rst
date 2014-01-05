@@ -13,14 +13,18 @@ Using Plugins
 
 To use one of the plugins included with xi4n (see the rest of this page for a
 list), just add an extra option in the `plugins` section of your `config.yaml`
-file, like so::
+file, like so.
+
+.. code-block:: yaml
 
     plugins: 
         - alias: your-name-for-plugin
           path: plugin-name
           options: 
 
-To add a second plugin you'd do something like this::
+To add a second plugin you'd do something like this:
+
+.. code-block:: yaml
 
     plugins: 
         - alias: your-name-for-plugin
@@ -34,7 +38,9 @@ To active a plugin for a connection, you add the plugin's alias to the list of
 plugins against the connection. For example, to add both `your-plugin-name` and
 `your-plugin-name-2` to an InSim connection, talking to localhost, via TCP on
 port 29999, and outputs errors to the console, you should have a configuration
-that looks something like this::
+that looks something like this:
+
+.. code-block:: yaml
 
     - talk: insim
       insim:

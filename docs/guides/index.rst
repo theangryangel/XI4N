@@ -9,3 +9,5 @@ guide.
    :maxdepth: 1
 
    main
+   node
+   lfs

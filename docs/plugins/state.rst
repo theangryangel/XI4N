@@ -13,4 +13,11 @@ LFSW Relay       Y
 Options          N
 Multi-connection Y
 Dependencies     N  
+Custom Events    Y  
 ================ ====
+
+Custom Events
+-------------
+
+.. todo::
+    List of custom events this plugin emits.
