@@ -1,0 +1,259 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Getting Started &mdash; xi4n 0.1.0-unstable documentation</title>
+    
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.1.0-unstable',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="xi4n 0.1.0-unstable documentation" href="../index.html" />
+    <link rel="up" title="Guides" href="index.html" />
+    <link rel="next" title="Installing Node.js" href="node.html" />
+    <link rel="prev" title="Guides" href="index.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="node.html" title="Installing Node.js"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="Guides"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">xi4n 0.1.0-unstable documentation</a> &raquo;</li>
+          <li><a href="index.html" accesskey="U">Guides</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="getting-started">
+<h1>Getting Started<a class="headerlink" href="#getting-started" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="installing">
+<h2>Installing<a class="headerlink" href="#installing" title="Permalink to this headline">¶</a></h2>
+<p>To begin you&#8217;ll need the following:</p>
+<ul class="simple">
+<li>A working LFS dedicated server, or LFS client installation with Insim
+configured on a known and available port. See <a class="reference internal" href="lfs.html"><em>Installing and Configuring LFS</em></a> for details.</li>
+<li>A working Node.js and npm installation. See <a class="reference internal" href="node.html"><em>Installing Node.js</em></a> for details.</li>
+<li>A text editor of your choice.</li>
+</ul>
+<p>Once you&#8217;ve met the prerequisties it&#8217;s pretty simple:</p>
+<ol class="arabic simple">
+<li>If you don&#8217;t have it, install Node.js (seriously, that was in the prequisties,
+3 lines above this one. It&#8217;s sad I have to repeat myself. I didn&#8217;t write this
+for the good of my health).</li>
+<li>Open a command prompt and install xi4n by running <tt class="docutils literal"><span class="pre">npm</span> <span class="pre">install</span> <span class="pre">xi4n</span> <span class="pre">-g</span></tt></li>
+<li>You&#8217;re all set and ready to rock! Type <tt class="docutils literal"><span class="pre">xi4n</span> <span class="pre">help</span></tt> at the command prompt
+and it should come back with a list of commands you can run.</li>
+</ol>
+</div>
+<div class="section" id="configuring">
+<h2>Configuring<a class="headerlink" href="#configuring" title="Permalink to this headline">¶</a></h2>
+<p>xi4n with a configuration directory, unlike other programs. In this directory is
+a collection of files, some of which will be configuration files and others
+which can be plugins to change how xi4n behaves.</p>
+<p>The idea is that each directory is self contained and allows you to separate out
+your configurations easily.</p>
+<p>However, don&#8217;t think that this means that it&#8217;s 1 configuration directory per
+Insim, Outsim, Outgauge or LFS World Relay connection. xi4n supports multiple
+connections at the same time, to multiple different servers, regardless of type.
+This means you can have 1 configuration file that connects to multiple LFS
+installations and share or pass data between them.</p>
+<ol class="arabic">
+<li><p class="first">To create a configuration directory open a command prompt and type <tt class="docutils literal"><span class="pre">xi4n</span> <span class="pre">init</span>
+<span class="pre">test</span></tt>.</p>
+</li>
+<li><p class="first">This will have created a directory called <tt class="docutils literal"><span class="pre">test</span></tt>. Open that directory and
+you should see at minimum:</p>
+<blockquote>
+<div><ul class="simple">
+<li>A file called <tt class="docutils literal"><span class="pre">config.yaml</span></tt> which contains the default configuration</li>
+<li>A directory called <tt class="docutils literal"><span class="pre">plugins</span></tt> which by default will be empty. Your custom plugins will go in here.</li>
+</ul>
+<p>By default <tt class="docutils literal"><span class="pre">config.yaml</span></tt> will connect to a LFS instance running Insim on port
+29999, on localhost with no admin password. It will load the state plugin which
+is a default plugin that whilst not required makes life easier for other
+plugins, and is frequently used.</p>
+</div></blockquote>
+</li>
+</ol>
+<div class="admonition hint">
+<p class="first admonition-title">Hint</p>
+<p class="last">Take a look at <a class="reference internal" href="../plugins/index.html"><em>Plugins</em></a> and <a class="reference internal" href="../connections/index.html"><em>Connections</em></a> for a
+full list of plugins and connection types that are shipped with xi4n, and
+their potential options.</p>
+</div>
+<div class="admonition hint">
+<p class="first admonition-title">Hint</p>
+<p class="last">You may also want to check out the <a class="reference internal" href="../ref/config.html"><em>config.yaml</em></a> reference.</p>
+</div>
+<div class="section" id="editing-the-default-configuration">
+<h3>Editing the default configuration<a class="headerlink" href="#editing-the-default-configuration" title="Permalink to this headline">¶</a></h3>
+<p>The configuration file is written in YAML (rhymes with camel), which is a human-readable
+data serialization format.</p>
+<p>You can use your favourite text editor to edit the file.</p>
+<div class="admonition attention">
+<p class="first admonition-title">Attention</p>
+<p class="last">YAML is touchy about spaces and tabs. I&#8217;d suggest using spaces. It relies on
+keeping everything inline.</p>
+</div>
+<div class="admonition hint">
+<p class="first admonition-title">Hint</p>
+<p class="last">There is a work in progress web based GUI editor for config.yaml. It&#8217;s not
+yet finished, but if you wish to help out, we are receptive to patches. If
+you want to give it a test and provide feedback, run <tt class="docutils literal"><span class="pre">xi4n</span> <span class="pre">config</span>
+<span class="pre">path/to/your/config</span></tt></p>
+</div>
+<p>See <a class="reference internal" href="../ref/config.html"><em>config.yaml</em></a> for a full breakdown a configuration.</p>
+</div>
+</div>
+<div class="section" id="running">
+<h2>Running<a class="headerlink" href="#running" title="Permalink to this headline">¶</a></h2>
+<p>Running a configuration is dead easy. Once you&#8217;ve edited your <tt class="docutils literal"><span class="pre">config.yaml</span></tt>
+and added any plugins you want to setup, simply:</p>
+<ol class="arabic">
+<li><p class="first">Open a command prompt and switch into the directory that holds your
+configuration directory.</p>
+</li>
+<li><p class="first">Assuming your configuration directory is called <tt class="docutils literal"><span class="pre">test</span></tt> run the command
+<tt class="docutils literal"><span class="pre">xi4n</span> <span class="pre">start</span> <span class="pre">test</span></tt>. If you&#8217;re already in the directory you can also run
+<tt class="docutils literal"><span class="pre">xi4n</span> <span class="pre">start</span> <span class="pre">.</span></tt> instead.</p>
+</li>
+<li><p class="first">Make sure you do not close the command prompt window. Doing so will stop
+xi4n. It is possible to &#8220;daemonize&#8221; or turn xi4n into a service using other
+tools or scripting, however we&#8217;ll leave that up to you.
+* On Windows we&#8217;d recommend nssm.
+* On Linux it really depends on your init system. Sysvinit scripts or systemd</p>
+<blockquote>
+<div><p>unit files are reasonably easy to write, but are only 2 of several options.</p>
+</div></blockquote>
+</li>
+</ol>
+</div>
+<div class="section" id="stopping">
+<h2>Stopping<a class="headerlink" href="#stopping" title="Permalink to this headline">¶</a></h2>
+<ol class="arabic simple">
+<li>Switch to the command prompt running xi4n.</li>
+<li>Press control and c on your keyboard.</li>
+<li>Wait a few seconds and xi4n will stop.</li>
+</ol>
+</div>
+<div class="section" id="errors">
+<h2>Errors<a class="headerlink" href="#errors" title="Permalink to this headline">¶</a></h2>
+<p>xi4n tries to be fairly plain speaking when an error occurs, however you can
+configure xi4n to send errors to a log file only, or to the screen.</p>
+<p>Make sure you check any log files and also the output on the command prompt.</p>
+</div>
+<div class="section" id="updating">
+<h2>Updating<a class="headerlink" href="#updating" title="Permalink to this headline">¶</a></h2>
+<p>We try not to break stuff, but sometimes it has to happen for progress.</p>
+<p>Prior to 0.1.0 xi4n was architecturally very different. If you&#8217;re running an
+older version I highly recommend creating a new configuration and porting across
+your settings manually. Unfortunately there is currently not automatic mechanism.</p>
+<p>Upgrading after 0.1.0 should be a lot easier as we don&#8217;t intend to make any more
+silly mistakes.</p>
+<ol class="arabic simple">
+<li>Open a command prompt.</li>
+<li>Type <tt class="docutils literal"><span class="pre">npm</span> <span class="pre">upgrade</span> <span class="pre">xi4n</span> <span class="pre">-g</span></tt>.</li>
+<li>Stop and restart any running xi4n instances.</li>
+</ol>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Getting Started</a><ul>
+<li><a class="reference internal" href="#installing">Installing</a></li>
+<li><a class="reference internal" href="#configuring">Configuring</a><ul>
+<li><a class="reference internal" href="#editing-the-default-configuration">Editing the default configuration</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#running">Running</a></li>
+<li><a class="reference internal" href="#stopping">Stopping</a></li>
+<li><a class="reference internal" href="#errors">Errors</a></li>
+<li><a class="reference internal" href="#updating">Updating</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="index.html"
+                        title="previous chapter">Guides</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="node.html"
+                        title="next chapter">Installing Node.js</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/guides/main.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="node.html" title="Installing Node.js"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="Guides"
+             >previous</a> |</li>
+        <li><a href="../index.html">xi4n 0.1.0-unstable documentation</a> &raquo;</li>
+          <li><a href="index.html" >Guides</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2014, the_angry_angel.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.
+    </div>
+  </body>
+</html>

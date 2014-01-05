@@ -1,0 +1,165 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>API &mdash; xi4n 0.1.0-unstable documentation</title>
+    
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.1.0-unstable',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="xi4n 0.1.0-unstable documentation" href="../index.html" />
+    <link rel="up" title="For Developers" href="index.html" />
+    <link rel="prev" title="Writing Plugins" href="plugins.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="plugins.html" title="Writing Plugins"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">xi4n 0.1.0-unstable documentation</a> &raquo;</li>
+          <li><a href="index.html" accesskey="U">For Developers</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="api">
+<h1>API<a class="headerlink" href="#api" title="Permalink to this headline">¶</a></h1>
+<p>This page describes the internal API of xi4n at it&#8217;s core. It&#8217;s a work in
+progress since xi4n is a platform first and a library second, its API is
+mainly undocumented, but is reasonably stable.</p>
+<p>If you&#8217;re planning on using xi4n as a library, honestly I highly recommend
+reading the source of xi4n code. xi4n itself is using the same modules that
+you can require(), thus it&#8217;s always going to be the most up to date repository
+of information.</p>
+<div class="section" id="require">
+<h2>Require<a class="headerlink" href="#require" title="Permalink to this headline">¶</a></h2>
+<ol class="arabic simple">
+<li>Specify xi4n as a dependency in your <cite>package.json</cite>.</li>
+<li>Run <tt class="docutils literal"><span class="pre">npm</span> <span class="pre">install</span></tt> as you would normally to pull down the new dependency.</li>
+<li>In your code <cite>var xi4n = require(&#8216;xi4n&#8217;);</cite>.</li>
+<li>Hack. Hack. Hack.</li>
+</ol>
+</div>
+<div class="section" id="exported-modules">
+<h2>Exported modules<a class="headerlink" href="#exported-modules" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="protocol-insim">
+<h3>protocol.insim<a class="headerlink" href="#protocol-insim" title="Permalink to this headline">¶</a></h3>
+<p>Creates an instance of an insim client.</p>
+</div>
+<div class="section" id="protocol-outsim">
+<h3>protocol.outsim<a class="headerlink" href="#protocol-outsim" title="Permalink to this headline">¶</a></h3>
+<p>Creates an instance of an outsim client.</p>
+</div>
+<div class="section" id="protocol-outgauge">
+<h3>protocol.outgauge<a class="headerlink" href="#protocol-outgauge" title="Permalink to this headline">¶</a></h3>
+<p>Creates an instance of an outgauge client.</p>
+</div>
+<div class="section" id="protocol-relay">
+<h3>protocol.relay<a class="headerlink" href="#protocol-relay" title="Permalink to this headline">¶</a></h3>
+<p>Creates an instance of a LFSW relay client.</p>
+</div>
+<div class="section" id="strings">
+<h3>strings<a class="headerlink" href="#strings" title="Permalink to this headline">¶</a></h3>
+</div>
+<div class="section" id="product">
+<h3>product<a class="headerlink" href="#product" title="Permalink to this headline">¶</a></h3>
+</div>
+<div class="section" id="data">
+<h3>data<a class="headerlink" href="#data" title="Permalink to this headline">¶</a></h3>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">API</a><ul>
+<li><a class="reference internal" href="#require">Require</a></li>
+<li><a class="reference internal" href="#exported-modules">Exported modules</a><ul>
+<li><a class="reference internal" href="#protocol-insim">protocol.insim</a></li>
+<li><a class="reference internal" href="#protocol-outsim">protocol.outsim</a></li>
+<li><a class="reference internal" href="#protocol-outgauge">protocol.outgauge</a></li>
+<li><a class="reference internal" href="#protocol-relay">protocol.relay</a></li>
+<li><a class="reference internal" href="#strings">strings</a></li>
+<li><a class="reference internal" href="#product">product</a></li>
+<li><a class="reference internal" href="#data">data</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="plugins.html"
+                        title="previous chapter">Writing Plugins</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/dev/api.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="plugins.html" title="Writing Plugins"
+             >previous</a> |</li>
+        <li><a href="../index.html">xi4n 0.1.0-unstable documentation</a> &raquo;</li>
+          <li><a href="index.html" >For Developers</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2014, the_angry_angel.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.
+    </div>
+  </body>
+</html>

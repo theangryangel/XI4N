@@ -1,0 +1,182 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Connections &mdash; xi4n 0.1.0-unstable documentation</title>
+    
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.1.0-unstable',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="xi4n 0.1.0-unstable documentation" href="../index.html" />
+    <link rel="next" title="Plugins" href="../plugins/index.html" />
+    <link rel="prev" title="Installing and Configuring LFS" href="../guides/lfs.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../plugins/index.html" title="Plugins"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="../guides/lfs.html" title="Installing and Configuring LFS"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">xi4n 0.1.0-unstable documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="connections">
+<h1>Connections<a class="headerlink" href="#connections" title="Permalink to this headline">¶</a></h1>
+<p>Without a connection xi4n does absolutely nothing.</p>
+<p>A connection is defined as a source and/or destination for data to and from a
+LFS or the LFS World Relay. In practical terms this is often a dedicated server,
+client or the relay itself.</p>
+<p>Each configuration can have multiple connections and multiple plugins.</p>
+<p>For information on plugins see the <a class="reference internal" href="../plugins/index.html"><em>Plugins</em></a> page.</p>
+<div class="section" id="types-of-connection">
+<h2>Types of connection<a class="headerlink" href="#types-of-connection" title="Permalink to this headline">¶</a></h2>
+<p>There are several types of connection that xi4n currently supports:</p>
+<ul class="simple">
+<li><a class="reference internal" href="insim.html"><em>Insim</em></a>: Supporting pure Insim connections over both TCP and UDP. It also
+supports outsim and outgauge packets when setup via insim.</li>
+<li><a class="reference internal" href="outsim.html"><em>Outsim</em></a>: Supporting pure Outsim connections over UDP.</li>
+<li><a class="reference internal" href="outgauge.html"><em>Outgauge</em></a>: Supporting pure Outgauge connections over UDP.</li>
+<li><a class="reference internal" href="relay.html"><em>LFS World Relay</em></a>: Insim connections, via the LFS World Relay, when direct Insim is
+not permitted.</li>
+</ul>
+</div>
+<div class="section" id="configuring-a-connection">
+<h2>Configuring a connection<a class="headerlink" href="#configuring-a-connection" title="Permalink to this headline">¶</a></h2>
+<p>To create a connection just add an extra value in the <cite>connections</cite> section of your <cite>config.yaml</cite>
+file. For example the section below shows a single connection, talking insim,
+extracted from part of a working <cite>config.yaml</cite>.</p>
+<div class="admonition hint">
+<p class="first admonition-title">Hint</p>
+<p class="last">See <a class="reference internal" href="../ref/config.html"><em>config.yaml</em></a> for a full commented reference.</p>
+</div>
+<div class="highlight-yaml"><div class="highlight"><pre><span class="l-Scalar-Plain">connections</span><span class="p-Indicator">:</span>
+    <span class="c1"># The first connection begins here.</span>
+    <span class="c1"># Note that it&#39;s talking &quot;insim&quot;</span>
+    <span class="p-Indicator">-</span> <span class="l-Scalar-Plain">talk</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">insim</span>
+      <span class="c1"># Next are the insim options</span>
+      <span class="l-Scalar-Plain">insim</span><span class="p-Indicator">:</span>
+        <span class="c1"># Each connection type has different options.</span>
+        <span class="c1"># Here we tell it we want to use tcp</span>
+        <span class="l-Scalar-Plain">over</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">tcp</span>
+        <span class="c1"># The host is &#39;localhost&#39;</span>
+        <span class="l-Scalar-Plain">host</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">localhost</span>
+        <span class="c1"># And the port is 29999.</span>
+        <span class="l-Scalar-Plain">port</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">29999</span>
+        <span class="c1"># With an admin password of &#39;pies&#39;</span>
+        <span class="l-Scalar-Plain">admin</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">pies</span>
+      <span class="c1"># Next we tell the connection that we want to use the plugins with the</span>
+      <span class="c1"># aliases of &#39;state&#39; and &#39;livemap&#39;</span>
+      <span class="l-Scalar-Plain">use</span><span class="p-Indicator">:</span>
+        <span class="p-Indicator">-</span> <span class="l-Scalar-Plain">state</span>
+        <span class="p-Indicator">-</span> <span class="l-Scalar-Plain">livemap</span>
+      <span class="c1"># Next, we tell xi4n how to log stuff.</span>
+      <span class="c1"># In this instance we have 2 logging options setup.</span>
+      <span class="l-Scalar-Plain">log</span><span class="p-Indicator">:</span>
+        <span class="c1"># The first is to only output errors to the console.</span>
+        <span class="p-Indicator">-</span> <span class="l-Scalar-Plain">level</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">error</span>
+          <span class="l-Scalar-Plain">type</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">console</span>
+        <span class="c1"># The second is that we log informational errors to a file called</span>
+        <span class="c1"># info.log</span>
+        <span class="p-Indicator">-</span> <span class="l-Scalar-Plain">level</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">info</span>
+          <span class="l-Scalar-Plain">type</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">file</span>
+          <span class="l-Scalar-Plain">filename</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">info.log</span>
+</pre></div>
+</div>
+<p>How do you know what options to set? See the relevant page for the type of
+connection, in the list in the previous section.</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Connections</a><ul>
+<li><a class="reference internal" href="#types-of-connection">Types of connection</a></li>
+<li><a class="reference internal" href="#configuring-a-connection">Configuring a connection</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="../guides/lfs.html"
+                        title="previous chapter">Installing and Configuring LFS</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="../plugins/index.html"
+                        title="next chapter">Plugins</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/connections/index.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../plugins/index.html" title="Plugins"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="../guides/lfs.html" title="Installing and Configuring LFS"
+             >previous</a> |</li>
+        <li><a href="../index.html">xi4n 0.1.0-unstable documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2014, the_angry_angel.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.
+    </div>
+  </body>
+</html>

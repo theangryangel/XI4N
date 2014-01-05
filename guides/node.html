@@ -1,0 +1,159 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Installing Node.js &mdash; xi4n 0.1.0-unstable documentation</title>
+    
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.1.0-unstable',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="xi4n 0.1.0-unstable documentation" href="../index.html" />
+    <link rel="up" title="Guides" href="index.html" />
+    <link rel="next" title="Installing and Configuring LFS" href="lfs.html" />
+    <link rel="prev" title="Getting Started" href="main.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="lfs.html" title="Installing and Configuring LFS"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="main.html" title="Getting Started"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">xi4n 0.1.0-unstable documentation</a> &raquo;</li>
+          <li><a href="index.html" accesskey="U">Guides</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="installing-node-js">
+<h1>Installing Node.js<a class="headerlink" href="#installing-node-js" title="Permalink to this headline">¶</a></h1>
+<p>You&#8217;ll need <a class="reference external" href="http://www.nodejs.org/">Node.js</a> in order to run xi4n. It should work on any future
+version, however there is no guarantee. It has been tested on 0.6.x-0.10.x.</p>
+<ul class="simple">
+<li><strong>Windows</strong> download and run the installer from <a class="reference external" href="http://www.nodejs.org/">Node.js</a>.</li>
+<li><strong>Mac OS X</strong> You can either download a package from <a class="reference external" href="http://www.nodejs.org/">Node.js</a>.
+If you prefer Homebrew install via <tt class="docutils literal"><span class="pre">brew</span> <span class="pre">install</span> <span class="pre">node</span></tt>.
+If you prefer MacPorts install via <tt class="docutils literal"><span class="pre">port</span> <span class="pre">install</span> <span class="pre">nodejs</span></tt>.</li>
+<li><strong>Debian, Linux Mint Debian Edition</strong>, Node.js is packaged in Debian Sid/Unstable. You can either use
+<a class="reference external" href="https://wiki.debian.org/AptPreferences#Pinning">Apt Pinning</a> or manually download the deb packages (<cite>node</cite> and <cite>npm</cite> to install it.
+If you&#8217;re already running Sid/Unstable Run <tt class="docutils literal"><span class="pre">apt-get</span> <span class="pre">install</span> <span class="pre">nodejs</span> <span class="pre">npm</span></tt> with
+root privileges to install it.</li>
+</ul>
+<div class="admonition attention">
+<p class="first admonition-title">Attention</p>
+<p class="last">Debian has a naming conflict with Amateur Packet Radio Node Program.
+Accordingly the normal <tt class="docutils literal"><span class="pre">node</span></tt> command is infact <tt class="docutils literal"><span class="pre">nodejs</span></tt>.</p>
+</div>
+<ul class="simple">
+<li><strong>Ubuntu, Mint, elementary OS</strong>, depending on the version Node.js is likely to already
+be available in the main repository, although most likely an old version. Run
+<tt class="docutils literal"><span class="pre">sudo</span> <span class="pre">apt-get</span> <span class="pre">install</span> <span class="pre">nodejs</span></tt> to install it.
+To install a more modern version there is a useful third party repository
+which you can use. <a href="#id1"><span class="problematic" id="id2">``</span></a>sudo apt-get update</li>
+</ul>
+<p>sudo apt-get install -y python-software-properties python g++ make
+sudo add-apt-repository -y ppa:chris-lea/node.js
+sudo apt-get update
+sudo apt-get install nodejs``</p>
+<div class="admonition attention">
+<p class="first admonition-title">Attention</p>
+<p class="last">Ubuntu and it&#8217;s derivates have a naming conflict with Amateur Packet Radio Node Program.
+Accordingly the normal <tt class="docutils literal"><span class="pre">node</span></tt> command is infact <tt class="docutils literal"><span class="pre">nodejs</span></tt>.</p>
+</div>
+<ul class="simple">
+<li><strong>openSUSE, SLE</strong> have packaged Node.js already. Run <tt class="docutils literal"><span class="pre">sudo</span> <span class="pre">zypper</span> <span class="pre">in</span> <span class="pre">nodejs</span> <span class="pre">nodejs-devel</span></tt></li>
+<li><strong>Fedora</strong> <tt class="docutils literal"><span class="pre">sudo</span> <span class="pre">yum</span> <span class="pre">install</span> <span class="pre">npm</span></tt></li>
+<li><strong>RHEL/CentOS/Scientific Linux 6</strong>, Node.js and npm are available from the
+Fedora Extra Packages for Enterprise Linux (EPEL) repository. If you haven&#8217;t
+already done so, first enable EPEL. Then run <tt class="docutils literal"><span class="pre">sudo</span> <span class="pre">yum</span> <span class="pre">install</span> <span class="pre">npm</span></tt></li>
+<li><strong>Arch Linux</strong>, Node.js is available in the Community Repository. <tt class="docutils literal"><span class="pre">pacman</span> <span class="pre">-S</span>
+<span class="pre">nodejs</span></tt></li>
+<li><strong>Gentoo</strong>, Node.js is available via portage. <tt class="docutils literal"><span class="pre">emerge</span> <span class="pre">nodejs</span></tt></li>
+<li><strong>FreeBSD, OpenBSD</strong>, Node.js is available via ports.</li>
+<li><strong>Building from source</strong>, depends on your platform. Please consult the Node.js
+documentation. I&#8217;ll assume you know what you&#8217;re doing.</li>
+</ul>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="main.html"
+                        title="previous chapter">Getting Started</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="lfs.html"
+                        title="next chapter">Installing and Configuring LFS</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/guides/node.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="lfs.html" title="Installing and Configuring LFS"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="main.html" title="Getting Started"
+             >previous</a> |</li>
+        <li><a href="../index.html">xi4n 0.1.0-unstable documentation</a> &raquo;</li>
+          <li><a href="index.html" >Guides</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2014, the_angry_angel.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.
+    </div>
+  </body>
+</html>

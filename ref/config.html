@@ -1,0 +1,220 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>config.yaml &mdash; xi4n 0.1.0-unstable documentation</title>
+    
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.1.0-unstable',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="xi4n 0.1.0-unstable documentation" href="../index.html" />
+    <link rel="up" title="Reference" href="index.html" />
+    <link rel="next" title="For Developers" href="../dev/index.html" />
+    <link rel="prev" title="Command Line Interface" href="cli.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../dev/index.html" title="For Developers"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="cli.html" title="Command Line Interface"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">xi4n 0.1.0-unstable documentation</a> &raquo;</li>
+          <li><a href="index.html" accesskey="U">Reference</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="config-yaml">
+<h1>config.yaml<a class="headerlink" href="#config-yaml" title="Permalink to this headline">¶</a></h1>
+<p>Below you&#8217;ll find a commented example configuration file.</p>
+<p>It describes each step of the way and what&#8217;s happening.</p>
+<div class="admonition hint">
+<p class="first admonition-title">Hint</p>
+<p>We have a work in-progress web interface that allows you to drag and drop
+options into place without having to manually edit <cite>config.yaml</cite>. It&#8217;s not
+yet complete, so if you want to help us out with that, dive into the code
+and take a look!</p>
+<p class="last">You can give it a go by running <tt class="docutils literal"><span class="pre">xi4n</span> <span class="pre">config</span> <span class="pre">path/to/config/directory</span></tt> and
+following the instructions.</p>
+</div>
+<div class="admonition hint">
+<p class="first admonition-title">Hint</p>
+<p class="last">You do not need to worry about extra options. Any options that xi4n does not
+recognise it will ignore.</p>
+</div>
+<div class="admonition attention">
+<p class="first admonition-title">Attention</p>
+<p class="last">Pay close attention to the spacing. YAML is touchy about getting things
+right.</p>
+</div>
+<div class="highlight-yaml"><div class="highlight"><pre><span class="c1"># Here we describe what versions of xi4n this configuration should support.</span>
+<span class="c1"># We may drop this in future.</span>
+<span class="c1"># We describe here that we only care about versions greater than or equal to</span>
+<span class="c1"># 0.1.0</span>
+<span class="l-Scalar-Plain">xi4n</span><span class="p-Indicator">:</span> <span class="s">&quot;&gt;=0.1.0&quot;</span>
+<span class="c1"># Next is a list of plugins and their options.</span>
+<span class="l-Scalar-Plain">plugins</span><span class="p-Indicator">:</span>
+    <span class="c1"># Our first plugin is an instance of the state plugin.</span>
+    <span class="c1"># We&#39;ve given it an alias of &#39;state&#39;.</span>
+    <span class="c1"># An alias allows a plugin to used on multiple different connections.</span>
+    <span class="p-Indicator">-</span> <span class="l-Scalar-Plain">alias</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">state</span>
+      <span class="c1"># Here we set the &#39;path&#39; of the plugin. xi4n will look for plugins in</span>
+      <span class="c1"># 2 places, the system or core plugin directory and the configuration</span>
+      <span class="c1"># plugin directory.</span>
+      <span class="c1"># The value MUST correspond to the actual name of the directory.</span>
+      <span class="c1"># For system or core plugins this is the same as the name in the</span>
+      <span class="c1"># documentation list</span>
+      <span class="l-Scalar-Plain">path</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">state</span>
+      <span class="c1"># Finally options. This is a list of options for the plugin.</span>
+      <span class="l-Scalar-Plain">options</span><span class="p-Indicator">:</span>
+    <span class="c1"># Below you&#39;ll find a setup for a second plugin, called livemap2. We&#39;ve</span>
+    <span class="c1"># given it an alias of livemap, for demonstration reasons.</span>
+    <span class="p-Indicator">-</span> <span class="l-Scalar-Plain">alias</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">livemap</span>
+      <span class="l-Scalar-Plain">path</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">livemap2</span>
+      <span class="l-Scalar-Plain">options</span><span class="p-Indicator">:</span>
+        <span class="l-Scalar-Plain">http-port</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">8080</span>
+<span class="c1"># Next up is a list of connections.</span>
+<span class="c1"># xi4n can make multiple connections, to multiple different servers, all</span>
+<span class="c1"># talking different protocols.</span>
+<span class="l-Scalar-Plain">connections</span><span class="p-Indicator">:</span>
+    <span class="c1"># The first connection begins here.</span>
+    <span class="c1"># Note that it&#39;s talking &quot;insim&quot;</span>
+    <span class="p-Indicator">-</span> <span class="l-Scalar-Plain">talk</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">insim</span>
+      <span class="c1"># Next are the insim options</span>
+      <span class="l-Scalar-Plain">insim</span><span class="p-Indicator">:</span>
+        <span class="c1"># Each connection type has different options.</span>
+        <span class="c1"># Here we tell it we want to use tcp</span>
+        <span class="l-Scalar-Plain">over</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">tcp</span>
+        <span class="c1"># The host is &#39;localhost&#39;</span>
+        <span class="l-Scalar-Plain">host</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">localhost</span>
+        <span class="c1"># And the port is 29999.</span>
+        <span class="l-Scalar-Plain">port</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">29999</span>
+        <span class="c1"># With an admin password of &#39;pies&#39;</span>
+        <span class="l-Scalar-Plain">admin</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">pies</span>
+      <span class="c1"># Next we tell the connection that we want to use the plugins with the</span>
+      <span class="c1"># aliases of &#39;state&#39; and &#39;livemap&#39;</span>
+      <span class="l-Scalar-Plain">use</span><span class="p-Indicator">:</span>
+        <span class="p-Indicator">-</span> <span class="l-Scalar-Plain">state</span>
+        <span class="p-Indicator">-</span> <span class="l-Scalar-Plain">livemap</span>
+      <span class="c1"># Next, we tell xi4n how to log stuff.</span>
+      <span class="c1"># In this instance we have 2 logging options setup.</span>
+      <span class="l-Scalar-Plain">log</span><span class="p-Indicator">:</span>
+        <span class="c1"># The first is to only output errors to the console.</span>
+        <span class="c1"># By default xi4n uses debug, info, warn and error levels only.</span>
+        <span class="c1"># debug is debugging information</span>
+        <span class="c1"># info is informational but less spammy than debug</span>
+        <span class="c1"># warn is for non-serious errors</span>
+        <span class="c1"># error is for errors that may not be recoverable</span>
+        <span class="p-Indicator">-</span> <span class="l-Scalar-Plain">level</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">error</span>
+          <span class="c1"># Here we set the type to console.</span>
+          <span class="c1"># xi4n uses &#39;winston&#39; under the hood, so can support any winston</span>
+          <span class="c1"># transport.</span>
+          <span class="c1"># The 2 you&#39;ll most likely use are &#39;console&#39; to output to the</span>
+          <span class="c1"># screen and &#39;file&#39; to output to a file.</span>
+          <span class="l-Scalar-Plain">type</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">console</span>
+        <span class="c1"># The second is that we log informational errors to a file called</span>
+        <span class="c1"># info.log</span>
+        <span class="p-Indicator">-</span> <span class="l-Scalar-Plain">level</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">info</span>
+          <span class="l-Scalar-Plain">type</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">file</span>
+          <span class="l-Scalar-Plain">filename</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">info.log</span>
+    <span class="c1"># Here&#39;s a second insim connection</span>
+    <span class="c1"># Note, in this instance we use the same plugins, but don&#39;t have any</span>
+    <span class="c1"># admin password set, and it&#39;s talking on port 29998 instead.</span>
+    <span class="p-Indicator">-</span> <span class="l-Scalar-Plain">talk</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">insim</span>
+      <span class="l-Scalar-Plain">insim</span><span class="p-Indicator">:</span>
+        <span class="l-Scalar-Plain">over</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">tcp</span>
+        <span class="l-Scalar-Plain">host</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">localhost</span>
+        <span class="l-Scalar-Plain">port</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">29998</span>
+      <span class="l-Scalar-Plain">use</span><span class="p-Indicator">:</span>
+        <span class="p-Indicator">-</span> <span class="l-Scalar-Plain">state</span>
+        <span class="p-Indicator">-</span> <span class="l-Scalar-Plain">livemap</span>
+      <span class="l-Scalar-Plain">log</span><span class="p-Indicator">:</span>
+        <span class="p-Indicator">-</span> <span class="l-Scalar-Plain">level</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">error</span>
+          <span class="l-Scalar-Plain">type</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">console</span>
+</pre></div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="cli.html"
+                        title="previous chapter">Command Line Interface</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="../dev/index.html"
+                        title="next chapter">For Developers</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/ref/config.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../dev/index.html" title="For Developers"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="cli.html" title="Command Line Interface"
+             >previous</a> |</li>
+        <li><a href="../index.html">xi4n 0.1.0-unstable documentation</a> &raquo;</li>
+          <li><a href="index.html" >Reference</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2014, the_angry_angel.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.
+    </div>
+  </body>
+</html>

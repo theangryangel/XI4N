@@ -1,0 +1,265 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Installing and Configuring LFS &mdash; xi4n 0.1.0-unstable documentation</title>
+    
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.1.0-unstable',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="xi4n 0.1.0-unstable documentation" href="../index.html" />
+    <link rel="up" title="Guides" href="index.html" />
+    <link rel="next" title="Connections" href="../connections/index.html" />
+    <link rel="prev" title="Installing Node.js" href="node.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../connections/index.html" title="Connections"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="node.html" title="Installing Node.js"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">xi4n 0.1.0-unstable documentation</a> &raquo;</li>
+          <li><a href="index.html" accesskey="U">Guides</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="installing-and-configuring-lfs">
+<h1>Installing and Configuring LFS<a class="headerlink" href="#installing-and-configuring-lfs" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="dedicated-server">
+<h2>Dedicated Server<a class="headerlink" href="#dedicated-server" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="installing-running">
+<h3>Installing &amp; Running<a class="headerlink" href="#installing-running" title="Permalink to this headline">¶</a></h3>
+<ol class="arabic simple">
+<li>Download the Dedicated Host from <a class="reference external" href="http://www.lfs.net/?page=addons">LFS.net Additional Downloads</a>.</li>
+<li>Extract to somewhere non-temporary on your file system.</li>
+<li>Consult readme.txt in the directory you just extracted for details on how to
+configure and run the dedicated server.</li>
+</ol>
+<div class="admonition hint">
+<p class="first admonition-title">Hint</p>
+<p class="last">Whilst there is only a Windows binary provided for LFS dedicated hosting, it
+is possible and commonly used on Linux, BSD, Solaris and Mac OS X, under <a class="reference external" href="http://www.winehq.org/">Wine</a>.
+I won&#8217;t go through the exact details, however there is a handy wiki page on
+<cite>_LFS Manual - Hosting</cite>.</p>
+</div>
+</div>
+<div class="section" id="configuring-insim">
+<h3>Configuring Insim<a class="headerlink" href="#configuring-insim" title="Permalink to this headline">¶</a></h3>
+<ol class="arabic simple">
+<li>Open your dedicated server applicable cfg file, and set <cite>/insim 29999</cite>. Then
+save. Make a note of your <cite>/admin</cite> value. Insim uses this password to
+connect.</li>
+<li>Restart your LFS dedicated server.</li>
+</ol>
+<div class="admonition hint">
+<p class="first admonition-title">Hint</p>
+<p class="last">A double forward slash (<cite>//</cite>) at the start of a line in the LFS
+configuration file denotes a <strong>comment</strong>. This means that line is ignored.
+If you want the line to be acted on by LFS it <strong>must</strong> only have one slash.</p>
+</div>
+</div>
+<div class="section" id="configuring-outsim">
+<h3>Configuring Outsim<a class="headerlink" href="#configuring-outsim" title="Permalink to this headline">¶</a></h3>
+<p>You can&#8217;t for a dedicated server. Outsim is client side only.</p>
+</div>
+<div class="section" id="configuring-outgauge">
+<h3>Configuring Outgauge<a class="headerlink" href="#configuring-outgauge" title="Permalink to this headline">¶</a></h3>
+<p>You can&#8217;t for a dedicated server. Outgauge is client side only.</p>
+</div>
+</div>
+<div class="section" id="client">
+<h2>Client<a class="headerlink" href="#client" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="installing">
+<h3>Installing<a class="headerlink" href="#installing" title="Permalink to this headline">¶</a></h3>
+<p>I won&#8217;t go through LFS in great detail. If you&#8217;re here then you should alreaady
+know what LFS is, and how to install it.</p>
+<p>That said, here are the basics:</p>
+<ol class="arabic">
+<li><p class="first">You&#8217;ll need an account on <a class="reference external" href="http://www.lfs.net/">LFS.net</a>.</p>
+<p>..ATTENTION::
+You&#8217;ll need to setup both a WEB password and a GAME password.
+The WEB password is used to logon to various LFS websites, including forums,
+account website and LFS World.
+The GAME password is used to unlock your LFS client - sort of like entering a
+license key it determines what content you&#8217;re permitted.</p>
+</li>
+<li><p class="first">Download and run the installer from <a class="reference external" href="http://www.lfs.net/">LFS.net</a></p>
+</li>
+<li><p class="first">Run LFS.</p>
+</li>
+<li><p class="first">It should now ask you to unlock LFS. Do so using the account name and GAME
+password you setup on <a class="reference external" href="http://www.lfs.net/">LFS.net</a>.</p>
+</li>
+</ol>
+</div>
+<div class="section" id="id1">
+<h3>Configuring Insim<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h3>
+<ol class="arabic simple">
+<li>With the game running you can press <cite>t</cite> to open a chat dialog box.</li>
+<li>Type <cite>/insim 29999</cite>. This starts Insim on port 29999. If you receive a <cite>bind
+failed</cite> error message you will need to use a different port. Remember this
+port number as you will need to config xi4n to use it later.</li>
+<li>Each time you start LFS you will need to re-perform steps 1 and 2.</li>
+</ol>
+<div class="admonition hint">
+<p class="first admonition-title">Hint</p>
+<p class="last">You can actually call <tt class="docutils literal"><span class="pre">LFS.exe</span></tt> with various arguments, including the one
+to start Insim. This allows you to create a custom shortcut that auto-starts
+Insim everytime you start LFS. For example: <tt class="docutils literal"><span class="pre">LFS.exe</span> <span class="pre">/insim</span> <span class="pre">29999</span></tt>.
+You could even go a step further and create a script that starts LFS first
+then starts xi4n. You&#8217;re on your own to figure that out, although it&#8217;s not
+tricky.</p>
+</div>
+</div>
+<div class="section" id="id2">
+<h3>Configuring Outsim<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h3>
+<p>Outsim can be started one of two ways. Either via Insim, which your Insim
+program must know to do, or via <cite>cfg.txt</cite> which can be found in your LFS
+installation directory.</p>
+<div class="admonition hint">
+<p class="first admonition-title">Hint</p>
+<p class="last">If you want to use Insim at the same time as Outsim, then you probably want
+to setup Outsim via Insim rather than via <cite>cfg.txt</cite> as you will get both
+sets of packets from a single connection, rather than on 2 different
+connections - which will make writing custom plugins much, much easier.
+However, if you only want Outsim, then there is nothing wrong with using
+either.</p>
+</div>
+<p>To enable Outsim via <cite>cfg.txt</cite> edit it so that it has the following lines (you
+may want to substitute a different port).</p>
+<p><tt class="docutils literal"><span class="pre">Outsim</span> <span class="pre">Mode</span> <span class="pre">1</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span class="pre">//</span> <span class="pre">0=off</span> <span class="pre">1=driving</span> <span class="pre">2=driving+replay</span>
+<span class="pre">Outsim</span> <span class="pre">Delay</span> <span class="pre">1</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span class="pre">//</span> <span class="pre">Minimum</span> <span class="pre">delay</span> <span class="pre">between</span> <span class="pre">packets</span> <span class="pre">(100ths</span> <span class="pre">of</span> <span class="pre">a</span> <span class="pre">sec)</span>
+<span class="pre">Outsim</span> <span class="pre">IP</span> <span class="pre">0.0.0.0</span>&nbsp;&nbsp;&nbsp; <span class="pre">//</span> <span class="pre">IP</span> <span class="pre">address</span> <span class="pre">to</span> <span class="pre">send</span> <span class="pre">the</span> <span class="pre">UDP</span> <span class="pre">packet</span>
+<span class="pre">Outsim</span> <span class="pre">Port</span> <span class="pre">29998</span>&nbsp;&nbsp;&nbsp; <span class="pre">//</span> <span class="pre">IP</span> <span class="pre">port</span>
+<span class="pre">Outsim</span> <span class="pre">ID</span> <span class="pre">0</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span class="pre">//</span> <span class="pre">If</span> <span class="pre">not</span> <span class="pre">zero,</span> <span class="pre">adds</span> <span class="pre">an</span> <span class="pre">identifier</span> <span class="pre">to</span> <span class="pre">the</span> <span class="pre">packet</span></tt></p>
+</div>
+<div class="section" id="id3">
+<h3>Configuring Outgauge<a class="headerlink" href="#id3" title="Permalink to this headline">¶</a></h3>
+<p>Outgauge can be started one of two ways. Either via Insim, which your Insim
+program must know to do, or via <cite>cfg.txt</cite> which can be found in your LFS
+installation directory.</p>
+<div class="admonition hint">
+<p class="first admonition-title">Hint</p>
+<p class="last">If you want to use Insim at the same time as Outgauge, then you probably want
+to setup Outgauge via Insim rather than via <cite>cfg.txt</cite> as you will get both
+sets of packets from a single connection, rather than on 2 different
+connections - which will make writing custom plugins much, much easier.
+However, if you only want Outgauge, then there is nothing wrong with using
+either.</p>
+</div>
+<p>To enable Outsim via <cite>cfg.txt</cite> edit it so that it has the following lines (you
+may want to substitute a different port).</p>
+<p><tt class="docutils literal"><span class="pre">Outgauge</span> <span class="pre">Mode</span> <span class="pre">1</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span class="pre">//</span> <span class="pre">0-off</span> <span class="pre">1-driving</span> <span class="pre">2-driving+replay</span>
+<span class="pre">Outgauge</span> <span class="pre">Delay</span> <span class="pre">1</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span class="pre">//</span> <span class="pre">minimum</span> <span class="pre">delay</span> <span class="pre">between</span> <span class="pre">packets</span> <span class="pre">(100ths</span> <span class="pre">of</span> <span class="pre">a</span> <span class="pre">sec)</span>
+<span class="pre">Outgauge</span> <span class="pre">IP</span> <span class="pre">0.0.0.0</span>&nbsp;&nbsp;&nbsp; <span class="pre">//</span> <span class="pre">IP</span> <span class="pre">address</span> <span class="pre">to</span> <span class="pre">send</span> <span class="pre">the</span> <span class="pre">UDP</span> <span class="pre">packet</span>
+<span class="pre">Outgauge</span> <span class="pre">Port</span> <span class="pre">0</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span class="pre">//</span> <span class="pre">IP</span> <span class="pre">port</span>
+<span class="pre">Outgauge</span> <span class="pre">ID</span> <span class="pre">0</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span class="pre">//</span> <span class="pre">if</span> <span class="pre">not</span> <span class="pre">zero,</span> <span class="pre">adds</span> <span class="pre">an</span> <span class="pre">identifier</span> <span class="pre">to</span> <span class="pre">the</span> <span class="pre">packet</span></tt></p>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Installing and Configuring LFS</a><ul>
+<li><a class="reference internal" href="#dedicated-server">Dedicated Server</a><ul>
+<li><a class="reference internal" href="#installing-running">Installing &amp; Running</a></li>
+<li><a class="reference internal" href="#configuring-insim">Configuring Insim</a></li>
+<li><a class="reference internal" href="#configuring-outsim">Configuring Outsim</a></li>
+<li><a class="reference internal" href="#configuring-outgauge">Configuring Outgauge</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#client">Client</a><ul>
+<li><a class="reference internal" href="#installing">Installing</a></li>
+<li><a class="reference internal" href="#id1">Configuring Insim</a></li>
+<li><a class="reference internal" href="#id2">Configuring Outsim</a></li>
+<li><a class="reference internal" href="#id3">Configuring Outgauge</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="node.html"
+                        title="previous chapter">Installing Node.js</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="../connections/index.html"
+                        title="next chapter">Connections</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/guides/lfs.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../connections/index.html" title="Connections"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="node.html" title="Installing Node.js"
+             >previous</a> |</li>
+        <li><a href="../index.html">xi4n 0.1.0-unstable documentation</a> &raquo;</li>
+          <li><a href="index.html" >Guides</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2014, the_angry_angel.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.
+    </div>
+  </body>
+</html>

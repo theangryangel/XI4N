@@ -1,0 +1,208 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Plugins &mdash; xi4n 0.1.0-unstable documentation</title>
+    
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.1.0-unstable',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="xi4n 0.1.0-unstable documentation" href="../index.html" />
+    <link rel="next" title="Reference" href="../ref/index.html" />
+    <link rel="prev" title="Connections" href="../connections/index.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../ref/index.html" title="Reference"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="../connections/index.html" title="Connections"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">xi4n 0.1.0-unstable documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="plugins">
+<h1>Plugins<a class="headerlink" href="#plugins" title="Permalink to this headline">¶</a></h1>
+<p>Plugins extend xi4n&#8217;s core functionality, which is effectively to do nothing
+except maintain a connection to your chosen Insim, Outsim, Outgauge or LFS World
+Relay server.</p>
+<p>Luckily xi4n both ships with some pre-made plugins and also has the capability
+for new plugins to be written and packaged up.</p>
+<div class="section" id="using-plugins">
+<h2>Using Plugins<a class="headerlink" href="#using-plugins" title="Permalink to this headline">¶</a></h2>
+<p>To use one of the plugins included with xi4n (see the rest of this page for a
+list), just add an extra option in the <cite>plugins</cite> section of your <cite>config.yaml</cite>
+file, like so.</p>
+<div class="highlight-yaml"><div class="highlight"><pre><span class="l-Scalar-Plain">plugins</span><span class="p-Indicator">:</span>
+    <span class="p-Indicator">-</span> <span class="l-Scalar-Plain">alias</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">your-name-for-plugin</span>
+      <span class="l-Scalar-Plain">path</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">plugin-name</span>
+      <span class="l-Scalar-Plain">options</span><span class="p-Indicator">:</span>
+</pre></div>
+</div>
+<p>To add a second plugin you&#8217;d do something like this:</p>
+<div class="highlight-yaml"><div class="highlight"><pre><span class="l-Scalar-Plain">plugins</span><span class="p-Indicator">:</span>
+    <span class="p-Indicator">-</span> <span class="l-Scalar-Plain">alias</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">your-name-for-plugin</span>
+      <span class="l-Scalar-Plain">path</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">plugin-name</span>
+      <span class="l-Scalar-Plain">options</span><span class="p-Indicator">:</span>
+    <span class="p-Indicator">-</span> <span class="l-Scalar-Plain">alias</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">your-name-for-plugin-2</span>
+      <span class="l-Scalar-Plain">path</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">plugin-name-2</span>
+      <span class="l-Scalar-Plain">options</span><span class="p-Indicator">:</span>
+</pre></div>
+</div>
+<p>To active a plugin for a connection, you add the plugin&#8217;s alias to the list of
+plugins against the connection. For example, to add both <cite>your-plugin-name</cite> and
+<cite>your-plugin-name-2</cite> to an Insim connection, talking to localhost, via TCP on
+port 29999, and outputs errors to the console, you should have a configuration
+that looks something like this:</p>
+<div class="highlight-yaml"><div class="highlight"><pre><span class="p-Indicator">-</span> <span class="l-Scalar-Plain">talk</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">insim</span>
+  <span class="l-Scalar-Plain">insim</span><span class="p-Indicator">:</span>
+    <span class="l-Scalar-Plain">over</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">tcp</span>
+    <span class="l-Scalar-Plain">host</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">localhost</span>
+    <span class="l-Scalar-Plain">port</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">29999</span>
+  <span class="l-Scalar-Plain">use</span><span class="p-Indicator">:</span>
+    <span class="p-Indicator">-</span> <span class="l-Scalar-Plain">your-plugin-name</span>
+    <span class="p-Indicator">-</span> <span class="l-Scalar-Plain">your-plugin-name-2</span>
+  <span class="l-Scalar-Plain">log</span><span class="p-Indicator">:</span>
+    <span class="p-Indicator">-</span> <span class="l-Scalar-Plain">level</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">error</span>
+      <span class="l-Scalar-Plain">type</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">console</span>
+</pre></div>
+</div>
+<p>Why all this alias bollocks? The main benefit is that you can have the same
+plugin running with 2 different sets of options, or you can have the same plugin
+running on multiple servers.</p>
+</div>
+<div class="section" id="core-plugins">
+<h2>Core Plugins<a class="headerlink" href="#core-plugins" title="Permalink to this headline">¶</a></h2>
+<p>There are a bunch of plugins that are shipped as part of xi4n and should be
+maintained as things progress. These plugins will not appear in your
+configuration directories, but should be available.</p>
+<p>Each plugin will have it&#8217;s own set of options. You should look carefully at the
+appropriate page to make sure that you configure each correctly.</p>
+<ul class="simple">
+<li><a class="reference internal" href="busy.html"><em>busy</em></a>: An anti-idler plugin.</li>
+<li><a class="reference internal" href="gauges.html"><em>gauges</em></a>: An outgauge plugin that draws a beatiful gauge on a webpage,
+representing whats happening on the car you&#8217;re driving (in real time).</li>
+<li><a class="reference internal" href="livemap2.html"><em>livemap2</em></a>: A live tracker map, that displays on a web page, the live
+positions of racers (in real time).</li>
+<li><a class="reference internal" href="veto.html"><em>veto</em></a>: An anti-vote plugin</li>
+<li><a class="reference internal" href="powered-by-text.html"><em>powered-by-text</em></a>: A small example plugin, that shows how to display text when someone connects to a server.</li>
+<li><a class="reference internal" href="powered-by-buttons.html"><em>powered-by-buttons</em></a>: A small example plugin, that shows how to display a button that auto-hides when someone connects to a server.</li>
+<li><a class="reference internal" href="state.html"><em>state</em></a>: A &#8220;meta&#8221; plugin that maintains a definition of the current state of LFS including players, connections and server state (weather, track, etc.) - many plugins will probably depend on this, typically you will most likely be asked to add the plugin, but do nothing else with it.</li>
+<li><a class="reference internal" href="slmbr.html"><em>slmbr</em></a>: A joke Insim application, that rewards players for not moving.</li>
+<li><a class="reference internal" href="tv.html"><em>tv</em></a>: A Work In Progress automatic TV director.</li>
+</ul>
+</div>
+<div class="section" id="other-plugins">
+<h2>Other Plugins<a class="headerlink" href="#other-plugins" title="Permalink to this headline">¶</a></h2>
+<p>In addition to the plugins that come with xi4n, you can also use plugins that
+are maintained by third parties. To use a third party plugin:</p>
+<ul class="simple">
+<li>Download the source for the plugin and place it into
+<cite>your-configuration-directory/plugins/plugin-name</cite> where <cite>plugin-name</cite> is the
+name of the plugin.</li>
+<li>Read the plugin documentation. It may require you to edit <cite>package.json</cite> and
+then run <tt class="docutils literal"><span class="pre">npm</span> <span class="pre">install</span></tt> in the configuration directory.</li>
+<li>Edit <cite>config.yaml</cite> and enable the plugin as above.</li>
+<li>Restart xi4n.</li>
+</ul>
+</div>
+<div class="section" id="writing-plugins">
+<h2>Writing Plugins<a class="headerlink" href="#writing-plugins" title="Permalink to this headline">¶</a></h2>
+<p>See <a class="reference internal" href="../dev/plugins.html"><em>Writing Plugins</em></a>.</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Plugins</a><ul>
+<li><a class="reference internal" href="#using-plugins">Using Plugins</a></li>
+<li><a class="reference internal" href="#core-plugins">Core Plugins</a></li>
+<li><a class="reference internal" href="#other-plugins">Other Plugins</a></li>
+<li><a class="reference internal" href="#writing-plugins">Writing Plugins</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="../connections/index.html"
+                        title="previous chapter">Connections</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="../ref/index.html"
+                        title="next chapter">Reference</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/plugins/index.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../ref/index.html" title="Reference"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="../connections/index.html" title="Connections"
+             >previous</a> |</li>
+        <li><a href="../index.html">xi4n 0.1.0-unstable documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2014, the_angry_angel.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.
+    </div>
+  </body>
+</html>

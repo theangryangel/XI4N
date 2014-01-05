@@ -1,0 +1,181 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Insim &mdash; xi4n 0.1.0-unstable documentation</title>
+    
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.1.0-unstable',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="xi4n 0.1.0-unstable documentation" href="../index.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li><a href="../index.html">xi4n 0.1.0-unstable documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="insim">
+<h1>Insim<a class="headerlink" href="#insim" title="Permalink to this headline">¶</a></h1>
+<p>Supporting pure Insim connections over both TCP and UDP. It also supports outsim
+and outgauge packets when setup via insim (can be done by one or more plugins).</p>
+<div class="section" id="talk">
+<h2>Talk<a class="headerlink" href="#talk" title="Permalink to this headline">¶</a></h2>
+<p><tt class="docutils literal"><span class="pre">insim</span></tt></p>
+</div>
+<div class="section" id="options">
+<h2>Options<a class="headerlink" href="#options" title="Permalink to this headline">¶</a></h2>
+<table border="1" class="docutils">
+<colgroup>
+<col width="8%" />
+<col width="53%" />
+<col width="13%" />
+<col width="14%" />
+<col width="12%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Option</th>
+<th class="head">Description</th>
+<th class="head">Values</th>
+<th class="head">Defaults to</th>
+<th class="head">Suggested</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>over</td>
+<td>How to talk to LFS</td>
+<td>TCP or UDP</td>
+<td>TCP</td>
+<td>TCP</td>
+</tr>
+<tr class="row-odd"><td>port</td>
+<td>Port # LFS is configured to talk insim on</td>
+<td>0-65535</td>
+<td>29999</td>
+<td>Any avail</td>
+</tr>
+<tr class="row-even"><td>admin</td>
+<td>Admin password LFS has configured</td>
+<td>Any</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="example">
+<h2>Example<a class="headerlink" href="#example" title="Permalink to this headline">¶</a></h2>
+<ul>
+<li><p class="first">Talks insim</p>
+</li>
+<li><p class="first">Over tcp</p>
+</li>
+<li><p class="first">To localhost on port 29999</p>
+</li>
+<li><dl class="first docutils">
+<dt>Using plugins with aliases</dt>
+<dd><ul class="first last simple">
+<li>your-plugin-name</li>
+<li>your-plugin-name-2</li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><p class="first">Logging errors only to the console</p>
+</li>
+</ul>
+<div class="highlight-yaml"><div class="highlight"><pre><span class="p-Indicator">-</span> <span class="l-Scalar-Plain">talk</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">insim</span>
+  <span class="l-Scalar-Plain">insim</span><span class="p-Indicator">:</span>
+    <span class="l-Scalar-Plain">over</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">tcp</span>
+    <span class="l-Scalar-Plain">host</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">localhost</span>
+    <span class="l-Scalar-Plain">port</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">29999</span>
+  <span class="l-Scalar-Plain">use</span><span class="p-Indicator">:</span>
+    <span class="p-Indicator">-</span> <span class="l-Scalar-Plain">your-plugin-name</span>
+    <span class="p-Indicator">-</span> <span class="l-Scalar-Plain">your-plugin-name-2</span>
+  <span class="l-Scalar-Plain">log</span><span class="p-Indicator">:</span>
+    <span class="p-Indicator">-</span> <span class="l-Scalar-Plain">level</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">error</span>
+      <span class="l-Scalar-Plain">type</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">console</span>
+</pre></div>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Insim</a><ul>
+<li><a class="reference internal" href="#talk">Talk</a></li>
+<li><a class="reference internal" href="#options">Options</a></li>
+<li><a class="reference internal" href="#example">Example</a></li>
+</ul>
+</li>
+</ul>
+
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/connections/insim.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li><a href="../index.html">xi4n 0.1.0-unstable documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2014, the_angry_angel.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.
+    </div>
+  </body>
+</html>

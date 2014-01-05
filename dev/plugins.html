@@ -1,0 +1,206 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Writing Plugins &mdash; xi4n 0.1.0-unstable documentation</title>
+    
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.1.0-unstable',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="xi4n 0.1.0-unstable documentation" href="../index.html" />
+    <link rel="up" title="For Developers" href="index.html" />
+    <link rel="next" title="API" href="api.html" />
+    <link rel="prev" title="Hacking on xi4n" href="core.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="api.html" title="API"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="core.html" title="Hacking on xi4n"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">xi4n 0.1.0-unstable documentation</a> &raquo;</li>
+          <li><a href="index.html" accesskey="U">For Developers</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="writing-plugins">
+<h1>Writing Plugins<a class="headerlink" href="#writing-plugins" title="Permalink to this headline">¶</a></h1>
+<p>You know Javascript, right?</p>
+<p>Seriously, you do need to know Javascript and it&#8217;s idiosyncrasies. Particularly
+how scoping &amp; &#8216;this&#8217; works. xi4n takes advantage of it.</p>
+<div class="section" id="lets-start-at-the-basics">
+<h2>Lets start at the basics<a class="headerlink" href="#lets-start-at-the-basics" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="what-exactly-is-insim-outsim-outgauge-lfsw-relay">
+<h3>What exactly is Insim/Outsim/Outgauge/LFSW Relay?<a class="headerlink" href="#what-exactly-is-insim-outsim-outgauge-lfsw-relay" title="Permalink to this headline">¶</a></h3>
+<p>These are all protocols used to talk to Live For Speed (LFS) servers and clients. The
+general gist is that when something happens in LFS a packet is sent from the
+server or client you&#8217;re connected to and your application receives that packet
+of information and does something with it.</p>
+<p>In the instance of Insim and the LFSW Relay, you can also send data back to LFS.</p>
+<p>Make sense?</p>
+</div>
+<div class="section" id="how-does-xi4n-fit-into-all-of-this">
+<h3>How does xi4n fit into all of this?<a class="headerlink" href="#how-does-xi4n-fit-into-all-of-this" title="Permalink to this headline">¶</a></h3>
+<p>What xi4n does is take away the heavy lifting of parsing data from LFS and
+maintaining the connection, as well as giving you the ability to connect to
+multiple different types of connections.</p>
+<p>However, xi4n does not do much additional translation. It merely takes the data
+from LFS, and turns it into an event that is in turn passed to plugins.</p>
+</div>
+<div class="section" id="so-how-do-i-do-x">
+<h3>So how do I do X?<a class="headerlink" href="#so-how-do-i-do-x" title="Permalink to this headline">¶</a></h3>
+<p>Since all xi4n does is translate the packets into an event (which is a
+javascript object) you need to write a plugin that listens for the relevant
+event and then reacts to it.</p>
+</div>
+<div class="section" id="how-do-i-know-what-events-to-listen-for">
+<h3>How do I know what events to listen for?<a class="headerlink" href="#how-do-i-know-what-events-to-listen-for" title="Permalink to this headline">¶</a></h3>
+<p>xi4n emits events that match the LFS packet name. You can find all of these and
+description of what they do in your LFS installation, in docs/Insim.txt or on
+the LFS wiki.</p>
+<p>So, taking a practical example, you want to know when one player hits another
+player. Looking in Insim.txt you&#8217;ll see that IS_CON is the packet for a contact
+between players, so you listen for the event IS_CON. Simple, no?</p>
+</div>
+<div class="section" id="can-other-plugins-emit-events">
+<h3>Can other plugins emit events?<a class="headerlink" href="#can-other-plugins-emit-events" title="Permalink to this headline">¶</a></h3>
+<p>Yes. Infact one of the plugins bundled with xi4n does exactly this - it&#8217;s a
+<a class="reference internal" href="../plugins/state.html"><em>state</em></a> plugin that tracks the vital information and presents it in a more usable
+format.</p>
+<p>How do you know what to listen for when depending on another plugin?
+Unfortunately you&#8217;ll either have to read the documentation or read the code. If
+it&#8217;s a core plugin the relevant plugin page will have a list of events.</p>
+</div>
+</div>
+<div class="section" id="writing-your-first-plugin">
+<h2>Writing Your first plugin<a class="headerlink" href="#writing-your-first-plugin" title="Permalink to this headline">¶</a></h2>
+<ol class="arabic">
+<li><p class="first">Open a command propt and switch into your configuration directory.</p>
+</li>
+<li><p class="first">Run <tt class="docutils literal"><span class="pre">xi4n</span> <span class="pre">boilerplate</span> <span class="pre">plugins/your-awesome-plugin-name</span></tt>. This generates a  directory with the same name as the plugin and a basic package.json, and plugin file.</p>
+</li>
+<li><p class="first">Open <cite>plugins/your-awesome-plugin-name/lib.js</cite> with your favourite text
+editor. You&#8217;ll see there&#8217;s already the barebones of a plugin already.</p>
+</li>
+<li><p class="first">In the file you&#8217;ll see an object being created called plugin, which has:
+* A <cite>constructor</cite> function that takes the argument <cite>options</cite>.
+* An <cite>associate</cite> function that takes the argument <cite>client</cite>.
+* Finally a <cite>module.exports = plugin;</cite> line. This line exports the plugin</p>
+<blockquote>
+<div><p>class so that it can be used by xi4n.</p>
+</div></blockquote>
+</li>
+<li><p class="first">If you have any setup to do on a per instance basis you should do it in the
+constructor.</p>
+</li>
+<li><p class="first">The <cite>associate</cite> function is called when a plugin is associated with a
+connection to LFS. The connection is the <cite>client</cite> argument in the
+boilerplate. It&#8217;s in this <cite>associate</cite> function that you setup any listeners
+you want for packets from each LFS connection. Bear in mind that since a
+plugin can be associated with <strong>multiple</strong> connections of multiple types, you
+may need to think carefully how you store your data.</p>
+</li>
+</ol>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Writing Plugins</a><ul>
+<li><a class="reference internal" href="#lets-start-at-the-basics">Lets start at the basics</a><ul>
+<li><a class="reference internal" href="#what-exactly-is-insim-outsim-outgauge-lfsw-relay">What exactly is Insim/Outsim/Outgauge/LFSW Relay?</a></li>
+<li><a class="reference internal" href="#how-does-xi4n-fit-into-all-of-this">How does xi4n fit into all of this?</a></li>
+<li><a class="reference internal" href="#so-how-do-i-do-x">So how do I do X?</a></li>
+<li><a class="reference internal" href="#how-do-i-know-what-events-to-listen-for">How do I know what events to listen for?</a></li>
+<li><a class="reference internal" href="#can-other-plugins-emit-events">Can other plugins emit events?</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#writing-your-first-plugin">Writing Your first plugin</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="core.html"
+                        title="previous chapter">Hacking on xi4n</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="api.html"
+                        title="next chapter">API</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/dev/plugins.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="api.html" title="API"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="core.html" title="Hacking on xi4n"
+             >previous</a> |</li>
+        <li><a href="../index.html">xi4n 0.1.0-unstable documentation</a> &raquo;</li>
+          <li><a href="index.html" >For Developers</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2014, the_angry_angel.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.
+    </div>
+  </body>
+</html>
