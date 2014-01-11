@@ -1,8 +1,8 @@
 .gitignore
 .npmignore
 Makefile
-README.md
 config.yaml
 build/
 tests/
 docs/src/
+scripts/
