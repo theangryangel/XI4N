@@ -1,6 +1,7 @@
+BUILD_NAME=$(shell grep -m 1 name package.json | cut -d \" -f 4)
+BUILD_VERSION=$(shell grep version package.json | cut -d \" -f 4)
 BUILD_DIR=./build
 OUTPUT_DIR=$(BUILD_DIR)/output
-BUILD_VERSION=$(shell grep version package.json | cut -d \" -f 4)
 GH_PAGES_SOURCES=docs package.json
 
 build: clean docs
@@ -9,6 +10,9 @@ build: clean docs
 	mkdir -p $(OUTPUT_DIR)/docs
 	cp -R docs/_build/html $(OUTPUT_DIR)/docs
 	cd $(OUTPUT_DIR) && npm pack && mv *.tgz ..
+
+publish: build
+	npm publish $(BUILD_DIR)/$(BUILD_NAME)-$(BUILD_VERSION).tgz
 
 clean:
 	make -C docs clean
@@ -29,4 +33,4 @@ gh-pages:
 	git commit -m "Generated gh-pages for `git log master -1 --pretty=short \
 		--abbrev-commit`" && git push origin gh-pages ; git checkout master
 
-.PHONY: build clean docs gh-pages
+.PHONY: build publish clean docs gh-pages
