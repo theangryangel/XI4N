@@ -1,61 +1,158 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
 
-<html xmlns="http://www.w3.org/1999/xhtml">
-  <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    
-    <title>Command Line Interface &mdash; xi4n 0.1.0 documentation</title>
-    
-    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
-    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-    
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Command Line Interface &mdash; xi4n 0.1.0 documentation</title>
+  
+
+  
+  
+
+  
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700' rel='stylesheet' type='text/css'>
+
+  
+  
+
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '../',
-        VERSION:     '0.1.0',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
+        URL_ROOT:'../',
+        VERSION:'0.1.0',
+        COLLAPSE_INDEX:false,
+        FILE_SUFFIX:'.html',
         HAS_SOURCE:  true
       };
     </script>
-    <script type="text/javascript" src="../_static/jquery.js"></script>
-    <script type="text/javascript" src="../_static/underscore.js"></script>
-    <script type="text/javascript" src="../_static/doctools.js"></script>
-    <link rel="top" title="xi4n 0.1.0 documentation" href="../index.html" />
-    <link rel="up" title="Reference" href="index.html" />
-    <link rel="next" title="config.yaml" href="config.html" />
-    <link rel="prev" title="Reference" href="index.html" /> 
-  </head>
-  <body>
-    <div class="related">
-      <h3>Navigation</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="../genindex.html" title="General Index"
-             accesskey="I">index</a></li>
-        <li class="right" >
-          <a href="config.html" title="config.yaml"
-             accesskey="N">next</a> |</li>
-        <li class="right" >
-          <a href="index.html" title="Reference"
-             accesskey="P">previous</a> |</li>
-        <li><a href="../index.html">xi4n 0.1.0 documentation</a> &raquo;</li>
-          <li><a href="index.html" accesskey="U">Reference</a> &raquo;</li> 
-      </ul>
-    </div>  
+      <script type="text/javascript" src="../_static/jquery.js"></script>
+      <script type="text/javascript" src="../_static/underscore.js"></script>
+      <script type="text/javascript" src="../_static/doctools.js"></script>
 
-    <div class="document">
-      <div class="documentwrapper">
-        <div class="bodywrapper">
-          <div class="body">
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+  
+
+  
+  
+    <script type="text/javascript">
+        jQuery(function () {
+            SphinxRtdTheme.StickyNav.enable();
+        });
+    </script>
+  
+
+  
+    <link rel="top" title="xi4n 0.1.0 documentation" href="../index.html"/>
+        <link rel="up" title="Reference" href="index.html"/>
+        <link rel="next" title="config.yaml" href="config.html"/>
+        <link rel="prev" title="Reference" href="index.html"/> 
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.6.2/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-nav-search">
+        <a href="../index.html" class="icon icon-home"> xi4n</a>
+        <div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+        
+        
+            <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../guides/index.html">Guides</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../guides/main.html">Getting Started</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guides/node.html">Installing Node.js</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guides/lfs.html">Installing and Configuring LFS</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../connections/index.html">Connections</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../connections/index.html#types-of-connection">Types of connection</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../connections/index.html#configuring-a-connection">Configuring a connection</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../plugins/index.html">Plugins</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../plugins/index.html#using-plugins">Using Plugins</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../plugins/index.html#core-plugins">Core Plugins</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../plugins/index.html#other-plugins">Other Plugins</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../plugins/index.html#writing-plugins">Writing Plugins</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Reference</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="">Command Line Interface</a></li>
+<li class="toctree-l2"><a class="reference internal" href="config.html">config.yaml</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../dev/index.html">For Developers</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../dev/core.html">Hacking on xi4n</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../dev/plugins.html">Writing Plugins</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../dev/api.html">API</a></li>
+</ul>
+</li>
+</ul>
+
+        
+      </div>
+      &nbsp;
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="icon icon-reorder"></i>
+        <a href="../index.html">xi4n</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../index.html">Docs</a> &raquo;</li>
+      
+          <li><a href="index.html">Reference</a> &raquo;</li>
+      
+    <li>Command Line Interface</li>
+      <li class="wy-breadcrumbs-aside">
+        
+          <a href="../_sources/ref/cli.txt" rel="nofollow"> View page source</a>
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main">
             
   <div class="section" id="command-line-interface">
 <h1>Command Line Interface<a class="headerlink" href="#command-line-interface" title="Permalink to this headline">¶</a></h1>
 <p><strong>xi4n</strong> is the command-line interface to xi4n.</p>
 <p>You invoke xi4n by specifying a <em>command</em>, like so:</p>
-<div class="highlight-python"><pre>xi4n COMMAND [ARGS...]</pre>
+<div class="highlight-python"><div class="highlight"><pre>xi4n COMMAND [ARGS...]
+</pre></div>
 </div>
 <p>The rest of this document describes the available commands. If you ever need
 a quick list of what&#8217;s available, just type <tt class="docutils literal"><span class="pre">xi4n</span> <span class="pre">help</span></tt>.</p>
@@ -63,7 +160,8 @@ a quick list of what&#8217;s available, just type <tt class="docutils literal"><
 <h2>Commands<a class="headerlink" href="#commands" title="Permalink to this headline">¶</a></h2>
 <div class="section" id="init">
 <h3>init<a class="headerlink" href="#init" title="Permalink to this headline">¶</a></h3>
-<div class="highlight-python"><pre>xi4n init DIR [options]</pre>
+<div class="highlight-python"><div class="highlight"><pre>xi4n init DIR [options]
+</pre></div>
 </div>
 <p>Creates a basic xi4n configuration directory, including:</p>
 <ol class="arabic simple">
@@ -76,26 +174,30 @@ particular configuration.</li>
 </div>
 <div class="section" id="start">
 <h3>start<a class="headerlink" href="#start" title="Permalink to this headline">¶</a></h3>
-<div class="highlight-python"><pre>xi4n start DIR [options]</pre>
+<div class="highlight-python"><div class="highlight"><pre>xi4n start DIR [options]
+</pre></div>
 </div>
 <p>Starts a xi4n configuration.</p>
 </div>
 <div class="section" id="boilerplate">
 <h3>boilerplate<a class="headerlink" href="#boilerplate" title="Permalink to this headline">¶</a></h3>
-<div class="highlight-python"><pre>xi4n boilerplate [options] DIR</pre>
+<div class="highlight-python"><div class="highlight"><pre>xi4n boilerplate [options] DIR
+</pre></div>
 </div>
 <p>Creates a boilerplate plugin in DIR.</p>
 </div>
 <div class="section" id="docs">
 <h3>docs<a class="headerlink" href="#docs" title="Permalink to this headline">¶</a></h3>
-<div class="highlight-python"><pre>xi4n docs</pre>
+<div class="highlight-python"><div class="highlight"><pre>xi4n docs
+</pre></div>
 </div>
 <p>Hosts documentation in a live web server, useful for offline viewing.
 Unavailable when using development versions of xi4n.</p>
 </div>
 <div class="section" id="config">
 <h3>config<a class="headerlink" href="#config" title="Permalink to this headline">¶</a></h3>
-<div class="highlight-python"><pre>xi4n config [options] DIR</pre>
+<div class="highlight-python"><div class="highlight"><pre>xi4n config [options] DIR
+</pre></div>
 </div>
 <p>Starts a web-based configuration tool editor. Currently EXPERIMENTAL and
 INCOMPLETE.</p>
@@ -105,72 +207,35 @@ INCOMPLETE.</p>
 
 
           </div>
-        </div>
-      </div>
-      <div class="sphinxsidebar">
-        <div class="sphinxsidebarwrapper">
-  <h3><a href="../index.html">Table Of Contents</a></h3>
-  <ul>
-<li><a class="reference internal" href="#">Command Line Interface</a><ul>
-<li><a class="reference internal" href="#commands">Commands</a><ul>
-<li><a class="reference internal" href="#init">init</a></li>
-<li><a class="reference internal" href="#start">start</a></li>
-<li><a class="reference internal" href="#boilerplate">boilerplate</a></li>
-<li><a class="reference internal" href="#docs">docs</a></li>
-<li><a class="reference internal" href="#config">config</a></li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="config.html" class="btn btn-neutral float-right" title="config.yaml"/>Next <span class="icon icon-circle-arrow-right"></span></a>
+      
+      
+        <a href="index.html" class="btn btn-neutral" title="Reference"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+      
+    </div>
+  
 
-  <h4>Previous topic</h4>
-  <p class="topless"><a href="index.html"
-                        title="previous chapter">Reference</a></p>
-  <h4>Next topic</h4>
-  <p class="topless"><a href="config.html"
-                        title="next chapter">config.yaml</a></p>
-  <h3>This Page</h3>
-  <ul class="this-page-menu">
-    <li><a href="../_sources/ref/cli.txt"
-           rel="nofollow">Show Source</a></li>
-  </ul>
-<div id="searchbox" style="display: none">
-  <h3>Quick search</h3>
-    <form class="search" action="../search.html" method="get">
-      <input type="text" name="q" />
-      <input type="submit" value="Go" />
-      <input type="hidden" name="check_keywords" value="yes" />
-      <input type="hidden" name="area" value="default" />
-    </form>
-    <p class="searchtip" style="font-size: 90%">
-    Enter search terms or a module, class or function name.
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2014, the_angry_angel.
     </p>
-</div>
-<script type="text/javascript">$('#searchbox').show(0);</script>
+  </div>
+
+  <a href="https://github.com/snide/sphinx_rtd_theme">Sphinx theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>
+</footer>
         </div>
       </div>
-      <div class="clearer"></div>
-    </div>
-    <div class="related">
-      <h3>Navigation</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="../genindex.html" title="General Index"
-             >index</a></li>
-        <li class="right" >
-          <a href="config.html" title="config.yaml"
-             >next</a> |</li>
-        <li class="right" >
-          <a href="index.html" title="Reference"
-             >previous</a> |</li>
-        <li><a href="../index.html">xi4n 0.1.0 documentation</a> &raquo;</li>
-          <li><a href="index.html" >Reference</a> &raquo;</li> 
-      </ul>
-    </div>
-    <div class="footer">
-        &copy; Copyright 2014, the_angry_angel.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.
-    </div>
-  </body>
+
+    </section>
+
+  </div>
+  
+
+</body>
 </html>

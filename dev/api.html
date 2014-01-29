@@ -1,63 +1,162 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
 
-<html xmlns="http://www.w3.org/1999/xhtml">
-  <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    
-    <title>API &mdash; xi4n 0.1.0 documentation</title>
-    
-    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
-    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-    
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>API &mdash; xi4n 0.1.0 documentation</title>
+  
+
+  
+  
+
+  
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700' rel='stylesheet' type='text/css'>
+
+  
+  
+
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '../',
-        VERSION:     '0.1.0',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
+        URL_ROOT:'../',
+        VERSION:'0.1.0',
+        COLLAPSE_INDEX:false,
+        FILE_SUFFIX:'.html',
         HAS_SOURCE:  true
       };
     </script>
-    <script type="text/javascript" src="../_static/jquery.js"></script>
-    <script type="text/javascript" src="../_static/underscore.js"></script>
-    <script type="text/javascript" src="../_static/doctools.js"></script>
-    <link rel="top" title="xi4n 0.1.0 documentation" href="../index.html" />
-    <link rel="up" title="For Developers" href="index.html" />
-    <link rel="prev" title="Writing Plugins" href="plugins.html" /> 
-  </head>
-  <body>
-    <div class="related">
-      <h3>Navigation</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="../genindex.html" title="General Index"
-             accesskey="I">index</a></li>
-        <li class="right" >
-          <a href="plugins.html" title="Writing Plugins"
-             accesskey="P">previous</a> |</li>
-        <li><a href="../index.html">xi4n 0.1.0 documentation</a> &raquo;</li>
-          <li><a href="index.html" accesskey="U">For Developers</a> &raquo;</li> 
-      </ul>
-    </div>  
+      <script type="text/javascript" src="../_static/jquery.js"></script>
+      <script type="text/javascript" src="../_static/underscore.js"></script>
+      <script type="text/javascript" src="../_static/doctools.js"></script>
 
-    <div class="document">
-      <div class="documentwrapper">
-        <div class="bodywrapper">
-          <div class="body">
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+  
+
+  
+  
+    <script type="text/javascript">
+        jQuery(function () {
+            SphinxRtdTheme.StickyNav.enable();
+        });
+    </script>
+  
+
+  
+    <link rel="top" title="xi4n 0.1.0 documentation" href="../index.html"/>
+        <link rel="up" title="For Developers" href="index.html"/>
+        <link rel="prev" title="Writing Plugins" href="plugins.html"/> 
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.6.2/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-nav-search">
+        <a href="../index.html" class="icon icon-home"> xi4n</a>
+        <div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+        
+        
+            <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../guides/index.html">Guides</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../guides/main.html">Getting Started</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guides/node.html">Installing Node.js</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guides/lfs.html">Installing and Configuring LFS</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../connections/index.html">Connections</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../connections/index.html#types-of-connection">Types of connection</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../connections/index.html#configuring-a-connection">Configuring a connection</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../plugins/index.html">Plugins</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../plugins/index.html#using-plugins">Using Plugins</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../plugins/index.html#core-plugins">Core Plugins</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../plugins/index.html#other-plugins">Other Plugins</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../plugins/index.html#writing-plugins">Writing Plugins</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../ref/index.html">Reference</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../ref/cli.html">Command Line Interface</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ref/config.html">config.yaml</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">For Developers</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="core.html">Hacking on xi4n</a></li>
+<li class="toctree-l2"><a class="reference internal" href="plugins.html">Writing Plugins</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="">API</a></li>
+</ul>
+</li>
+</ul>
+
+        
+      </div>
+      &nbsp;
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="icon icon-reorder"></i>
+        <a href="../index.html">xi4n</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../index.html">Docs</a> &raquo;</li>
+      
+          <li><a href="index.html">For Developers</a> &raquo;</li>
+      
+    <li>API</li>
+      <li class="wy-breadcrumbs-aside">
+        
+          <a href="../_sources/dev/api.txt" rel="nofollow"> View page source</a>
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main">
             
   <div class="section" id="api">
 <h1>API<a class="headerlink" href="#api" title="Permalink to this headline">¶</a></h1>
-<p>This page describes the internal API of xi4n at it&#8217;s core. It&#8217;s a work in
+<p>This page describes the public API of xi4n at it&#8217;s core. It&#8217;s a work in
 progress since xi4n is a platform first and a library second, its API is
 mainly undocumented, but is reasonably stable.</p>
 <p>If you&#8217;re planning on using xi4n as a library, honestly I highly recommend
 reading the source of xi4n code. xi4n itself is using the same modules that
 you can require(), thus it&#8217;s always going to be the most up to date repository
 of information.</p>
-<div class="section" id="require">
-<h2>Require<a class="headerlink" href="#require" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="basic-usage">
+<h2>Basic usage<a class="headerlink" href="#basic-usage" title="Permalink to this headline">¶</a></h2>
 <ol class="arabic simple">
 <li>Specify xi4n as a dependency in your <cite>package.json</cite>.</li>
 <li>Run <tt class="docutils literal"><span class="pre">npm</span> <span class="pre">install</span></tt> as you would normally to pull down the new dependency.</li>
@@ -65,101 +164,649 @@ of information.</p>
 <li>Hack. Hack. Hack.</li>
 </ol>
 </div>
-<div class="section" id="exported-modules">
-<h2>Exported modules<a class="headerlink" href="#exported-modules" title="Permalink to this headline">¶</a></h2>
-<div class="section" id="protocol-insim">
-<h3>protocol.insim<a class="headerlink" href="#protocol-insim" title="Permalink to this headline">¶</a></h3>
-<p>Creates an instance of an insim client.</p>
+<div class="section" id="xi4n-protocols-manager">
+<h2>xi4n.protocols.manager<a class="headerlink" href="#xi4n-protocols-manager" title="Permalink to this headline">¶</a></h2>
+<p>Manages a collection of clients; insim, outsim, outgauge or relay.</p>
+<dl class="class">
+<dt id="xi4n.protocols.manager">
+<em class="property">class </em><tt class="descclassname">xi4n.protocols.</tt><tt class="descname">manager</tt><big>(</big><em>options</em><big>)</big><a class="headerlink" href="#xi4n.protocols.manager" title="Permalink to this definition">¶</a></dt>
+<dd><p>Manages one or more clients.
+Clients are automatically created and setup from options object.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first last simple">
+<li><strong>options</strong> (<em>object</em>) &#8211; An object of options</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="xi4n.protocols.manager.start">
+<tt class="descclassname">xi4n.protocols.manager.</tt><tt class="descname">start</tt><big>(</big><big>)</big><a class="headerlink" href="#xi4n.protocols.manager.start" title="Permalink to this definition">¶</a></dt>
+<dd><p>Attempts to start/connect all associated clients.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="xi4n.protocols.manager.stop">
+<tt class="descclassname">xi4n.protocols.manager.</tt><tt class="descname">stop</tt><big>(</big><big>)</big><a class="headerlink" href="#xi4n.protocols.manager.stop" title="Permalink to this definition">¶</a></dt>
+<dd><p>Attempts to stop/disconnect all associated clients.</p>
+</dd></dl>
+
 </div>
-<div class="section" id="protocol-outsim">
-<h3>protocol.outsim<a class="headerlink" href="#protocol-outsim" title="Permalink to this headline">¶</a></h3>
-<p>Creates an instance of an outsim client.</p>
+<div class="section" id="xi4n-protocols-insim">
+<h2>xi4n.protocols.insim<a class="headerlink" href="#xi4n-protocols-insim" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="xi4n.protocols.insim">
+<em class="property">class </em><tt class="descclassname">xi4n.protocols.</tt><tt class="descname">insim</tt><big>(</big><em>options</em><span class="optional">[</span>, <em>log</em><span class="optional">]</span><big>)</big><a class="headerlink" href="#xi4n.protocols.insim" title="Permalink to this definition">¶</a></dt>
+<dd><p>An insim client. Implements the insim protocol, and also understands and
+decodes outsim and outgauge, when setup to be sent over insim.</p>
+<p>Emit events, named the same as the insim, outsim, or outgauge packet name.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first last simple">
+<li><strong>options</strong> (<em>object</em>) &#8211; An object of options</li>
+<li><strong>log</strong> (<em>object</em>) &#8211; Optional logger. An instance of winston, or compatible logger is required. If none provided all log entries go into a black hole.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="xi4n.protocols.insim.connect">
+<tt class="descclassname">xi4n.protocols.insim.</tt><tt class="descname">connect</tt><big>(</big><big>)</big><a class="headerlink" href="#xi4n.protocols.insim.connect" title="Permalink to this definition">¶</a></dt>
+<dd><p>Attempts to establish a connection.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="xi4n.protocols.insim.disconnect">
+<tt class="descclassname">xi4n.protocols.insim.</tt><tt class="descname">disconnect</tt><big>(</big><big>)</big><a class="headerlink" href="#xi4n.protocols.insim.disconnect" title="Permalink to this definition">¶</a></dt>
+<dd><p>Disconnects any active connections.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="xi4n.protocols.insim.send">
+<tt class="descclassname">xi4n.protocols.insim.</tt><tt class="descname">send</tt><big>(</big><em>data</em><big>)</big><a class="headerlink" href="#xi4n.protocols.insim.send" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sends data down any active insim connection.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first last simple">
+<li><strong>data</strong> (<em>object</em>) &#8211; An instance of an object. Must implement pack() function that returns a binary string of an insim packet.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="xi4n.protocols.insim.on">
+<tt class="descclassname">xi4n.protocols.insim.</tt><tt class="descname">on</tt><big>(</big><em>event</em>, <em>callback</em><big>)</big><a class="headerlink" href="#xi4n.protocols.insim.on" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first last simple">
+<li><strong>event</strong> (<em>string</em>) &#8211; Event you&#8217;re listening for. Typically an insim packet</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<p>name.
+:param function callback: Function that is called when the event is
+received.</p>
+<p>Adds a callback to run, when event is emitted.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="xi4n.protocols.insim.off">
+<tt class="descclassname">xi4n.protocols.insim.</tt><tt class="descname">off</tt><big>(</big><em>event</em>, <em>callback</em><big>)</big><a class="headerlink" href="#xi4n.protocols.insim.off" title="Permalink to this definition">¶</a></dt>
+<dd><p>Removes a callback from the event queue.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first last simple">
+<li><strong>event</strong> (<em>string</em>) &#8211; Event you want to remove the callback from.</li>
+<li><strong>callback</strong> (<em>function</em>) &#8211; Callback you want to remove.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
 </div>
-<div class="section" id="protocol-outgauge">
-<h3>protocol.outgauge<a class="headerlink" href="#protocol-outgauge" title="Permalink to this headline">¶</a></h3>
-<p>Creates an instance of an outgauge client.</p>
+<div class="section" id="xi4n-protocols-outsim">
+<h2>xi4n.protocols.outsim<a class="headerlink" href="#xi4n-protocols-outsim" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="xi4n.protocols.outsim">
+<em class="property">class </em><tt class="descclassname">xi4n.protocols.</tt><tt class="descname">outsim</tt><big>(</big><em>options</em><span class="optional">[</span>, <em>log</em><span class="optional">]</span><big>)</big><a class="headerlink" href="#xi4n.protocols.outsim" title="Permalink to this definition">¶</a></dt>
+<dd><p>An outsim client. Implements the outsim protocol.</p>
+<p>Emit events, named the same as the outsim packet.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first last simple">
+<li><strong>options</strong> (<em>object</em>) &#8211; An object of options</li>
+<li><strong>log</strong> (<em>object</em>) &#8211; Optional logger. An instance of winston, or compatible logger is required. If none provided all log entries go into a black hole.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="xi4n.protocols.outsim.connect">
+<tt class="descclassname">xi4n.protocols.outsim.</tt><tt class="descname">connect</tt><big>(</big><big>)</big><a class="headerlink" href="#xi4n.protocols.outsim.connect" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates a listening UDP socket.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="xi4n.protocols.outsim.disconnect">
+<tt class="descclassname">xi4n.protocols.outsim.</tt><tt class="descname">disconnect</tt><big>(</big><big>)</big><a class="headerlink" href="#xi4n.protocols.outsim.disconnect" title="Permalink to this definition">¶</a></dt>
+<dd><p>Kills the listening socket.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="xi4n.protocols.outsim.on">
+<tt class="descclassname">xi4n.protocols.outsim.</tt><tt class="descname">on</tt><big>(</big><em>event</em>, <em>callback</em><big>)</big><a class="headerlink" href="#xi4n.protocols.outsim.on" title="Permalink to this definition">¶</a></dt>
+<dd><p>Adds a callback to run, when event is emitted.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first last simple">
+<li><strong>event</strong> (<em>string</em>) &#8211; Event you&#8217;re listening for. Typically an outsim packet name.</li>
+<li><strong>callback</strong> (<em>function</em>) &#8211; Function that is called when the event is received.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="xi4n.protocols.outsim.off">
+<tt class="descclassname">xi4n.protocols.outsim.</tt><tt class="descname">off</tt><big>(</big><em>event</em>, <em>callback</em><big>)</big><a class="headerlink" href="#xi4n.protocols.outsim.off" title="Permalink to this definition">¶</a></dt>
+<dd><p>Removes a callback from the event queue.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first last simple">
+<li><strong>event</strong> (<em>string</em>) &#8211; Event you want to remove the callback from.</li>
+<li><strong>callback</strong> (<em>function</em>) &#8211; Callback you want to remove.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
 </div>
-<div class="section" id="protocol-relay">
-<h3>protocol.relay<a class="headerlink" href="#protocol-relay" title="Permalink to this headline">¶</a></h3>
-<p>Creates an instance of a LFSW relay client.</p>
+<div class="section" id="xi4n-protocols-outgauge">
+<h2>xi4n.protocols.outgauge<a class="headerlink" href="#xi4n-protocols-outgauge" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt>
+<em class="property">class </em><tt class="descclassname">xi4n.protocols.</tt><tt class="descname">outsim</tt><big>(</big><em>options</em><span class="optional">[</span>, <em>log</em><span class="optional">]</span><big>)</big></dt>
+<dd><p>An outsim client. Implements the outgauge protocol.</p>
+<p>Emit events, named the same as the outgauge packet.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first last simple">
+<li><strong>options</strong> (<em>object</em>) &#8211; An object of options</li>
+<li><strong>log</strong> (<em>object</em>) &#8211; Optional logger. An instance of winston, or compatible logger is required. If none provided all log entries go into a black hole.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt>
+<tt class="descclassname">xi4n.protocols.outsim.</tt><tt class="descname">connect</tt><big>(</big><big>)</big></dt>
+<dd><p>Creates a listening UDP socket.</p>
+</dd></dl>
+
+<dl class="function">
+<dt>
+<tt class="descclassname">xi4n.protocols.outsim.</tt><tt class="descname">disconnect</tt><big>(</big><big>)</big></dt>
+<dd><p>Kills the listening socket.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="xi4n.protocols.outgauge.on">
+<tt class="descclassname">xi4n.protocols.outgauge.</tt><tt class="descname">on</tt><big>(</big><em>event</em>, <em>callback</em><big>)</big><a class="headerlink" href="#xi4n.protocols.outgauge.on" title="Permalink to this definition">¶</a></dt>
+<dd><p>Adds a callback to run, when event is emitted.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first last simple">
+<li><strong>event</strong> (<em>string</em>) &#8211; Event you&#8217;re listening for. Typically an outgauge packet name.</li>
+<li><strong>callback</strong> (<em>function</em>) &#8211; Function that is called when the event is received.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="xi4n.protocols.outgauge.off">
+<tt class="descclassname">xi4n.protocols.outgauge.</tt><tt class="descname">off</tt><big>(</big><em>event</em>, <em>callback</em><big>)</big><a class="headerlink" href="#xi4n.protocols.outgauge.off" title="Permalink to this definition">¶</a></dt>
+<dd><p>Removes a callback from the event queue.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first last simple">
+<li><strong>event</strong> (<em>string</em>) &#8211; Event you want to remove the callback from.</li>
+<li><strong>callback</strong> (<em>function</em>) &#8211; Callback you want to remove.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
 </div>
-<div class="section" id="strings">
-<h3>strings<a class="headerlink" href="#strings" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="xi4n-protocols-relay">
+<h2>xi4n.protocols.relay<a class="headerlink" href="#xi4n-protocols-relay" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="xi4n.protocols.relay">
+<em class="property">class </em><tt class="descclassname">xi4n.protocols.</tt><tt class="descname">relay</tt><big>(</big><em>options</em><span class="optional">[</span>, <em>log</em><span class="optional">]</span><big>)</big><a class="headerlink" href="#xi4n.protocols.relay" title="Permalink to this definition">¶</a></dt>
+<dd><p>LFS World relay client. Implements the both relay and insim protocols.</p>
+<p>Emit events, named the same as the insim or relay packet.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first last simple">
+<li><strong>options</strong> (<em>object</em>) &#8211; An object of options</li>
+<li><strong>log</strong> (<em>object</em>) &#8211; Optional logger. An instance of winston, or compatible logger is required. If none provided all log entries go into a black hole.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="xi4n.protocols.relay.connect">
+<tt class="descclassname">xi4n.protocols.relay.</tt><tt class="descname">connect</tt><big>(</big><big>)</big><a class="headerlink" href="#xi4n.protocols.relay.connect" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates a connection to the LFS World relay.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="xi4n.protocols.relay.select">
+<tt class="descclassname">xi4n.protocols.relay.</tt><tt class="descname">select</tt><big>(</big><em>host</em><span class="optional">[</span>, <em>admin_password</em><span class="optional">[</span>, <em>spectator_password</em><span class="optional">]</span><span class="optional">]</span><big>)</big><a class="headerlink" href="#xi4n.protocols.relay.select" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convenience function that sends a IR_SEL packet to the LFS World relay and
+selects a host to receive data from.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first last simple">
+<li><strong>host</strong> (<em>string</em>) &#8211; Host you want to select to receive insim data from.</li>
+<li><strong>admin_password</strong> (<em>string</em>) &#8211; Optional administrator password for host.</li>
+<li><strong>spectator_password</strong> (<em>string</em>) &#8211; Optional spectator password for host.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="xi4n.protocols.relay.disconnect">
+<tt class="descclassname">xi4n.protocols.relay.</tt><tt class="descname">disconnect</tt><big>(</big><big>)</big><a class="headerlink" href="#xi4n.protocols.relay.disconnect" title="Permalink to this definition">¶</a></dt>
+<dd><p>Disconnects from the LFS World relay.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="xi4n.protocols.relay.send">
+<tt class="descclassname">xi4n.protocols.relay.</tt><tt class="descname">send</tt><big>(</big><em>data</em><big>)</big><a class="headerlink" href="#xi4n.protocols.relay.send" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first last simple">
+<li><strong>data</strong> (<em>object</em>) &#8211; An instance of an object. Must implement pack() function that returns a binary string of a relay packet.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="xi4n.protocols.relay.on">
+<tt class="descclassname">xi4n.protocols.relay.</tt><tt class="descname">on</tt><big>(</big><em>event</em>, <em>callback</em><big>)</big><a class="headerlink" href="#xi4n.protocols.relay.on" title="Permalink to this definition">¶</a></dt>
+<dd><p>Adds a callback to run, when event is emitted.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first last simple">
+<li><strong>event</strong> (<em>string</em>) &#8211; Event you&#8217;re listening for. Typically an insim or relay packet name.</li>
+<li><strong>callback</strong> (<em>function</em>) &#8211; Function that is called when the event is received.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="xi4n.protocols.relay.off">
+<tt class="descclassname">xi4n.protocols.relay.</tt><tt class="descname">off</tt><big>(</big><em>event</em>, <em>callback</em><big>)</big><a class="headerlink" href="#xi4n.protocols.relay.off" title="Permalink to this definition">¶</a></dt>
+<dd><p>Removes a callback from the event queue.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first last simple">
+<li><strong>event</strong> (<em>string</em>) &#8211; Event you want to remove the callback from.</li>
+<li><strong>callback</strong> (<em>function</em>) &#8211; Callback you want to remove.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
 </div>
-<div class="section" id="product">
-<h3>product<a class="headerlink" href="#product" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="xi4n-product">
+<h2>xi4n.product<a class="headerlink" href="#xi4n-product" title="Permalink to this headline">¶</a></h2>
+<dl class="attribute">
+<dt id="xi4n.product.basedir">
+<tt class="descclassname">xi4n.product.</tt><tt class="descname">basedir</tt><a class="headerlink" href="#xi4n.product.basedir" title="Permalink to this definition">¶</a></dt>
+<dd><p>The base directory of the xi4n install.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="xi4n.product.name">
+<tt class="descclassname">xi4n.product.</tt><tt class="descname">name</tt><a class="headerlink" href="#xi4n.product.name" title="Permalink to this definition">¶</a></dt>
+<dd><p>The name of the product (read from package.json)</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="xi4n.product.bversion">
+<tt class="descclassname">xi4n.product.</tt><tt class="descname">bversion</tt><a class="headerlink" href="#xi4n.product.bversion" title="Permalink to this definition">¶</a></dt>
+<dd><p>The version of the product (read from package.json).
+Semver compatible.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="xi4n.product.bfull">
+<tt class="descclassname">xi4n.product.</tt><tt class="descname">bfull</tt><a class="headerlink" href="#xi4n.product.bfull" title="Permalink to this definition">¶</a></dt>
+<dd><p>Full product string - product name and version number.</p>
+</dd></dl>
+
 </div>
-<div class="section" id="data">
-<h3>data<a class="headerlink" href="#data" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="xi4n-strings">
+<h2>xi4n.strings<a class="headerlink" href="#xi4n-strings" title="Permalink to this headline">¶</a></h2>
+<p>Provides a bunch of useful functions to deal with LFS&#8217; codepages and special
+codes - such as colours.</p>
+<dl class="function">
+<dt id="xi4n.strings.toUTF8">
+<tt class="descclassname">xi4n.strings.</tt><tt class="descname">toUTF8</tt><big>(</big><em>string</em><big>)</big><a class="headerlink" href="#xi4n.strings.toUTF8" title="Permalink to this definition">¶</a></dt>
+<dd><p>Converts a LFS string to a UTF-8 string. Colour codes are not removed.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first last simple">
+<li><strong>string</strong> (<em>string</em>) &#8211; Input string from LFS.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="xi4n.strings.translateSpecials">
+<tt class="descclassname">xi4n.strings.</tt><tt class="descname">translateSpecials</tt><big>(</big><em>string</em><big>)</big><a class="headerlink" href="#xi4n.strings.translateSpecials" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convers special characters into their UTF-8 equivilent, such as ^^ into ^.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first last simple">
+<li><strong>string</strong> (<em>string</em>) &#8211; Input string from LFS.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="xi4n.strings.remColours">
+<tt class="descclassname">xi4n.strings.</tt><tt class="descname">remColours</tt><big>(</big><em>string</em><big>)</big><a class="headerlink" href="#xi4n.strings.remColours" title="Permalink to this definition">¶</a></dt>
+<dd><p>Removes colour codes from a LFS string, replacing them with nothing.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first last simple">
+<li><strong>string</strong> (<em>string</em>) &#8211; Input string from LFS.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
 </div>
+<div class="section" id="xi4n-data-pth">
+<h2>xi4n.data.pth<a class="headerlink" href="#xi4n-data-pth" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="xi4n.data.pth.get">
+<tt class="descclassname">xi4n.data.pth.</tt><tt class="descname">get</tt><big>(</big><em>track</em><big>)</big><a class="headerlink" href="#xi4n.data.pth.get" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a pth file, converted into json for convenience.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first last simple">
+<li><strong>track</strong> (<em>string</em>) &#8211; Short track name i.e. BL1.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+<div class="section" id="xi4n-data-vehicle">
+<h2>xi4n.data.vehicle<a class="headerlink" href="#xi4n-data-vehicle" title="Permalink to this headline">¶</a></h2>
+<dl class="attribute">
+<dt id="xi4n.data.vehicle.all">
+<tt class="descclassname">xi4n.data.vehicle.</tt><tt class="descname">all</tt><a class="headerlink" href="#xi4n.data.vehicle.all" title="Permalink to this definition">¶</a></dt>
+<dd><p>Contains an array of vehicles, and their relevant facts.</p>
+<p>Example return format:</p>
+<div class="highlight-python"><div class="highlight"><pre>[
+        { short: &#39;XFG&#39;, long: &#39;XF GTI&#39;, layout: &#39;Hatchback&#39;, drive: &#39;FWD&#39;, kw: 86, bhp: 115, kg: 942, lb: 2076, demo: true, s1: true, s2: true },
+    ...
+    { short: &#39;FZR&#39;, long: &#39;FZ50 GTR&#39;, layout: &#39;Race&#39;, drive: &#39;RWD&#39;, kw: 465, bhp: 490, kg: 110, lb: 2425, demo: false, s1: false, s2: true }
+]
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="xi4n.data.vehicle.findBy">
+<tt class="descclassname">xi4n.data.vehicle.</tt><tt class="descname">findBy</tt><big>(</big><em>callback</em><big>)</big><a class="headerlink" href="#xi4n.data.vehicle.findBy" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns an array of vehicles, and their relevant facts, filtered by
+callback.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first last simple">
+<li><strong>callback</strong> (<em>function</em>) &#8211; Callback used to filter vehicles.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="xi4n.data.vehicle.countBy">
+<tt class="descclassname">xi4n.data.vehicle.</tt><tt class="descname">countBy</tt><big>(</big><em>callback</em><big>)</big><a class="headerlink" href="#xi4n.data.vehicle.countBy" title="Permalink to this definition">¶</a></dt>
+<dd><p>Counts the number of vehicles that match the filtering callback.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first last simple">
+<li><strong>callback</strong> (<em>function</em>) &#8211; Callback used to filter vehicles.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="xi4n.data.vehicle.randomOneBy">
+<tt class="descclassname">xi4n.data.vehicle.</tt><tt class="descname">randomOneBy</tt><big>(</big><span class="optional">[</span><em>callback</em><span class="optional">]</span><big>)</big><a class="headerlink" href="#xi4n.data.vehicle.randomOneBy" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a single vehicle, optionally filtered by a callback.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first last simple">
+<li><strong>callback</strong> (<em>function</em>) &#8211; Optional Callback used to filter vehicles.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+<div class="section" id="xi4n-data-track">
+<h2>xi4n.data.track<a class="headerlink" href="#xi4n-data-track" title="Permalink to this headline">¶</a></h2>
+<dl class="attribute">
+<dt id="xi4n.data.track.all">
+<tt class="descclassname">xi4n.data.track.</tt><tt class="descname">all</tt><a class="headerlink" href="#xi4n.data.track.all" title="Permalink to this definition">¶</a></dt>
+<dd><p>Contains an array of track, and their relevant facts.</p>
+<p>Example return format:</p>
+<div class="highlight-python"><div class="highlight"><pre>[
+    { short: &#39;BL1&#39;, long: &#39;Blackwood GP&#39;, km: 3.307, mi: 2.055, grid: 32, s1: true, s2: true, demo: true, reversible: true },
+    ...
+    { short: &#39;AS7&#39;, long: &#39;Aston North&#39;, km: 5.168, mi: 3.211, grid: 32, s1: false, s2: true, demo: false, reversible: true }
+]
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="xi4n.data.track.findBy">
+<tt class="descclassname">xi4n.data.track.</tt><tt class="descname">findBy</tt><big>(</big><em>callback</em><big>)</big><a class="headerlink" href="#xi4n.data.track.findBy" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns an array of tracks, and their relevant facts, filtered by
+callback.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first last simple">
+<li><strong>callback</strong> (<em>function</em>) &#8211; Callback used to filter tracks.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="xi4n.data.track.countBy">
+<tt class="descclassname">xi4n.data.track.</tt><tt class="descname">countBy</tt><big>(</big><em>callback</em><big>)</big><a class="headerlink" href="#xi4n.data.track.countBy" title="Permalink to this definition">¶</a></dt>
+<dd><p>Counts the number of vehicles that match the filtering callback.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first last simple">
+<li><strong>callback</strong> (<em>function</em>) &#8211; Callback used to filter vehicles.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="xi4n.data.track.randomOneBy">
+<tt class="descclassname">xi4n.data.track.</tt><tt class="descname">randomOneBy</tt><big>(</big><span class="optional">[</span><em>callback</em><span class="optional">]</span><big>)</big><a class="headerlink" href="#xi4n.data.track.randomOneBy" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a single track, optionally filtered by a callback.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first last simple">
+<li><strong>callback</strong> (<em>function</em>) &#8211; Optional Callback used to filter tracks.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
 </div>
 </div>
 
 
           </div>
-        </div>
-      </div>
-      <div class="sphinxsidebar">
-        <div class="sphinxsidebarwrapper">
-  <h3><a href="../index.html">Table Of Contents</a></h3>
-  <ul>
-<li><a class="reference internal" href="#">API</a><ul>
-<li><a class="reference internal" href="#require">Require</a></li>
-<li><a class="reference internal" href="#exported-modules">Exported modules</a><ul>
-<li><a class="reference internal" href="#protocol-insim">protocol.insim</a></li>
-<li><a class="reference internal" href="#protocol-outsim">protocol.outsim</a></li>
-<li><a class="reference internal" href="#protocol-outgauge">protocol.outgauge</a></li>
-<li><a class="reference internal" href="#protocol-relay">protocol.relay</a></li>
-<li><a class="reference internal" href="#strings">strings</a></li>
-<li><a class="reference internal" href="#product">product</a></li>
-<li><a class="reference internal" href="#data">data</a></li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+      
+        <a href="plugins.html" class="btn btn-neutral" title="Writing Plugins"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+      
+    </div>
+  
 
-  <h4>Previous topic</h4>
-  <p class="topless"><a href="plugins.html"
-                        title="previous chapter">Writing Plugins</a></p>
-  <h3>This Page</h3>
-  <ul class="this-page-menu">
-    <li><a href="../_sources/dev/api.txt"
-           rel="nofollow">Show Source</a></li>
-  </ul>
-<div id="searchbox" style="display: none">
-  <h3>Quick search</h3>
-    <form class="search" action="../search.html" method="get">
-      <input type="text" name="q" />
-      <input type="submit" value="Go" />
-      <input type="hidden" name="check_keywords" value="yes" />
-      <input type="hidden" name="area" value="default" />
-    </form>
-    <p class="searchtip" style="font-size: 90%">
-    Enter search terms or a module, class or function name.
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2014, the_angry_angel.
     </p>
-</div>
-<script type="text/javascript">$('#searchbox').show(0);</script>
+  </div>
+
+  <a href="https://github.com/snide/sphinx_rtd_theme">Sphinx theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>
+</footer>
         </div>
       </div>
-      <div class="clearer"></div>
-    </div>
-    <div class="related">
-      <h3>Navigation</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="../genindex.html" title="General Index"
-             >index</a></li>
-        <li class="right" >
-          <a href="plugins.html" title="Writing Plugins"
-             >previous</a> |</li>
-        <li><a href="../index.html">xi4n 0.1.0 documentation</a> &raquo;</li>
-          <li><a href="index.html" >For Developers</a> &raquo;</li> 
-      </ul>
-    </div>
-    <div class="footer">
-        &copy; Copyright 2014, the_angry_angel.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.
-    </div>
-  </body>
+
+    </section>
+
+  </div>
+  
+
+</body>
 </html>
